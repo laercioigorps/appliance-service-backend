@@ -8,8 +8,8 @@ Easily deploy django apps on heroku or run locally with docker-compose up.
 ## Getting Started locally
 
 ```sh
-  git clone
-  cd boilerplate
+  git clone https://github.com/laercioigorps/django-heroku-docker-boilerplate.git
+  cd django-heroku-docker-boilerplate
   docker-compose up
 
   ```
