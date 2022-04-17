@@ -41,3 +41,5 @@ Heroku setup:
   heroku run python manage.py makemigrations -a your_app_name
   
   heroku run python manage.py migrate -a your_app_name
+
+You should be able to view the app at https://APP_NAME.herokuapp.com. It should return a 404.
