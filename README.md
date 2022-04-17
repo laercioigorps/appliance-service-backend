@@ -59,7 +59,7 @@ Set the Stack of your app to container:
   
   Push the code up to Heroku to build the image and run the container:
   ```sh
-    git push heroku master
+    git push heroku HEAD:master
   ```
   
   Make migrations:
