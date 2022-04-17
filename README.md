@@ -11,14 +11,7 @@ Easily deploy django apps on heroku or run locally with docker-compose up.
   git clone
   cd boilerplate
   docker-compose up
-  ```
-  Add your URL to allowed hosts in settings.py:
-  >ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'your_app_name.herokuapp.com']
 
-run the server locally:
-  
-  ```sh
-  docker-compose up
   ```
 
 This is an example of how you may give instructions on setting up your project locally.
