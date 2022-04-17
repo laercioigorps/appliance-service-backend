@@ -70,3 +70,9 @@ Set the Stack of your app to container:
   ```
   
   You should be able to view the app at https://your_app_name.herokuapp.com. It should return a 404.
+  
+  You can also create a superuser:
+    ```sh
+    heroku run python manage.py createsuperuser -a your_app_name
+  ```
+  After creating superuser, you lan go to the https://your_app_name.herokuapp.com/admin and login to test.
