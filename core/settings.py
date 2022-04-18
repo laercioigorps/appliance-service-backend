@@ -30,9 +30,6 @@ DEBUG = int(os.environ.get('DEBUG', default=0))
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1','powerful-escarpment-12801.herokuapp.com']
 
-CSRF_TRUSTED_ORIGINS = ['https://powerful-escarpment-12801.herokuapp.com']
-
-
 # Application definition
 
 INSTALLED_APPS = [
