@@ -83,6 +83,26 @@ Set the Stack of your app to container:
   ```
   After creating superuser, you lan go to the https://your_app_name.herokuapp.com/admin and login to test.
   
+## API EndPoints
+You can find auth endpoints em [dj-auth-rest endpoints](https://dj-rest-auth.readthedocs.io/en/latest/api_endpoints.html), the basics are:
+
+#### Login
+> /dj-rest-auth/login/ (POST)
+>* username
+>*  email
+>*  password
+>>Returns Token key
+
+
+#### Registration
+> /dj-rest-auth/registration/ (POST)
+>* username
+>*  email
+>*  password1
+>*  password2
+>>Returns Token key
+
+  
 ### Built With
 
 This section should list any major Tools/frameworks/libraries used.
