@@ -3,6 +3,9 @@
 <!-- ABOUT THE PROJECT -->
 Easily deploy django REST apps on heroku or run locally with docker-compose up.
 
+* Free and rapidly Django REST APP deploy on Heroku
+* User login and registration endpoints
+
 
 <!-- GETTING STARTED -->
 ## Getting Started locally
