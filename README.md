@@ -1,7 +1,7 @@
-# django-heroku-docker-boilerplate
+# Django-Heroku-Docker-boilerplate
 
 <!-- ABOUT THE PROJECT -->
-Easily deploy django apps on heroku or run locally with docker-compose up.
+Easily deploy django REST apps on heroku or run locally with docker-compose up.
 
 
 <!-- GETTING STARTED -->
@@ -20,7 +20,7 @@ Easily deploy django apps on heroku or run locally with docker-compose up.
 ```sh
     heroku create
   ```
-  you will receive the app name, and we will refer it as your_app_name.
+  You will receive the app name, and we will refer it as your_app_name.
   
   Add the SECRET_KEY environment variable:
   ```sh
@@ -28,8 +28,10 @@ Easily deploy django apps on heroku or run locally with docker-compose up.
   ```
   >Change SOME_SECRET_VALUE to a randomly generated string that's at least 50 characters, and replace your_app_name.
 
-Add your URL to allowed hosts in settings.py:
+Add your URL to ALLOWED_HOSTS and CSRF_TRUSTED_ORIGINS in settings.py:
 >ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'your_app_name.herokuapp.com']
+
+>CSRF_TRUSTED_ORIGINS = ['https://your_app_name.herokuapp.com']
 
 Commit your changes:
 ```sh
@@ -77,3 +79,18 @@ Set the Stack of your app to container:
     heroku run python manage.py createsuperuser -a your_app_name
   ```
   After creating superuser, you lan go to the https://your_app_name.herokuapp.com/admin and login to test.
+  
+### Built With
+
+This section should list any major Tools/frameworks/libraries used.
+
+* [Django](https://www.djangoproject.com/)
+* [Django REST](https://www.django-rest-framework.org/)
+* [dj_rest_auth](https://dj-rest-auth.readthedocs.io/en/latest/)
+* [Postgres](https://www.postgresql.org/)
+* [Docker](https://www.docker.com/)
+* [whitenoise](http://whitenoise.evans.io/en/stable/)
+* [gunicorn](https://gunicorn.org/)
+* [Heroku](https://www.heroku.com/)
+
+<p align="right">(<a href="#top">back to top</a>)</p>
