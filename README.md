@@ -102,6 +102,42 @@ You can find auth endpoints em [dj-auth-rest endpoints](https://dj-rest-auth.rea
 >*  password2
 >>Returns Token key
 
+
+## Testing
+You can test if your app is accepting requsts, we are using the command-line HTTP client [httpie](https://httpie.io/docs/cli/linux). To test if its working:
+
+```sh
+    hhttp --version
+  ```
+
+
+#### Registration request
+```sh
+    http POST https://your_app_name.herokuapp.com/dj-rest-auth/registration/ \
+      username=testusername \
+      email=test@email.com \
+      password1=testpassword \
+      password2=testpassword
+  ```
+  > Don't forget to replace your_app_name
+
+  You will receive a key as a response if the registration is OK, for example:
+  
+    {"key": "59f98be42a25e0c7ded64aa0c53b9a0d150b5cda"}
+    
+    
+#### Login request
+```sh
+    http POST https://your_app_name.herokuapp.com/dj-rest-auth/login/ \
+      username=testusername \
+      password=testpassword 
+  ```
+  > Don't forget to replace your_app_name
+
+  You will receive a key as a response if the login is OK, for example:
+  
+    {"key": "59f98be42a25e0c7ded64aa0c53b9a0d150b5cda"}
+
   
 ### Built With
 
