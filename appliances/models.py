@@ -15,3 +15,12 @@ class Category(models.Model):
 
     def __str__(self) -> str:
         return self.name
+
+
+class Appliance(models.Model):
+    model = models.CharField(max_length=20)
+    brand = models.ForeignKey(Brand, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+
+    def __str__(self) -> str:
+        return self.model
