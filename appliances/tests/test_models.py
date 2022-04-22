@@ -1,5 +1,5 @@
 from django.test import TestCase
-from appliances.models import Brand, Category, Appliance, Symptom
+from appliances.models import Brand, Category, Appliance, Symptom, Problem
 
 # Create your tests here.
 
@@ -71,3 +71,29 @@ class SymptomTest(TestCase):
 
         symptoms_by_geladeira_count = geladeira.symptom_set.all().count()
         self.assertEquals(symptoms_by_geladeira_count, 1)
+
+    def test_add_cause_to_symptom(self):
+        bloqueio = Problem.objects.create(name="Evaporador bloqueado")
+
+        symptom = Symptom.objects.create(name="Não gela o refrigerador",
+                                         description="A sample description")
+        causes_count = symptom.causes.all().count()
+        self.assertEquals(causes_count, 0)
+
+        symptom.causes.add(bloqueio)
+
+        causes_count = symptom.causes.all().count()
+        self.assertEquals(causes_count, 1)
+
+
+class ProblemTest(TestCase):
+
+    def test_create_problem(self):
+        problem_count = Problem.objects.all().count()
+        self.assertEquals(problem_count, 0)
+
+        problem = Problem.objects.create(
+            name="Evaporador bloqueado", description="caso seja frost free")
+
+        problem_count = Problem.objects.all().count()
+        self.assertEquals(problem_count, 1)
