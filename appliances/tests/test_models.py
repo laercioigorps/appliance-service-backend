@@ -1,5 +1,14 @@
+from unicodedata import category
 from django.test import TestCase
-from appliances.models import Brand, Category, Appliance, Symptom, Problem, Solution
+from appliances.models import (
+    Brand,
+    Category,
+    Appliance,
+    Symptom,
+    Problem,
+    Solution,
+    Historic,
+)
 
 # Create your tests here.
 
@@ -148,3 +157,103 @@ class SolutionTest(TestCase):
             name="Troca do sensor", description="se for de sensor"
         )
         self.assertEqual(str(solution), "Troca do sensor")
+
+
+class ApplianceHistoricTest(TestCase):
+    def setUp(self):
+        # brands
+        self.electrolux = Brand.objects.create(name="Electrolux")
+        self.brastemp = Brand.objects.create(name="Brastemp")
+        # Cateogories
+        self.geladeira = Category.objects.create(name="Geladeira")
+        self.lavadoraDeRoupas = Category.objects.create(name="Lavadora de roupas")
+        # solutions
+        self.trocaDeSensor = Solution.objects.create(
+            name="Troca do sensor", description="se for de sensor"
+        )
+        self.trocaDeplacaDepotencia = Solution.objects.create(
+            name="Troca da placa de potencia", description="se for de sensor"
+        )
+        # Problems
+        self.evaporadorBloqueado = Problem.objects.create(
+            name="Evaporador bloqueado", description="caso seja frost free"
+        )
+        self.falhaSensor = Problem.objects.create(
+            name="Sensor com falha", description="falha no sensot"
+        )
+        # Symptoms
+        self.naoGelaRefrigerador = Symptom.objects.create(
+            name="Não gela o refrigerador",
+            description="A parte de baixo da geladeira está refrigerando abaixo do normal",
+        )
+        self.naoLiga = Symptom.objects.create(
+            name="Não liga nada",
+            description="não apresenta sinal de energia",
+        )
+
+    def test_historic_create_with_no_data(self):
+        historic = Historic.objects.create()
+        self.assertEqual(historic.completed, False)
+
+    def test_add_symptoms_to_historic(self):
+        historic = Historic.objects.create()
+
+        historic_symptoms_count = historic.symptoms.all().count()
+        self.assertEqual(historic_symptoms_count, 0)
+
+        historic.symptoms.add(self.naoGelaRefrigerador)
+
+        historic_symptoms_count = historic.symptoms.all().count()
+        self.assertEqual(historic_symptoms_count, 1)
+
+        historic.symptoms.add(self.naoLiga)
+
+        historic_symptoms_count = historic.symptoms.all().count()
+        self.assertEqual(historic_symptoms_count, 2)
+
+    def test_add_problems_to_historic(self):
+        historic = Historic.objects.create()
+
+        historic_problems_count = historic.problems.all().count()
+        self.assertEqual(historic_problems_count, 0)
+
+        historic.problems.add(self.evaporadorBloqueado)
+
+        historic_problems_count = historic.problems.all().count()
+        self.assertEqual(historic_problems_count, 1)
+
+        historic.problems.add(self.falhaSensor)
+
+        historic_problems_count = historic.problems.all().count()
+        self.assertEqual(historic_problems_count, 2)
+
+    def test_add_solution_to_historic(self):
+        historic = Historic.objects.create()
+
+        historic_solutions_count = historic.solutions.all().count()
+        self.assertEqual(historic_solutions_count, 0)
+
+        historic.solutions.add(self.trocaDeSensor)
+
+        historic_solutions_count = historic.solutions.all().count()
+        self.assertEqual(historic_solutions_count, 1)
+
+        historic.solutions.add(self.trocaDeplacaDepotencia)
+
+        historic_solutions_count = historic.solutions.all().count()
+        self.assertEqual(historic_solutions_count, 2)
+
+    def test_add_appliance_to_historic(self):
+        historic = Historic.objects.create()
+
+        df50x = Appliance.objects.create(
+            brand=self.electrolux, category=self.geladeira, model="DF50x"
+        )
+
+        self.assertEqual(historic.appliance, None)
+        historic.appliance = df50x
+        historic.save()
+
+        historicCopy = Historic.objects.get(appliance__model="DF50x")
+        self.assertEqual(historicCopy.appliance.model, "DF50x")
+        self.assertEqual(historicCopy.appliance.brand.name, "Electrolux")
