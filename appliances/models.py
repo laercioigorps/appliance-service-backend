@@ -29,7 +29,7 @@ class Appliance(models.Model):
 class Solution(models.Model):
     name = models.CharField(max_length=40)
     description = models.CharField(max_length=150)
-    
+
     def __str__(self) -> str:
         return self.name
 
@@ -37,7 +37,7 @@ class Solution(models.Model):
 class Problem(models.Model):
     name = models.CharField(max_length=40)
     description = models.CharField(max_length=150)
-    solutions = models.ManyToManyField(Solution)
+    solutions = models.ManyToManyField(Solution, blank=True)
 
     def __str__(self) -> str:
         return self.name
@@ -45,8 +45,8 @@ class Problem(models.Model):
 class Symptom(models.Model):
     name = models.CharField(max_length=40)
     description = models.CharField(max_length=150)
-    categories = models.ManyToManyField(Category)
-    causes = models.ManyToManyField(Problem)
+    categories = models.ManyToManyField(Category, blank=True)
+    causes = models.ManyToManyField(Problem, blank=True)
 
     def __str__(self) -> str:
         return self.name
