@@ -1,5 +1,5 @@
 from django.test import TestCase
-from appliances.models import Brand, Category, Appliance, Symptom, Problem
+from appliances.models import Brand, Category, Appliance, Symptom, Problem, Solution
 
 # Create your tests here.
 
@@ -97,3 +97,30 @@ class ProblemTest(TestCase):
 
         problem_count = Problem.objects.all().count()
         self.assertEquals(problem_count, 1)
+
+    def test_add_solution_to_problem(self):
+        trocaDeSensor = Solution.objects.create(
+            name="Troca do sensor", description="se for de sensor")
+
+        problem = Problem.objects.create(
+            name="Evaporador bloqueado", description="caso seja frost free")
+        solution_for_problem_count = problem.solutions.all().count()
+        self.assertEquals(solution_for_problem_count, 0)
+
+        problem.solutions.add(trocaDeSensor)
+
+        solution_for_problem_count = problem.solutions.all().count()
+        self.assertEquals(solution_for_problem_count, 1)
+
+
+class SolutionTest(TestCase):
+
+    def test_create_solution(self):
+        solution_count = Solution.objects.all().count()
+        self.assertEquals(solution_count, 0)
+
+        solution = Solution.objects.create(
+            name="Troca do sensor", description="se for de sensor")
+
+        solution_count = Solution.objects.all().count()
+        self.assertEquals(solution_count, 1)
