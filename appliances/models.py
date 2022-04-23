@@ -54,3 +54,13 @@ class Symptom(models.Model):
 
     def __str__(self) -> str:
         return self.name
+
+
+class Historic(models.Model):
+    completed = models.BooleanField(default=False)
+    symptoms = models.ManyToManyField(Symptom, blank=True)
+    problems = models.ManyToManyField(Problem, blank=True)
+    solutions = models.ManyToManyField(Solution, blank=True)
+    appliance = models.ForeignKey(
+        Appliance, on_delete=models.CASCADE, blank=True, null=True
+    )
