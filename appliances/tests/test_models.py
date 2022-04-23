@@ -19,14 +19,14 @@ class CategoryTest(TestCase):
 
 
 class ApplianceTest(TestCase):
-
     def setUp(self):
         self.brand1 = Brand.objects.create(name="Brastemp")
         self.category1 = Category.objects.create(name="Geladeira")
 
     def test_create_Apliance(self):
         Appliance.objects.create(
-            model="BWC11ABANA", brand=self.brand1, category=self.category1)
+            model="BWC11ABANA", brand=self.brand1, category=self.category1
+        )
         appliance = Appliance.objects.get(model="BWC11ABANA")
         self.assertEquals(appliance.model, "BWC11ABANA")
         self.assertEquals(appliance.brand.name, "Brastemp")
@@ -34,13 +34,14 @@ class ApplianceTest(TestCase):
 
 
 class SymptomTest(TestCase):
-
     def test_create_symptom(self):
         symptoms_count = Symptom.objects.all().count()
         self.assertEquals(symptoms_count, 0)
 
-        symptom = Symptom.objects.create(name="Não gela o refrigerador",
-                                         description="A parte de baixo da geladeira está refrigerando abaixo do normal")
+        symptom = Symptom.objects.create(
+            name="Não gela o refrigerador",
+            description="A parte de baixo da geladeira está refrigerando abaixo do normal",
+        )
 
         symptoms_count = Symptom.objects.all().count()
         self.assertEquals(symptoms_count, 1)
@@ -48,8 +49,9 @@ class SymptomTest(TestCase):
         self.assertEquals(symptom.name, "Não gela o refrigerador")
 
     def test_add_category_to_symptom(self):
-        symptom = Symptom.objects.create(name="Não gela o refrigerador",
-                                         description="A sample description")
+        symptom = Symptom.objects.create(
+            name="Não gela o refrigerador", description="A sample description"
+        )
         symptoms_count = symptom.categories.all().count()
         self.assertEquals(symptoms_count, 0)
 
@@ -60,8 +62,9 @@ class SymptomTest(TestCase):
         self.assertEquals(symptoms_count, 1)
 
     def test_list_symptoms_by_category(self):
-        symptom = Symptom.objects.create(name="Não gela o refrigerador",
-                                         description="A sample description")
+        symptom = Symptom.objects.create(
+            name="Não gela o refrigerador", description="A sample description"
+        )
 
         geladeira = Category.objects.create(name="Geladeira")
         symptoms_by_geladeira_count = geladeira.symptom_set.all().count()
@@ -75,8 +78,9 @@ class SymptomTest(TestCase):
     def test_add_cause_to_symptom(self):
         bloqueio = Problem.objects.create(name="Evaporador bloqueado")
 
-        symptom = Symptom.objects.create(name="Não gela o refrigerador",
-                                         description="A sample description")
+        symptom = Symptom.objects.create(
+            name="Não gela o refrigerador", description="A sample description"
+        )
         causes_count = symptom.causes.all().count()
         self.assertEquals(causes_count, 0)
 
@@ -86,28 +90,32 @@ class SymptomTest(TestCase):
         self.assertEquals(causes_count, 1)
 
     def test_symptom__str__(self):
-        symptom = Symptom.objects.create(name="Não gela o refrigerador",
-                                         description="A sample description")
+        symptom = Symptom.objects.create(
+            name="Não gela o refrigerador", description="A sample description"
+        )
         self.assertEqual(str(symptom), "Não gela o refrigerador")
 
-class ProblemTest(TestCase):
 
+class ProblemTest(TestCase):
     def test_create_problem(self):
         problem_count = Problem.objects.all().count()
         self.assertEquals(problem_count, 0)
 
         problem = Problem.objects.create(
-            name="Evaporador bloqueado", description="caso seja frost free")
+            name="Evaporador bloqueado", description="caso seja frost free"
+        )
 
         problem_count = Problem.objects.all().count()
         self.assertEquals(problem_count, 1)
 
     def test_add_solution_to_problem(self):
         trocaDeSensor = Solution.objects.create(
-            name="Troca do sensor", description="se for de sensor")
+            name="Troca do sensor", description="se for de sensor"
+        )
 
         problem = Problem.objects.create(
-            name="Evaporador bloqueado", description="caso seja frost free")
+            name="Evaporador bloqueado", description="caso seja frost free"
+        )
         solution_for_problem_count = problem.solutions.all().count()
         self.assertEquals(solution_for_problem_count, 0)
 
@@ -118,23 +126,25 @@ class ProblemTest(TestCase):
 
     def test_problem__str__(self):
         problem = Problem.objects.create(
-            name="Evaporador bloqueado", description="caso seja frost free")
+            name="Evaporador bloqueado", description="caso seja frost free"
+        )
         self.assertEqual(str(problem), "Evaporador bloqueado")
 
 
 class SolutionTest(TestCase):
-
     def test_create_solution(self):
         solution_count = Solution.objects.all().count()
         self.assertEquals(solution_count, 0)
 
         solution = Solution.objects.create(
-            name="Troca do sensor", description="se for de sensor")
+            name="Troca do sensor", description="se for de sensor"
+        )
 
         solution_count = Solution.objects.all().count()
         self.assertEquals(solution_count, 1)
 
     def test_Solution_str__(self):
         solution = Solution.objects.create(
-            name="Troca do sensor", description="se for de sensor")
+            name="Troca do sensor", description="se for de sensor"
+        )
         self.assertEqual(str(solution), "Troca do sensor")
