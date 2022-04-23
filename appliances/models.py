@@ -26,9 +26,15 @@ class Appliance(models.Model):
         return self.model
 
 
+class Solution(models.Model):
+    name = models.CharField(max_length=40)
+    description = models.CharField(max_length=150)
+
+
 class Problem(models.Model):
     name = models.CharField(max_length=40)
     description = models.CharField(max_length=150)
+    solutions = models.ManyToManyField(Solution)
 
 
 class Symptom(models.Model):
