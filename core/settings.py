@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     "allauth.socialaccount",
     "dj_rest_auth.registration",
     "appliances",
+    "profiles",
 ]
 
 SITE_ID = 1
