@@ -16,3 +16,8 @@ class Address(models.Model):
 
 class Organization(models.Model):
     name = models.CharField(max_length=30)
+
+
+class Customer(models.Model):
+    name = models.CharField(max_length=30)
+    owner = models.ForeignKey(Organization, on_delete=models.CASCADE)
