@@ -12,3 +12,7 @@ class Address(models.Model):
     complement = models.CharField(max_length=40, null=True)
     is_active = models.BooleanField(default=True)
     type = models.CharField(max_length=30, null=True)
+
+
+class Organization(models.Model):
+    name = models.CharField(max_length=30)
