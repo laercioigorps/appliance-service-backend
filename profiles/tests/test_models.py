@@ -1,6 +1,6 @@
 from django.test import TestCase
-
-from profiles.models import Address, Organization, Customer
+from django.contrib.auth.models import User
+from profiles.models import Address, Organization, Customer, Profile
 
 # Create your tests here.
 class TestAddress(TestCase):
@@ -39,3 +39,14 @@ class TestCustomer(TestCase):
 
         customer_count = Customer.objects.all().count()
         self.assertEqual(customer_count, 1)
+
+
+class TestProfile(TestCase):
+    def test_create_profile_by_creating_user(self):
+        profile_count = Profile.objects.all().count()
+        self.assertEqual(profile_count, 0)
+
+        newUser = User.objects.create_user(username="paulo")
+
+        profile_count = Profile.objects.all().count()
+        self.assertEqual(profile_count, 1)
