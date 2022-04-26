@@ -40,6 +40,46 @@ class TestCustomer(TestCase):
         customer_count = Customer.objects.all().count()
         self.assertEqual(customer_count, 1)
 
+    def test_add_address_to_customer(self):
+        address = Address.objects.create(
+            street="street1", neighborhood="caic", number="5"
+        )
+        customer = Customer.objects.create(
+            name="first customer", owner=self.organization1
+        )
+        customer.address.add(address)
+
+        c = Customer.objects.get(pk=customer.pk)
+        a = c.address.first()
+        self.assertEqual(a.street, "street1")
+        self.assertEqual(a.neighborhood, "caic")
+        self.assertEqual(a.number, "5")
+
+    def test_add_two_address_to_customer(self):
+        address1 = Address.objects.create(
+            street="street1", neighborhood="caic1", number="1"
+        )
+        address2 = Address.objects.create(
+            street="street2", neighborhood="caic2", number="2"
+        )
+
+        customer = Customer.objects.create(
+            name="first customer", owner=self.organization1
+        )
+
+        address_count = customer.address.count()
+        self.assertEqual(address_count, 0)
+
+        customer.address.add(address1)
+
+        address_count = customer.address.count()
+        self.assertEqual(address_count, 1)
+
+        customer.address.add(address2)
+
+        address_count = customer.address.count()
+        self.assertEqual(address_count, 2)
+
 
 class TestProfile(TestCase):
     def test_create_profile_by_creating_user(self):
