@@ -50,3 +50,14 @@ class TestProfile(TestCase):
 
         profile_count = Profile.objects.all().count()
         self.assertEqual(profile_count, 1)
+
+    def test_create_profile_and_verity_own_organization(self):
+        organization_count = Organization.objects.all().count()
+        self.assertEqual(organization_count, 0)
+
+        newUser = User.objects.create_user(username="paulo")
+
+        organization_count = Organization.objects.all().count()
+        self.assertEqual(organization_count, 1)
+
+        self.assertEqual(newUser.profile.org.name, "own")
