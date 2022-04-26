@@ -24,6 +24,7 @@ class Organization(models.Model):
 class Customer(models.Model):
     name = models.CharField(max_length=30)
     owner = models.ForeignKey(Organization, on_delete=models.CASCADE)
+    address = models.ManyToManyField(Address, blank=True)
 
 
 class Profile(models.Model):
