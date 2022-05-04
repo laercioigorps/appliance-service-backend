@@ -1,1 +1,52 @@
 from django.test import TestCase
+from django.urls import reverse
+from django.contrib.auth.models import User
+from rest_framework.test import APIClient
+import io
+from rest_framework.parsers import JSONParser
+
+from profiles.models import Customer
+
+
+class TestCustomer(TestCase):
+    def setUp(self) -> None:
+        self.user1 = User.objects.create_user("root1", "email1@exemple.com", "root")
+        self.user2 = User.objects.create_user("root2", "email2@exemple.com", "root")
+
+        self.customer1 = Customer.objects.create(
+            name="josé", owner=self.user2.profile.org
+        )
+        self.customer2 = Customer.objects.create(
+            name="Maria", owner=self.user2.profile.org
+        )
+        self.customer3 = Customer.objects.create(
+            name="Pedro", owner=self.user2.profile.org
+        )
+
+    def test_create_customer(self):
+        customer_count = Customer.objects.all().count()
+        self.assertEqual(customer_count, 3)
+
+        client = APIClient()
+        client.force_authenticate(user=self.user1)
+        response = client.post(
+            reverse("profiles:customer_list"), {"name": "customer1"}, format="json"
+        )
+        self.assertEqual(response.status_code, 201)
+
+        customer_count = Customer.objects.all().count()
+        self.assertEqual(customer_count, 4)
+
+    def test_list_customer_by_organization(self):
+        customer_count = Customer.objects.all().count()
+        self.assertEqual(customer_count, 3)
+
+        client = APIClient()
+        client.force_authenticate(user=self.user2)
+        response = client.get(reverse("profiles:customer_list"))
+        self.assertEqual(response.status_code, 200)
+
+        stream = io.BytesIO(response.content)
+        data = JSONParser().parse(stream)
+
+        self.assertEqual(len(data), 3)
