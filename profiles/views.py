@@ -16,3 +16,7 @@ def customer_list_view(request, format=None):
             serializer.save(owner=request.user.profile.org)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    if request.method == "GET":
+        customer_by_org = Customer.objects.filter(owner=request.user.profile.org)
+        serializer = CustomerSerializer(customer_by_org, many=True)
+        return Response(serializer.data)
