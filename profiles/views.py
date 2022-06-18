@@ -27,6 +27,8 @@ def customer_list_view(request, format=None):
 @permission_classes([IsAuthenticated])
 def customer_address_list_view(request, pk, format=None):
     customer = Customer.objects.get(pk=pk)
+    if not customer.has_object_permission(request):
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
     if request.method == "POST":
         serializer = AddressSerializer(data = request.data)
         if serializer.is_valid():
