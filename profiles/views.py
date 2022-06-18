@@ -26,7 +26,10 @@ def customer_list_view(request, format=None):
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def customer_address_list_view(request, pk, format=None):
-    customer = Customer.objects.get(pk=pk)
+    try:
+        customer = Customer.objects.get(pk=pk)
+    except Customer.DoesNotExist:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
     if not customer.has_object_permission(request):
         return Response(status=status.HTTP_401_UNAUTHORIZED)
     if request.method == "POST":
