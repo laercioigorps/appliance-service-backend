@@ -5,7 +5,7 @@ from rest_framework.test import APIClient
 import io
 from rest_framework.parsers import JSONParser
 
-from profiles.models import Customer
+from profiles.models import Address, Customer
 
 
 class TestCustomerView(TestCase):
@@ -26,7 +26,6 @@ class TestCustomerView(TestCase):
             name="Pedro", owner=self.user1.profile.org
         )
 
-
     def test_create_customer(self):
         customer_count = Customer.objects.all().count()
         self.assertEqual(customer_count, 4)
@@ -42,7 +41,9 @@ class TestCustomerView(TestCase):
         self.assertEqual(customer_count, 5)
 
     def test_list_customer_by_user_organization(self):
-        customer_owned_by_user2_organization = Customer.objects.filter(owner= self.user2.profile.org).count()
+        customer_owned_by_user2_organization = Customer.objects.filter(
+            owner=self.user2.profile.org
+        ).count()
         self.assertEqual(customer_owned_by_user2_organization, 3)
 
         client = APIClient()
@@ -114,7 +115,6 @@ class TestAddressView(TestCase):
         addressCount = self.customer2.address.count()
         self.assertEqual(addressCount, 0)
 
-
     def test_create_address_to_custumer_wich_the_user_organization_not_own(self):
         addressCount = self.customer2.address.count()
         self.assertEqual(addressCount, 0)
@@ -136,3 +136,26 @@ class TestAddressView(TestCase):
 
         addressCount = self.customer2.address.count()
         self.assertEqual(addressCount, 0)
+
+    def test_create_address_to_invalid_customer_with_authenticated_user(self):
+        addressCount = Address.objects.all().count()
+        self.assertEquals(addressCount, 0)
+
+        client = APIClient()
+        client.force_authenticate(user=self.user1)
+
+        response = client.post(
+            reverse("profiles:customer_address_list", kwargs={"pk": 100}),
+            {
+                "number": "5",
+                "street": "street1",
+                "neighborhood": "neighb",
+                "city": "San Andreas",
+            },
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, 400)
+
+        addressCount = Address.objects.all().count()
+        self.assertEquals(addressCount, 0)
