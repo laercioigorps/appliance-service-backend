@@ -50,3 +50,42 @@ class TestCustomer(TestCase):
         data = JSONParser().parse(stream)
 
         self.assertEqual(len(data), 3)
+
+
+class TestAddressView(TestCase):
+    def setUp(self):
+        self.user1 = User.objects.create_user("root1", "email1@exemple.com", "root")
+        self.user2 = User.objects.create_user("root2", "email2@exemple.com", "root")
+
+        self.customer1 = Customer.objects.create(
+            name="josé", owner=self.user2.profile.org
+        )
+        self.customer2 = Customer.objects.create(
+            name="Maria", owner=self.user2.profile.org
+        )
+        self.customer3 = Customer.objects.create(
+            name="Pedro", owner=self.user2.profile.org
+        )
+
+    def test_create_address_to_custumer_with_authenticated_user(self):
+        addressCount = self.customer1.address.count()
+        self.assertEqual(addressCount, 0)
+
+        client = APIClient()
+        client.force_authenticate(user=self.user2)
+
+        response = client.post(
+            reverse("profiles:customer_address_list", kwargs={"pk": self.customer1.id}),
+            {
+                "number": "5",
+                "street": "street1",
+                "neighborhood": "neighb",
+                "city": "San Andreas",
+            },
+            format="json",
+        )
+        self.assertEquals(response.status_code, 201)
+
+        addressCount = self.customer1.address.count()
+        self.assertEqual(addressCount, 1)
+

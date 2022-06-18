@@ -1,9 +1,11 @@
+from pickle import NONE
 from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from profiles.models import Customer
-from profiles.serializers import CustomerSerializer
+from profiles.serializers import AddressSerializer, CustomerSerializer
+from rest_framework.permissions import IsAuthenticated
 
 # Create your views here.
 @api_view(["GET", "POST"])
@@ -20,3 +22,15 @@ def customer_list_view(request, format=None):
         customer_by_org = Customer.objects.filter(owner=request.user.profile.org)
         serializer = CustomerSerializer(customer_by_org, many=True)
         return Response(serializer.data)
+
+@api_view(["POST"])
+def customer_address_list_view(request, pk, format=None):
+    customer = Customer.objects.get(pk=pk)
+    if request.method == "POST":
+        serializer = AddressSerializer(data = request.data)
+        if serializer.is_valid():
+            serializer.save()
+            address = serializer.instance
+            customer.address.add(address)
+            return Response(data=serializer.data, status=status.HTTP_201_CREATED)
+            
