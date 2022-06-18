@@ -24,6 +24,7 @@ def customer_list_view(request, format=None):
         return Response(serializer.data)
 
 @api_view(["POST"])
+@permission_classes([IsAuthenticated])
 def customer_address_list_view(request, pk, format=None):
     customer = Customer.objects.get(pk=pk)
     if request.method == "POST":
