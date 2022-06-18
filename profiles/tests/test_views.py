@@ -89,3 +89,24 @@ class TestAddressView(TestCase):
         addressCount = self.customer1.address.count()
         self.assertEqual(addressCount, 1)
 
+    def test_create_address_to_custumer_with_not_authenticated_user(self):
+        addressCount = self.customer2.address.count()
+        self.assertEqual(addressCount, 0)
+
+        client = APIClient()
+
+        response = client.post(
+            reverse("profiles:customer_address_list", kwargs={"pk": self.customer2.id}),
+            {
+                "number": "5",
+                "street": "street1",
+                "neighborhood": "neighb",
+                "city": "San Andreas",
+            },
+            format="json",
+        )
+        self.assertEquals(response.status_code, 403)
+
+        addressCount = self.customer2.address.count()
+        self.assertEqual(addressCount, 0)
+
