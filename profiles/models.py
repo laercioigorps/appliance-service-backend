@@ -26,6 +26,9 @@ class Customer(models.Model):
     owner = models.ForeignKey(Organization, on_delete=models.CASCADE)
     address = models.ManyToManyField(Address, blank=True)
 
+    def has_object_permission(self, request):
+        return self.owner == request.user.profile.org
+
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
