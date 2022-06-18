@@ -8,7 +8,7 @@ from rest_framework.parsers import JSONParser
 from profiles.models import Customer
 
 
-class TestCustomer(TestCase):
+class TestCustomerView(TestCase):
     def setUp(self) -> None:
         self.user1 = User.objects.create_user("root1", "email1@exemple.com", "root")
         self.user2 = User.objects.create_user("root2", "email2@exemple.com", "root")
@@ -22,10 +22,14 @@ class TestCustomer(TestCase):
         self.customer3 = Customer.objects.create(
             name="Pedro", owner=self.user2.profile.org
         )
+        self.customer4 = Customer.objects.create(
+            name="Pedro", owner=self.user1.profile.org
+        )
+
 
     def test_create_customer(self):
         customer_count = Customer.objects.all().count()
-        self.assertEqual(customer_count, 3)
+        self.assertEqual(customer_count, 4)
 
         client = APIClient()
         client.force_authenticate(user=self.user1)
@@ -35,11 +39,11 @@ class TestCustomer(TestCase):
         self.assertEqual(response.status_code, 201)
 
         customer_count = Customer.objects.all().count()
-        self.assertEqual(customer_count, 4)
+        self.assertEqual(customer_count, 5)
 
-    def test_list_customer_by_organization(self):
-        customer_count = Customer.objects.all().count()
-        self.assertEqual(customer_count, 3)
+    def test_list_customer_by_user_organization(self):
+        customer_owned_by_user2_organization = Customer.objects.filter(owner= self.user2.profile.org).count()
+        self.assertEqual(customer_owned_by_user2_organization, 3)
 
         client = APIClient()
         client.force_authenticate(user=self.user2)
@@ -109,4 +113,3 @@ class TestAddressView(TestCase):
 
         addressCount = self.customer2.address.count()
         self.assertEqual(addressCount, 0)
-
