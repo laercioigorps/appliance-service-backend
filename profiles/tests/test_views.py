@@ -112,6 +112,16 @@ class TestCustomerDetailView(TestCase):
 
         self.assertEquals(response.status_code, 404)
 
+    def test_get_customer_wich_authenticated_user_dont_own(self):
+        client = APIClient()
+        client.force_authenticate(self.user1)
+        response = client.get(
+            reverse("profiles:customer_detail", kwargs={"pk": self.customer1.id}),
+            format="json",
+        )
+
+        self.assertEquals(response.status_code, 403)
+
 
 class TestAddressView(TestCase):
     def setUp(self):
