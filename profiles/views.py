@@ -44,6 +44,7 @@ class CustomerDetailView(APIView):
 
     def delete(self, request, pk, format=None):
         customer = Customer.objects.get(pk=pk)
+        self.check_object_permissions(request, customer)
         customer.delete()
         return Response(status=status.HTTP_200_OK)
 
