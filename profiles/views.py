@@ -59,6 +59,7 @@ class CustomerAddressListView(APIView):
 
     def get(self, request, pk, format=None):
         customer = get_object_or_404(Customer, pk=pk)
+        self.check_object_permissions(request, customer)
         address = Address.objects.filter(customer__pk=pk)
         serializer = AddressSerializer(address, many=True)
         return Response(data=serializer.data)
