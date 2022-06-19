@@ -161,7 +161,7 @@ class TestCustomerDetailView(TestCase):
         self.assertEquals(response.status_code, 400)
 
     def test_delete_customer_with_valid_authenticated_user(self):
-        customer_count = Customer.objects.filter(owner = self.user2.profile.org).count()
+        customer_count = Customer.objects.filter(owner=self.user2.profile.org).count()
         self.assertEquals(customer_count, 3)
 
         client = APIClient()
@@ -173,8 +173,40 @@ class TestCustomerDetailView(TestCase):
 
         self.assertEquals(response.status_code, 200)
 
-        customer_count = Customer.objects.filter(owner = self.user2.profile.org).count()
+        customer_count = Customer.objects.filter(owner=self.user2.profile.org).count()
         self.assertEquals(customer_count, 2)
+
+    def test_delete_customer_with_not_authenticated_user(self):
+        customer_count = Customer.objects.filter(owner=self.user2.profile.org).count()
+        self.assertEquals(customer_count, 3)
+
+        client = APIClient()
+
+        response = client.delete(
+            reverse("profiles:customer_detail", kwargs={"pk": self.customer1.id}),
+            format="json",
+        )
+
+        self.assertEquals(response.status_code, 403)
+
+        customer_count = Customer.objects.filter(owner=self.user2.profile.org).count()
+        self.assertEquals(customer_count, 3)
+
+    def test_delete_customer_wich_authenticated_user_does_not_own(self):
+        customer_count = Customer.objects.filter(owner=self.user2.profile.org).count()
+        self.assertEquals(customer_count, 3)
+
+        client = APIClient()
+        client.force_authenticate(self.user1)
+        response = client.delete(
+            reverse("profiles:customer_detail", kwargs={"pk": self.customer1.id}),
+            format="json",
+        )
+
+        self.assertEquals(response.status_code, 403)
+
+        customer_count = Customer.objects.filter(owner=self.user2.profile.org).count()
+        self.assertEquals(customer_count, 3)
 
 
 class TestAddressView(TestCase):
