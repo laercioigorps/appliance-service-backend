@@ -92,6 +92,16 @@ class TestCustomerDetailView(TestCase):
 
         self.assertEqual(data["name"], self.customer4.name)
 
+    def test_get_customer_with_not_authenticated_user(self):
+        client = APIClient()
+
+        response = client.get(
+            reverse("profiles:customer_detail", kwargs={"pk": self.customer4.id}),
+            format="json",
+        )
+
+        self.assertEquals(response.status_code, 403)
+
 
 class TestAddressView(TestCase):
     def setUp(self):
