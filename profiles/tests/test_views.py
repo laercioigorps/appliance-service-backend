@@ -122,6 +122,22 @@ class TestCustomerDetailView(TestCase):
 
         self.assertEquals(response.status_code, 403)
 
+    def test_update_customer_with_authenticated_user(self):
+        client = APIClient()
+        client.force_authenticate(self.user2)
+        response = client.put(
+            reverse("profiles:customer_detail", kwargs={"pk": self.customer1.id}),
+            {"name": "new name", "owner": self.customer1.owner.id},
+            format="json",
+        )
+
+        self.assertEquals(response.status_code, 200)
+
+        stream = io.BytesIO(response.content)
+        data = JSONParser().parse(stream)
+
+        self.assertEqual(data["name"], "new name")
+
 
 class TestAddressView(TestCase):
     def setUp(self):
