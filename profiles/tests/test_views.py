@@ -149,6 +149,17 @@ class TestCustomerDetailView(TestCase):
 
         self.assertEquals(response.status_code, 404)
 
+    def test_update_customer_with_invalid_data(self):
+        client = APIClient()
+        client.force_authenticate(self.user2)
+        response = client.put(
+            reverse("profiles:customer_detail", kwargs={"pk": self.customer1.id}),
+            {"owner": self.customer1.owner.id},
+            format="json",
+        )
+
+        self.assertEquals(response.status_code, 400)
+
 
 class TestAddressView(TestCase):
     def setUp(self):
