@@ -102,6 +102,16 @@ class TestCustomerDetailView(TestCase):
 
         self.assertEquals(response.status_code, 403)
 
+    def test_get_invalid_customer_with_authenticated_user(self):
+        client = APIClient()
+        client.force_authenticate(self.user1)
+        response = client.get(
+            reverse("profiles:customer_detail", kwargs={"pk": 100}),
+            format="json",
+        )
+
+        self.assertEquals(response.status_code, 404)
+
 
 class TestAddressView(TestCase):
     def setUp(self):
