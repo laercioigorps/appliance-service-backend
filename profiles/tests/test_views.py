@@ -159,3 +159,24 @@ class TestAddressView(TestCase):
 
         addressCount = Address.objects.all().count()
         self.assertEquals(addressCount, 0)
+
+    def test_create_address_to_custumer_with_not_valid_data(self):
+        addressCount = self.customer1.address.count()
+        self.assertEqual(addressCount, 0)
+
+        client = APIClient()
+        client.force_authenticate(user=self.user2)
+
+        response = client.post(
+            reverse("profiles:customer_address_list", kwargs={"pk": self.customer1.id}),
+            {
+                "street": "street1",
+                "neighborhood": "neighb",
+                "city": "San Andreas",
+            },
+            format="json",
+        )
+        self.assertEquals(response.status_code, 400)
+
+        addressCount = self.customer1.address.count()
+        self.assertEqual(addressCount, 0)
