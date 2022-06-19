@@ -26,10 +26,11 @@ def customer_list_view(request, format=None):
 
 class CustomerDetailView(APIView):
 
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsCustomerOwner]
 
     def get(self, request, pk, format=None):
         customer = get_object_or_404(Customer, pk=pk)
+        self.check_object_permissions(request, customer)
         serializer = CustomerSerializer(customer)
         return Response(serializer.data)
 
