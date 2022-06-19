@@ -58,6 +58,7 @@ class CustomerAddressListView(APIView):
         return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def get(self, request, pk, format=None):
+        customer = get_object_or_404(Customer, pk=pk)
         address = Address.objects.filter(customer__pk=pk)
         serializer = AddressSerializer(address, many=True)
         return Response(data=serializer.data)
