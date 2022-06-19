@@ -180,3 +180,49 @@ class TestAddressView(TestCase):
 
         addressCount = self.customer1.address.count()
         self.assertEqual(addressCount, 0)
+
+
+class TestAddressListGetView(TestCase):
+    def setUp(self):
+        self.user1 = User.objects.create_user("root1", "email1@exemple.com", "root")
+        self.user2 = User.objects.create_user("root2", "email2@exemple.com", "root")
+
+        self.customer1 = Customer.objects.create(
+            name="josé", owner=self.user2.profile.org
+        )
+        self.customer2 = Customer.objects.create(
+            name="Maria", owner=self.user2.profile.org
+        )
+        self.customer3 = Customer.objects.create(
+            name="Pedro", owner=self.user2.profile.org
+        )
+
+        self.address1 = Address.objects.create(
+            number="1", street="street1", neighborhood="neigh1"
+        )
+        self.address2 = Address.objects.create(
+            number="2", street="street2", neighborhood="neigh2"
+        )
+        self.address3 = Address.objects.create(
+            number="3", street="street3", neighborhood="neigh3"
+        )
+
+        self.customer1.address.add(self.address1)
+        self.customer1.address.add(self.address2)
+
+        self.customer2.address.add(self.address3)
+
+    def test_list_address_from_customer_with_authenticated_user(self):
+
+        client = APIClient()
+        client.force_authenticate(self.user2)
+
+        response = client.get(
+            reverse("profiles:customer_address_list", kwargs={"pk": self.customer1.id})
+        )
+
+        self.assertEquals(response.status_code, 200)
+
+        stream = io.BytesIO(response.content)
+        data = JSONParser().parse(stream)
+        self.assertEqual(len(data), 2)
