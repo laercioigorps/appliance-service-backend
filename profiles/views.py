@@ -35,7 +35,7 @@ class CustomerDetailView(APIView):
         return Response(serializer.data)
 
     def put(self, request, pk, format=None):
-        customer = Customer.objects.get(pk=pk)
+        customer = get_object_or_404(Customer, pk=pk)
         serializer = CustomerSerializer(customer, data=request.data)
         if serializer.is_valid():
             serializer.save()
