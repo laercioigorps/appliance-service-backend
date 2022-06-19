@@ -42,6 +42,11 @@ class CustomerDetailView(APIView):
             return Response(data=serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    def delete(self, request, pk, format=None):
+        customer = Customer.objects.get(pk=pk)
+        customer.delete()
+        return Response(status=status.HTTP_200_OK)
+
 
 """ @api_view(["POST"])
 @permission_classes([IsAuthenticated, IsCustomerOwner])
