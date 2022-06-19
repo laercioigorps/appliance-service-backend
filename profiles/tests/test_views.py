@@ -155,7 +155,7 @@ class TestAddressView(TestCase):
             format="json",
         )
 
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 404)
 
         addressCount = Address.objects.all().count()
         self.assertEquals(addressCount, 0)
