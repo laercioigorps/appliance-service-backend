@@ -23,12 +23,13 @@ def customer_list_view(request, format=None):
         serializer = CustomerSerializer(customer_by_org, many=True)
         return Response(serializer.data)
 
+
 class CustomerDetailView(APIView):
 
     permission_classes = [IsAuthenticated]
 
     def get(self, request, pk, format=None):
-        customer = Customer.objects.get(pk=pk)
+        customer = get_object_or_404(Customer, pk=pk)
         serializer = CustomerSerializer(customer)
         return Response(serializer.data)
 
