@@ -226,3 +226,12 @@ class TestAddressListGetView(TestCase):
         response = client.get(reverse("profiles:customer_address_list", kwargs={"pk": self.customer1.id}))
 
         self.assertEquals(response.status_code, 403)
+
+    def test_list_address_from_customer_with_invalid_customer_id(self):
+
+        client = APIClient()
+        client.force_authenticate(self.user1)
+
+        response = client.get(reverse("profiles:customer_address_list", kwargs={"pk": 100}))
+
+        self.assertEquals(response.status_code, 404)
