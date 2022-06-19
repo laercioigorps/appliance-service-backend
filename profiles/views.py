@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes, APIView
@@ -24,7 +24,7 @@ def customer_list_view(request, format=None):
         return Response(serializer.data)
 
 
-@api_view(["POST"])
+""" @api_view(["POST"])
 @permission_classes([IsAuthenticated, IsCustomerOwner])
 def customer_address_list_view(request, pk, format=None):
     try:
@@ -39,7 +39,7 @@ def customer_address_list_view(request, pk, format=None):
             serializer.save()
             address = serializer.instance
             customer.address.add(address)
-            return Response(data=serializer.data, status=status.HTTP_201_CREATED)
+            return Response(data=serializer.data, status=status.HTTP_201_CREATED) """
 
 
 class CustomerAddressListView(APIView):
@@ -47,12 +47,7 @@ class CustomerAddressListView(APIView):
     permission_classes = [IsAuthenticated, IsCustomerOwner]
 
     def post(self, request, pk, format=None):
-        try:
-            customer = Customer.objects.get(pk=pk)
-        except Customer.DoesNotExist:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-        #if not customer.has_object_permission(request):
-        #    return Response(status=status.HTTP_401_UNAUTHORIZED)
+        customer = get_object_or_404(Customer, pk=pk)
         self.check_object_permissions(request, customer)
         if request.method == "POST":
             serializer = AddressSerializer(data=request.data)
