@@ -1,3 +1,4 @@
+from django import views
 from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth.models import User
@@ -55,6 +56,41 @@ class TestCustomerView(TestCase):
         data = JSONParser().parse(stream)
 
         self.assertEqual(len(data), 3)
+
+
+class TestCustomerDetailView(TestCase):
+    def setUp(self):
+        self.user1 = User.objects.create_user("root1", "email1@exemple.com", "root")
+        self.user2 = User.objects.create_user("root2", "email2@exemple.com", "root")
+
+        self.customer1 = Customer.objects.create(
+            name="josé", owner=self.user2.profile.org
+        )
+        self.customer2 = Customer.objects.create(
+            name="Maria", owner=self.user2.profile.org
+        )
+        self.customer3 = Customer.objects.create(
+            name="Pedro", owner=self.user2.profile.org
+        )
+        self.customer4 = Customer.objects.create(
+            name="Pedro", owner=self.user1.profile.org
+        )
+
+    def test_get_customer_with_valid_user(self):
+        client = APIClient()
+        client.force_authenticate(self.user1)
+
+        response = client.get(
+            reverse("profiles:customer_detail", kwargs={"pk": self.customer4.id}),
+            format="json",
+        )
+
+        self.assertEquals(response.status_code, 200)
+
+        stream = io.BytesIO(response.content)
+        data = JSONParser().parse(stream)
+
+        self.assertEqual(data["name"], self.customer4.name)
 
 
 class TestAddressView(TestCase):
@@ -183,7 +219,6 @@ class TestAddressView(TestCase):
 
 
 class TestAddressListGetView(TestCase):
-
     def setUp(self):
         self.user1 = User.objects.create_user("root1", "email1@exemple.com", "root")
         self.user2 = User.objects.create_user("root2", "email2@exemple.com", "root")
@@ -198,20 +233,29 @@ class TestAddressListGetView(TestCase):
             name="Pedro", owner=self.user2.profile.org
         )
 
-        self.address1 = Address.objects.create(number="1", street="street1", neighborhood="neigh1")
-        self.address2 = Address.objects.create(number="2", street="street2", neighborhood="neigh2")
-        self.address3 = Address.objects.create(number="3", street="street3", neighborhood="neigh3")
+        self.address1 = Address.objects.create(
+            number="1", street="street1", neighborhood="neigh1"
+        )
+        self.address2 = Address.objects.create(
+            number="2", street="street2", neighborhood="neigh2"
+        )
+        self.address3 = Address.objects.create(
+            number="3", street="street3", neighborhood="neigh3"
+        )
 
         self.customer1.address.add(self.address1)
         self.customer1.address.add(self.address2)
 
         self.customer2.address.add(self.address3)
+
     def test_list_address_from_customer_with_authenticated_user(self):
 
         client = APIClient()
         client.force_authenticate(self.user2)
 
-        response = client.get(reverse("profiles:customer_address_list", kwargs={"pk": self.customer1.id}))
+        response = client.get(
+            reverse("profiles:customer_address_list", kwargs={"pk": self.customer1.id})
+        )
 
         self.assertEquals(response.status_code, 200)
 
@@ -223,7 +267,9 @@ class TestAddressListGetView(TestCase):
 
         client = APIClient()
 
-        response = client.get(reverse("profiles:customer_address_list", kwargs={"pk": self.customer1.id}))
+        response = client.get(
+            reverse("profiles:customer_address_list", kwargs={"pk": self.customer1.id})
+        )
 
         self.assertEquals(response.status_code, 403)
 
@@ -232,7 +278,9 @@ class TestAddressListGetView(TestCase):
         client = APIClient()
         client.force_authenticate(self.user1)
 
-        response = client.get(reverse("profiles:customer_address_list", kwargs={"pk": 100}))
+        response = client.get(
+            reverse("profiles:customer_address_list", kwargs={"pk": 100})
+        )
 
         self.assertEquals(response.status_code, 404)
 
@@ -241,6 +289,8 @@ class TestAddressListGetView(TestCase):
         client = APIClient()
         client.force_authenticate(self.user1)
 
-        response = client.get(reverse("profiles:customer_address_list", kwargs={"pk": self.customer1.id}))
+        response = client.get(
+            reverse("profiles:customer_address_list", kwargs={"pk": self.customer1.id})
+        )
 
         self.assertEquals(response.status_code, 403)
