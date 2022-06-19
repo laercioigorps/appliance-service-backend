@@ -49,10 +49,10 @@ class CustomerAddressListView(APIView):
     def post(self, request, pk, format=None):
         customer = get_object_or_404(Customer, pk=pk)
         self.check_object_permissions(request, customer)
-        if request.method == "POST":
-            serializer = AddressSerializer(data=request.data)
-            if serializer.is_valid():
-                serializer.save()
-                address = serializer.instance
-                customer.address.add(address)
-                return Response(data=serializer.data, status=status.HTTP_201_CREATED)
+        serializer = AddressSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            address = serializer.instance
+            customer.address.add(address)
+            return Response(data=serializer.data, status=status.HTTP_201_CREATED)
+        return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
