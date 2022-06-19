@@ -23,6 +23,13 @@ def customer_list_view(request, format=None):
         serializer = CustomerSerializer(customer_by_org, many=True)
         return Response(serializer.data)
 
+class CustomerDetailView(APIView):
+
+    def get(self, request, pk, format=None):
+        customer = Customer.objects.get(pk=pk)
+        serializer = CustomerSerializer(customer)
+        return Response(serializer.data)
+
 
 """ @api_view(["POST"])
 @permission_classes([IsAuthenticated, IsCustomerOwner])
