@@ -34,6 +34,13 @@ class CustomerDetailView(APIView):
         serializer = CustomerSerializer(customer)
         return Response(serializer.data)
 
+    def put(self, request, pk, format=None):
+        customer = Customer.objects.get(pk=pk)
+        serializer = CustomerSerializer(customer, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(data=serializer.data, status=status.HTTP_200_OK)
+
 
 """ @api_view(["POST"])
 @permission_classes([IsAuthenticated, IsCustomerOwner])
