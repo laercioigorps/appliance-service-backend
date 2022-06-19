@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404, render
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes, APIView
-from profiles.models import Customer
+from profiles.models import Address, Customer
 from profiles.serializers import AddressSerializer, CustomerSerializer
 from rest_framework.permissions import IsAuthenticated
 from .permissions import IsCustomerOwner
@@ -56,3 +56,8 @@ class CustomerAddressListView(APIView):
             customer.address.add(address)
             return Response(data=serializer.data, status=status.HTTP_201_CREATED)
         return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def get(self, request, pk, format=None):
+        address = Address.objects.filter(customer__pk=pk)
+        serializer = AddressSerializer(address, many=True)
+        return Response(data=serializer.data)
