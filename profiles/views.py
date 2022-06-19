@@ -25,6 +25,8 @@ def customer_list_view(request, format=None):
 
 class CustomerDetailView(APIView):
 
+    permission_classes = [IsAuthenticated]
+
     def get(self, request, pk, format=None):
         customer = Customer.objects.get(pk=pk)
         serializer = CustomerSerializer(customer)
