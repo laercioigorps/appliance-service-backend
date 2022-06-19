@@ -235,3 +235,12 @@ class TestAddressListGetView(TestCase):
         response = client.get(reverse("profiles:customer_address_list", kwargs={"pk": 100}))
 
         self.assertEquals(response.status_code, 404)
+
+    def test_list_address_from_customer_wich_the_user_does_not_own(self):
+
+        client = APIClient()
+        client.force_authenticate(self.user1)
+
+        response = client.get(reverse("profiles:customer_address_list", kwargs={"pk": self.customer1.id}))
+
+        self.assertEquals(response.status_code, 403)
