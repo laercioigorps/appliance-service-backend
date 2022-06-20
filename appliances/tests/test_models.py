@@ -1,4 +1,5 @@
 from unicodedata import category
+from django.forms import ValidationError
 from django.test import TestCase
 from appliances.models import (
     Brand,
@@ -9,6 +10,7 @@ from appliances.models import (
     Solution,
     Historic,
 )
+from profiles.models import Organization
 
 # Create your tests here.
 
@@ -191,11 +193,15 @@ class ApplianceHistoricTest(TestCase):
             description="não apresenta sinal de energia",
         )
 
-    def test_historic_create_with_no_data(self):
-        historic = Historic.objects.create()
-        self.assertEqual(historic.completed, False)
+        self.org1 = Organization.objects.create(name="test1")
+        self.org2 = Organization.objects.create(name="test2")
 
-    def test_add_symptoms_to_historic(self):
+    def test_historic_create_with_no_data(self):
+        historic = Historic()
+        historic.full_clean()
+        self.assertRaises(ValidationError, historic.full_clean)
+
+    """ def test_add_symptoms_to_historic(self):
         historic = Historic.objects.create()
 
         historic_symptoms_count = historic.symptoms.all().count()
@@ -256,4 +262,4 @@ class ApplianceHistoricTest(TestCase):
 
         historicCopy = Historic.objects.get(appliance__model="DF50x")
         self.assertEqual(historicCopy.appliance.model, "DF50x")
-        self.assertEqual(historicCopy.appliance.brand.name, "Electrolux")
+        self.assertEqual(historicCopy.appliance.brand.name, "Electrolux") """
