@@ -111,7 +111,7 @@ class CustomerAddressDetailView(APIView):
             return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk, address_pk):
-        address = Address.objects.get(pk=address_pk)
+        address = get_object_or_404(Address, pk=address_pk)
         self.check_object_permissions(request, address)
         address.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
