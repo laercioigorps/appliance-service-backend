@@ -92,6 +92,8 @@ class CustomerAddressListView(APIView):
 
 class CustomerAddressDetailView(APIView):
 
+    permission_classes = [IsAuthenticated]
+
     def get(self, request, pk, address_pk):
         address = Address.objects.get(pk=address_pk)
         serializer = AddressSerializer(address)
