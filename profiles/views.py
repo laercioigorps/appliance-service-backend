@@ -5,7 +5,7 @@ from rest_framework.decorators import api_view, permission_classes, APIView
 from profiles.models import Address, Customer
 from profiles.serializers import AddressSerializer, CustomerSerializer
 from rest_framework.permissions import IsAuthenticated
-from .permissions import IsCustomerOwner
+from .permissions import IsAddressOwner, IsCustomerOwner
 
 # Create your views here.
 @api_view(["GET", "POST"])
@@ -92,9 +92,10 @@ class CustomerAddressListView(APIView):
 
 class CustomerAddressDetailView(APIView):
 
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsAddressOwner]
 
     def get(self, request, pk, address_pk):
         address = Address.objects.get(pk=address_pk)
+        self.check_object_permissions(request, address)
         serializer = AddressSerializer(address)
         return Response(data=serializer.data)
