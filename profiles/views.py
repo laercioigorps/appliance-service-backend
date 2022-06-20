@@ -101,7 +101,7 @@ class CustomerAddressDetailView(APIView):
         return Response(data=serializer.data)
 
     def put(self, request, pk, address_pk):
-        address = Address.objects.get(pk=address_pk)
+        address = get_object_or_404(Address, pk=address_pk)
         serializer = AddressSerializer(address, request.data)
         if(serializer.is_valid()):
             serializer.save()
