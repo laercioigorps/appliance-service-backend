@@ -112,5 +112,6 @@ class CustomerAddressDetailView(APIView):
 
     def delete(self, request, pk, address_pk):
         address = Address.objects.get(pk=address_pk)
+        self.check_object_permissions(request, address)
         address.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
