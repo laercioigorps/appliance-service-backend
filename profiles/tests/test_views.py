@@ -592,3 +592,14 @@ class TestCustomerAddressDetailView(TestCase):
 
         new_address_count = Address.objects.all().count()
         self.assertEqual(new_address_count, address_count - 1)
+
+    def test_delete_customer_address_with_not_authenticated_user(self):
+        client = APIClient()
+
+        response = client.delete(
+            reverse(
+                "profiles:customer_address_detail",
+                kwargs={"pk": self.customer1.id, "address_pk": self.address1.id},
+            )
+        )
+        self.assertEqual(response.status_code, 403)
