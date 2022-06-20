@@ -506,11 +506,12 @@ class TestCustomerAddressDetailView(TestCase):
             reverse(
                 "profiles:customer_address_detail",
                 kwargs={"pk": self.customer1.id, "address_pk": self.address1.id},
-            ), {
-                "number" : "9999",
-                "street" : "newStreet",
-                "neighborhood" : "newNeighborhood"
-            }
+            ),
+            {
+                "number": "9999",
+                "street": "newStreet",
+                "neighborhood": "newNeighborhood",
+            },
         )
 
         self.assertEqual(response.status_code, 200)
@@ -530,11 +531,12 @@ class TestCustomerAddressDetailView(TestCase):
             reverse(
                 "profiles:customer_address_detail",
                 kwargs={"pk": self.customer1.id, "address_pk": 100},
-            ), {
-                "number" : "9999",
-                "street" : "newStreet",
-                "neighborhood" : "newNeighborhood"
-            }
+            ),
+            {
+                "number": "9999",
+                "street": "newStreet",
+                "neighborhood": "newNeighborhood",
+            },
         )
 
         self.assertEqual(response.status_code, 404)
@@ -547,16 +549,16 @@ class TestCustomerAddressDetailView(TestCase):
             reverse(
                 "profiles:customer_address_detail",
                 kwargs={"pk": self.customer1.id, "address_pk": self.address1.id},
-            ), {
-                "number" : "9999",
-                "street" : "newStreet",
-                "neighborhood" : "newNeighborhood"
-            }
+            ),
+            {
+                "number": "9999",
+                "street": "newStreet",
+                "neighborhood": "newNeighborhood",
+            },
         )
 
         self.assertEqual(response.status_code, 403)
 
-    
     def test_update_customer_address_with_invalid_data(self):
         client = APIClient()
         client.force_authenticate(self.user2)
@@ -565,10 +567,28 @@ class TestCustomerAddressDetailView(TestCase):
             reverse(
                 "profiles:customer_address_detail",
                 kwargs={"pk": self.customer1.id, "address_pk": self.address1.id},
-            ), {
-                "street" : "newStreet",
-                "neighborhood" : "newNeighborhood",
-            }
+            ),
+            {
+                "street": "newStreet",
+                "neighborhood": "newNeighborhood",
+            },
+        )
+        self.assertEqual(response.status_code, 400)
+
+    def test_delete_customer_address_with_valid_authenticated_user(self):
+        address_count = Address.objects.all().count()
+
+        client = APIClient()
+        client.force_authenticate(self.user2)
+
+        response = client.delete(
+            reverse(
+                "profiles:customer_address_detail",
+                kwargs={"pk": self.customer1.id, "address_pk": self.address1.id},
+            )
         )
 
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 204)
+
+        new_address_count = Address.objects.all().count()
+        self.assertEqual(new_address_count, address_count - 1)
