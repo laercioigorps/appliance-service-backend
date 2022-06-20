@@ -1,4 +1,5 @@
 from django.db import models
+from profiles.models import Organization
 
 # Create your models here.
 
@@ -64,3 +65,4 @@ class Historic(models.Model):
     appliance = models.ForeignKey(
         Appliance, on_delete=models.CASCADE, blank=True, null=True
     )
+    org = models.ForeignKey(Organization, on_delete=models.CASCADE, null=True)
