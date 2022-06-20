@@ -261,3 +261,12 @@ class ApplianceHistoricTest(TestCase):
         historicCopy = Historic.objects.get(appliance__model="DF50x")
         self.assertEqual(historicCopy.appliance.model, "DF50x")
         self.assertEqual(historicCopy.appliance.brand.name, "Electrolux")
+
+    def test_add_organization_to_historic(self):
+        historic = Historic.objects.create()
+
+        historic.org = self.org1
+        historic.save()
+
+        histCopy = Historic.objects.get(pk=historic.id)
+        self.assertEquals(histCopy.org.name, self.org1.name)
