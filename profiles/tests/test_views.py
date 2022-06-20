@@ -603,3 +603,16 @@ class TestCustomerAddressDetailView(TestCase):
             )
         )
         self.assertEqual(response.status_code, 403)
+
+
+    def test_delete_customer_address_wich_authenticated_user_does_not_own(self):
+        client = APIClient()
+        client.force_authenticate(self.user1)
+
+        response = client.delete(
+            reverse(
+                "profiles:customer_address_detail",
+                kwargs={"pk": self.customer1.id, "address_pk": self.address1.id},
+            )
+        )
+        self.assertEqual(response.status_code, 403)
