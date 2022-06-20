@@ -99,3 +99,10 @@ class CustomerAddressDetailView(APIView):
         self.check_object_permissions(request, address)
         serializer = AddressSerializer(address)
         return Response(data=serializer.data)
+
+    def put(self, request, pk, address_pk):
+        address = Address.objects.get(pk=address_pk)
+        serializer = AddressSerializer(address, request.data)
+        if(serializer.is_valid()):
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
