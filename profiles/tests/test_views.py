@@ -458,6 +458,19 @@ class TestCustomerAddressDetailView(TestCase):
         stream = io.BytesIO(response.content)
         data = JSONParser().parse(stream)
 
-        self.assertEqual(data["number"], self.address1.number)
-        self.assertEqual(data["street"], self.address1.street)
-        self.assertEqual(data["neighborhood"], self.address1.neighborhood)
+        self.assertEqual(data['number'], self.address1.number)
+        self.assertEqual(data['street'], self.address1.street)
+        self.assertEqual(data['neighborhood'], self.address1.neighborhood)
+
+    
+    def test_retrieve_customer_address_with_not_authenticated_user(self):
+        client = APIClient()
+
+        response = client.get(
+            reverse(
+                "profiles:customer_address_detail",
+                kwargs={"pk": self.customer1.id, "address_pk": self.address1.id},
+            )
+        )
+
+        self.assertEquals(response.status_code, 403)
