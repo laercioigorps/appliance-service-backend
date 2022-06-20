@@ -521,3 +521,20 @@ class TestCustomerAddressDetailView(TestCase):
         self.assertEqual(data["number"], "9999")
         self.assertEqual(data["street"], "newStreet")
         self.assertEqual(data["neighborhood"], "newNeighborhood")
+
+    def test_update_not_valid_customer_address(self):
+        client = APIClient()
+        client.force_authenticate(self.user2)
+
+        response = client.put(
+            reverse(
+                "profiles:customer_address_detail",
+                kwargs={"pk": self.customer1.id, "address_pk": 100},
+            ), {
+                "number" : "9999",
+                "street" : "newStreet",
+                "neighborhood" : "newNeighborhood"
+            }
+        )
+
+        self.assertEqual(response.status_code, 404)
