@@ -88,3 +88,11 @@ class CustomerAddressListView(APIView):
         address = Address.objects.filter(customer__pk=pk)
         serializer = AddressSerializer(address, many=True)
         return Response(data=serializer.data)
+
+
+class CustomerAddressDetailView(APIView):
+
+    def get(self, request, pk, address_pk):
+        address = Address.objects.get(pk=address_pk)
+        serializer = AddressSerializer(address)
+        return Response(data=serializer.data)
