@@ -95,7 +95,7 @@ class CustomerAddressDetailView(APIView):
     permission_classes = [IsAuthenticated, IsAddressOwner]
 
     def get(self, request, pk, address_pk):
-        address = Address.objects.get(pk=address_pk)
+        address = get_object_or_404(Address, pk=address_pk)
         self.check_object_permissions(request, address)
         serializer = AddressSerializer(address)
         return Response(data=serializer.data)
