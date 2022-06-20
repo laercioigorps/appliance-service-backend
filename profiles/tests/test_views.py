@@ -485,3 +485,15 @@ class TestCustomerAddressDetailView(TestCase):
         )
 
         self.assertEquals(response.status_code, 403)
+
+    def test_retrieve_invalid_customer_address(self):
+        client = APIClient()
+        client.force_authenticate(self.user2)
+        response = client.get(
+            reverse(
+                "profiles:customer_address_detail",
+                kwargs={"pk": self.customer1.id, "address_pk": 100},
+            )
+        )
+
+        self.assertEquals(response.status_code, 404)
