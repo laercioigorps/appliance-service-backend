@@ -25,3 +25,9 @@ class SolutionSerializer(serializers.Serializer):
     class Meta:
         model = Solution
         fields = ["name", "description"]
+
+
+class ProblemSerializer(serializers.Serializer):
+    class Meta:
+        model = Solution
+        fields = ["name", "description", "solutions"]
