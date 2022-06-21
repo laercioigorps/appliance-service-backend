@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .serializers import ApplianceSerializer, BrandSerializer, CategorySerializer, ProblemSerializer, SolutionSerializer
-from .models import Appliance, Brand, Category, Problem, Solution
+from .serializers import ApplianceSerializer, BrandSerializer, CategorySerializer, ProblemSerializer, SolutionSerializer, SymptomSerializer
+from .models import Appliance, Brand, Category, Problem, Solution, Symptom
 
 # Create your views here.
 
@@ -43,4 +43,12 @@ class ProblemListView(APIView):
     def get(self, request, format=None):
         problems = Problem.objects.all()
         serializer = ProblemSerializer(problems, many=True)
+        return Response(data = serializer.data)
+
+
+class SymptomListView(APIView):
+
+    def get(self, request, format=None):
+        symptoms = Symptom.objects.all()
+        serializer = SymptomSerializer(symptoms, many=True)
         return Response(data = serializer.data)
