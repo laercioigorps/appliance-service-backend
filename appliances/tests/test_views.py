@@ -335,3 +335,9 @@ class HistoricViewTest(TestCase):
 
         self.assertEqual(data[0]["org"], self.user1.profile.org.id)
         self.assertEqual(data[1]["org"], self.user1.profile.org.id)
+
+    def test_list_historic_with_not_authenticated_user(self):
+        response = self.notAuthenticatedClient.get(
+            reverse("appliances:historic_list"), format="json"
+        )
+        self.assertEqual(response.status_code, 403)
