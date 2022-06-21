@@ -1,6 +1,6 @@
 from pyexpat import model
 from rest_framework import serializers
-from .models import Appliance, Brand, Category, Problem, Solution, Symptom
+from .models import Appliance, Brand, Category, Historic, Problem, Solution, Symptom
 
 
 class BrandSerializer(serializers.ModelSerializer):
@@ -37,3 +37,8 @@ class SymptomSerializer(serializers.ModelSerializer):
     class Meta:
         model = Symptom
         fields = ["name", "description", "causes"]
+
+class HistoricSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Historic
+        fields = ["appliance", "symptoms", "problems", "solutions", "org", "completed"]
