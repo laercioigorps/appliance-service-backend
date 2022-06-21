@@ -2,7 +2,15 @@ from pydoc import describe
 from unicodedata import category
 from django.test import TestCase
 from django.urls import reverse
-from appliances.models import Appliance, Brand, Category, Problem, Solution, Symptom
+from appliances.models import (
+    Appliance,
+    Brand,
+    Category,
+    Historic,
+    Problem,
+    Solution,
+    Symptom,
+)
 from rest_framework.test import APIClient
 from django.contrib.auth.models import User
 import io
@@ -296,3 +304,34 @@ class SymptomViewTest(TestCase):
 
         self.assertEqual(data[0]["name"], "symptom1")
         self.assertEqual(data[1]["name"], "symptom2")
+
+
+class HistoricViewTest(TestCase):
+    def setUp(self):
+
+        self.user1 = User.objects.create_user("root1", "email1@exemple.com", "root")
+        self.user2 = User.objects.create_user("root2", "email1@exemple.com", "root")
+
+        self.authenticatedClient = APIClient()
+        self.authenticatedClient.force_authenticate(self.user1)
+
+        self.notAuthenticatedClient = APIClient()
+
+        self.h1 = Historic.objects.create(org=self.user1.profile.org)
+        self.h2 = Historic.objects.create(org=self.user1.profile.org)
+
+        self.h3 = Historic.objects.create(org=self.user2.profile.org)
+
+    def test_list_historic_with_authenticated_user(self):
+        response = self.authenticatedClient.get(
+            reverse("appliances:historic_list"), format="json"
+        )
+        self.assertEqual(response.status_code, 200)
+
+        stream = io.BytesIO(response.content)
+        data = JSONParser().parse(stream)
+
+        self.assertEqual(len(data), 2)
+
+        self.assertEqual(data[0]["org"], self.user1.profile.org.id)
+        self.assertEqual(data[1]["org"], self.user1.profile.org.id)
