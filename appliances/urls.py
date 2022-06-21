@@ -6,6 +6,7 @@ app_name = "appliances"
 
 urlpatterns = [
     path("brands/", views.BrandListView.as_view(), name="brand_list"),
+    path("category/", views.CategoryListView.as_view(), name="category_list"),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
