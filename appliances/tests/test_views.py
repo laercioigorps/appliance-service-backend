@@ -2,7 +2,7 @@ from pydoc import describe
 from unicodedata import category
 from django.test import TestCase
 from django.urls import reverse
-from appliances.models import Appliance, Brand, Category, Problem, Solution
+from appliances.models import Appliance, Brand, Category, Problem, Solution, Symptom
 from rest_framework.test import APIClient
 from django.contrib.auth.models import User
 import io
@@ -234,3 +234,51 @@ class ProblemViewTest(TestCase):
         self.assertEqual(data[1]["name"], "Problem2")
         self.assertEqual(data[2]["name"], "Problem3")
         self.assertEqual(data[3]["name"], "Problem4")
+
+
+class SymptomViewTest(TestCase):
+    def setUp(self):
+        self.problem1 = Problem.objects.create(
+            name="Problem1", description="problem1Description"
+        )
+        self.problem2 = Problem.objects.create(
+            name="Problem2", description="problem2Description"
+        )
+        self.problem3 = Problem.objects.create(
+            name="Problem3", description="problem3Description"
+        )
+        self.problem4 = Problem.objects.create(
+            name="Problem4", description="problem4Description"
+        )
+
+        self.symptom1 = Symptom.objects.create(
+            name="symptom1", description="symptom1description"
+        )
+        self.symptom2 = Symptom.objects.create(
+            name="symptom2", description="symptom2description"
+        )
+
+        self.symptom1.causes.add(self.problem1)
+        self.symptom1.causes.add(self.problem2)
+        self.symptom2.causes.add(self.problem1)
+
+        self.user1 = User.objects.create_user("root1", "email1@exemple.com", "root")
+
+        self.authenticatedClient = APIClient()
+        self.authenticatedClient.force_authenticate(self.user1)
+
+        self.notAuthenticatedClient = APIClient()
+
+    def test_list_symptoms_with_authenticated_user(self):
+        response = self.authenticatedClient.get(
+            reverse("appliances:symptom_list"), format="json"
+        )
+        self.assertEqual(response.status_code, 200)
+
+        stream = io.BytesIO(response.content)
+        data = JSONParser().parse(stream)
+
+        self.assertEqual(len(data), 2)
+
+        self.assertEqual(data[0]["name"], "symptom1")
+        self.assertEqual(data[1]["name"], "symptom2")
