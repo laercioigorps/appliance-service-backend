@@ -64,3 +64,14 @@ class CategoryViewTest(TestCase):
         data = JSONParser().parse(stream)
 
         self.assertEqual(len(data), 2)
+
+    def test_list_category_with_not_authenticated_user(self):
+        response = self.notAuthenticatedClient.get(
+            reverse("appliances:category_list"), format="json"
+        )
+        self.assertEqual(response.status_code, 200)
+
+        stream = io.BytesIO(response.content)
+        data = JSONParser().parse(stream)
+
+        self.assertEqual(len(data), 2)
