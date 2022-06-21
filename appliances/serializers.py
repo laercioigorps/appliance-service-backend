@@ -8,7 +8,14 @@ class BrandSerializer(serializers.Serializer):
         model = Brand
         fields = ["name"]
 
+
 class CategorySerializer(serializers.Serializer):
     class Meta:
         model = Category
         fields = ["name"]
+
+
+class ApplianceSerializer(serializers.Serializer):
+    class Meta:
+        model = Category
+        fields = ["model", "brand", "category"]
