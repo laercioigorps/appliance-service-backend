@@ -113,3 +113,14 @@ class ApplianceViewTest(TestCase):
         data = JSONParser().parse(stream)
 
         self.assertEqual(len(data), 3)
+
+    def test_list_appliances_with_not_authenticated_user(self):
+        response = self.notAuthenticatedClient.get(
+            reverse("appliances:appliance_list"), format="json"
+        )
+        self.assertEqual(response.status_code, 200)
+
+        stream = io.BytesIO(response.content)
+        data = JSONParser().parse(stream)
+
+        self.assertEqual(len(data), 3)
