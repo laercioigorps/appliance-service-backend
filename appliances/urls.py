@@ -5,7 +5,7 @@ from . import views
 app_name = "appliances"
 
 urlpatterns = [
-    path("appliances/brands/", views.BrandListView.as_view(), name="brand_list"),
+    path("brands/", views.BrandListView.as_view(), name="brand_list"),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
