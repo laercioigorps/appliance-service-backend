@@ -282,3 +282,17 @@ class SymptomViewTest(TestCase):
 
         self.assertEqual(data[0]["name"], "symptom1")
         self.assertEqual(data[1]["name"], "symptom2")
+
+    def test_list_symptoms_with_not_authenticated_user(self):
+        response = self.notAuthenticatedClient.get(
+            reverse("appliances:symptom_list"), format="json"
+        )
+        self.assertEqual(response.status_code, 200)
+
+        stream = io.BytesIO(response.content)
+        data = JSONParser().parse(stream)
+
+        self.assertEqual(len(data), 2)
+
+        self.assertEqual(data[0]["name"], "symptom1")
+        self.assertEqual(data[1]["name"], "symptom2")
