@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .serializers import BrandSerializer, CategorySerializer
-from .models import Brand, Category
+from .serializers import ApplianceSerializer, BrandSerializer, CategorySerializer
+from .models import Appliance, Brand, Category
 
 # Create your views here.
 
@@ -20,4 +20,11 @@ class CategoryListView(APIView):
     def get(self, request, format=None):
         categories = Category.objects.all()
         serializer = CategorySerializer(categories, many=True)
+        return Response(data = serializer.data)
+
+class ApplianceListView(APIView):
+
+    def get(self, request, format=None):
+        appliances = Appliance.objects.all()
+        serializer = ApplianceSerializer(appliances, many=True)
         return Response(data = serializer.data)
