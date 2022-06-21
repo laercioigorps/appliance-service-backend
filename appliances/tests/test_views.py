@@ -32,6 +32,9 @@ class BrandViewTest(TestCase):
 
         self.assertEqual(len(data), 2)
 
+        self.assertEqual(data[0]["name"], "Brand1")
+        self.assertEqual(data[1]["name"], "Brand2")
+
     def test_list_brand_with_not_authenticated_user(self):
         response = self.notAuthenticatedClient.get(
             reverse("appliances:brand_list"), format="json"
@@ -66,6 +69,9 @@ class CategoryViewTest(TestCase):
         data = JSONParser().parse(stream)
 
         self.assertEqual(len(data), 2)
+
+        self.assertEqual(data[0]["name"], "cat1")
+        self.assertEqual(data[1]["name"], "cat2")
 
     def test_list_category_with_not_authenticated_user(self):
         response = self.notAuthenticatedClient.get(
@@ -115,6 +121,10 @@ class ApplianceViewTest(TestCase):
 
         self.assertEqual(len(data), 3)
 
+        self.assertEqual(data[0]["model"], "BRW15ABANA")
+        self.assertEqual(data[1]["model"], "BRW17ABANA")
+        self.assertEqual(data[2]["model"], "BRW18ABANA")
+
     def test_list_appliances_with_not_authenticated_user(self):
         response = self.notAuthenticatedClient.get(
             reverse("appliances:appliance_list"), format="json"
@@ -157,6 +167,9 @@ class SolutionViewTest(TestCase):
 
         self.assertEqual(len(data), 3)
 
+        self.assertEqual(data[0]["name"], "solution1")
+        self.assertEqual(data[1]["name"], "solution2")
+
     def test_list_solutions_with_not_authenticated_user(self):
         response = self.notAuthenticatedClient.get(
             reverse("appliances:solution_list"), format="json"
@@ -181,10 +194,18 @@ class ProblemViewTest(TestCase):
             name="solution3", description="solution3description"
         )
 
-        self.problem1 = Problem.objects.create(name="Problem1", description="problem1Description")
-        self.problem2 = Problem.objects.create(name="Problem2", description="problem2Description")
-        self.problem3 = Problem.objects.create(name="Problem3", description="problem3Description")
-        self.problem4 = Problem.objects.create(name="Problem4", description="problem4Description")
+        self.problem1 = Problem.objects.create(
+            name="Problem1", description="problem1Description"
+        )
+        self.problem2 = Problem.objects.create(
+            name="Problem2", description="problem2Description"
+        )
+        self.problem3 = Problem.objects.create(
+            name="Problem3", description="problem3Description"
+        )
+        self.problem4 = Problem.objects.create(
+            name="Problem4", description="problem4Description"
+        )
 
         self.problem1.solutions.add(self.solution1)
         self.problem2.solutions.add(self.solution2)
@@ -198,7 +219,6 @@ class ProblemViewTest(TestCase):
 
         self.notAuthenticatedClient = APIClient()
 
-    
     def test_list_problems_with_authenticated_user(self):
         response = self.authenticatedClient.get(
             reverse("appliances:problem_list"), format="json"
@@ -209,3 +229,8 @@ class ProblemViewTest(TestCase):
         data = JSONParser().parse(stream)
 
         self.assertEqual(len(data), 4)
+
+        self.assertEqual(data[0]["name"], "Problem1")
+        self.assertEqual(data[1]["name"], "Problem2")
+        self.assertEqual(data[2]["name"], "Problem3")
+        self.assertEqual(data[3]["name"], "Problem4")
