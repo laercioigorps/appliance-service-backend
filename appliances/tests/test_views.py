@@ -1,7 +1,7 @@
 from unicodedata import category
 from django.test import TestCase
 from django.urls import reverse
-from appliances.models import Appliance, Brand, Category
+from appliances.models import Appliance, Brand, Category, Solution
 from rest_framework.test import APIClient
 from django.contrib.auth.models import User
 import io
@@ -117,6 +117,37 @@ class ApplianceViewTest(TestCase):
     def test_list_appliances_with_not_authenticated_user(self):
         response = self.notAuthenticatedClient.get(
             reverse("appliances:appliance_list"), format="json"
+        )
+        self.assertEqual(response.status_code, 200)
+
+        stream = io.BytesIO(response.content)
+        data = JSONParser().parse(stream)
+
+        self.assertEqual(len(data), 3)
+
+
+class SolutionViewTest(TestCase):
+    def setUp(self):
+        self.solution1 = Solution.objects.create(
+            name="solution1", description="solution1description"
+        )
+        self.solution2 = Solution.objects.create(
+            name="solution2", description="solution2description"
+        )
+        self.solution3 = Solution.objects.create(
+            name="solution3", description="solution3description"
+        )
+
+        self.user1 = User.objects.create_user("root1", "email1@exemple.com", "root")
+
+        self.authenticatedClient = APIClient()
+        self.authenticatedClient.force_authenticate(self.user1)
+
+        self.notAuthenticatedClient = APIClient()
+
+    def test_list_solutions_with_authenticated_user(self):
+        response = self.authenticatedClient.get(
+            reverse("appliances:solution_list"), format="json"
         )
         self.assertEqual(response.status_code, 200)
 
