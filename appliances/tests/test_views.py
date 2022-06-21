@@ -1,7 +1,8 @@
+from pydoc import describe
 from unicodedata import category
 from django.test import TestCase
 from django.urls import reverse
-from appliances.models import Appliance, Brand, Category, Solution
+from appliances.models import Appliance, Brand, Category, Problem, Solution
 from rest_framework.test import APIClient
 from django.contrib.auth.models import User
 import io
@@ -155,3 +156,56 @@ class SolutionViewTest(TestCase):
         data = JSONParser().parse(stream)
 
         self.assertEqual(len(data), 3)
+
+    def test_list_solutions_with_not_authenticated_user(self):
+        response = self.notAuthenticatedClient.get(
+            reverse("appliances:solution_list"), format="json"
+        )
+        self.assertEqual(response.status_code, 200)
+
+        stream = io.BytesIO(response.content)
+        data = JSONParser().parse(stream)
+
+        self.assertEqual(len(data), 3)
+
+
+class ProblemViewTest(TestCase):
+    def setUp(self):
+        self.solution1 = Solution.objects.create(
+            name="solution1", description="solution1description"
+        )
+        self.solution2 = Solution.objects.create(
+            name="solution2", description="solution2description"
+        )
+        self.solution3 = Solution.objects.create(
+            name="solution3", description="solution3description"
+        )
+
+        self.problem1 = Problem.objects.create(name="Problem1", description="problem1Description")
+        self.problem2 = Problem.objects.create(name="Problem2", description="problem2Description")
+        self.problem3 = Problem.objects.create(name="Problem3", description="problem3Description")
+        self.problem4 = Problem.objects.create(name="Problem4", description="problem4Description")
+
+        self.problem1.solutions.add(self.solution1)
+        self.problem2.solutions.add(self.solution2)
+        self.problem3.solutions.add(self.solution3)
+        self.problem4.solutions.add(self.solution3)
+
+        self.user1 = User.objects.create_user("root1", "email1@exemple.com", "root")
+
+        self.authenticatedClient = APIClient()
+        self.authenticatedClient.force_authenticate(self.user1)
+
+        self.notAuthenticatedClient = APIClient()
+
+    
+    def test_list_problems_with_authenticated_user(self):
+        response = self.authenticatedClient.get(
+            reverse("appliances:problem_list"), format="json"
+        )
+        self.assertEqual(response.status_code, 200)
+
+        stream = io.BytesIO(response.content)
+        data = JSONParser().parse(stream)
+
+        self.assertEqual(len(data), 4)
