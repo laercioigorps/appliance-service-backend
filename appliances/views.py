@@ -3,6 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import ApplianceSerializer, BrandSerializer, CategorySerializer, HistoricSerializer, ProblemSerializer, SolutionSerializer, SymptomSerializer
 from .models import Appliance, Brand, Category, Historic, Problem, Solution, Symptom
+from rest_framework.permissions import IsAuthenticated
 
 # Create your views here.
 
@@ -54,6 +55,8 @@ class SymptomListView(APIView):
         return Response(data = serializer.data)
 
 class HistoricListView(APIView):
+
+    permission_classes=[IsAuthenticated]
 
     def get(self, request, format=None):
         historics = Historic.objects.filter(org = request.user.profile.org)
