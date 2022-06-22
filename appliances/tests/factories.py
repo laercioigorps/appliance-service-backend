@@ -3,7 +3,7 @@ import factory
 
 from core.utils.tests.base import faker
 
-from appliances.models import Appliance, Brand, Category, Solution, Symptom
+from appliances.models import Appliance, Brand, Category, Problem, Solution, Symptom
 
 
 class BrandFactory(factory.django.DjangoModelFactory):
@@ -32,6 +32,14 @@ class ApplianceFactory(factory.django.DjangoModelFactory):
 class SolutionFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Solution
+
+    name = factory.LazyAttribute(lambda _: faker.name())
+    description = factory.LazyAttribute(lambda _: faker.paragraph(nb_sentences=5))
+
+
+class ProblemFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Problem
 
     name = factory.LazyAttribute(lambda _: faker.name())
     description = factory.LazyAttribute(lambda _: faker.paragraph(nb_sentences=5))
