@@ -24,7 +24,7 @@ class BrandTest(TestCase):
         self.assertEquals(myBrand.name, "Brastemp")
 
         newBrandCount = Brand.objects.all().count()
-        self.assertEqual(newBrandCount, brandCount+1)
+        self.assertEqual(newBrandCount, brandCount + 1)
 
     def test_create_brand_with_factory(self):
         brandCount = Brand.objects.all().count()
@@ -32,8 +32,7 @@ class BrandTest(TestCase):
         brand = BrandFactory()
 
         newBrandCount = Brand.objects.all().count()
-        self.assertEqual(newBrandCount, brandCount+1)
-
+        self.assertEqual(newBrandCount, brandCount + 1)
 
 
 class CategoryTest(TestCase):
@@ -45,31 +44,36 @@ class CategoryTest(TestCase):
         self.assertEquals(category.name, "Geladeira")
 
         newCatCount = Category.objects.all().count()
-        self.assertEqual(newCatCount, catCount+1)
+        self.assertEqual(newCatCount, catCount + 1)
 
     def test_create_category_using_factory(self):
         catCount = Category.objects.all().count()
 
         category = CategoryFactory()
 
-
         newCatCount = Category.objects.all().count()
-        self.assertEqual(newCatCount, catCount+1)
+        self.assertEqual(newCatCount, catCount + 1)
 
 
 class ApplianceTest(TestCase):
     def setUp(self):
-        self.brand1 = Brand.objects.create(name="Brastemp")
-        self.category1 = Category.objects.create(name="Geladeira")
+        self.brand1 = BrandFactory()
+        self.category1 = CategoryFactory()
 
     def test_create_Apliance(self):
+        applianceCount = Appliance.objects.all().count()
+
         Appliance.objects.create(
             model="BWC11ABANA", brand=self.brand1, category=self.category1
         )
+
+        newApplianceCount = Appliance.objects.all().count()
+        self.assertEqual(newApplianceCount, applianceCount + 1)
+
         appliance = Appliance.objects.get(model="BWC11ABANA")
-        self.assertEquals(appliance.model, "BWC11ABANA")
-        self.assertEquals(appliance.brand.name, "Brastemp")
-        self.assertEquals(appliance.category.name, "Geladeira")
+
+        self.assertEquals(appliance.brand.name, self.brand1.name)
+        self.assertEquals(appliance.category.name, self.category1.name)
 
 
 class SymptomTest(TestCase):
