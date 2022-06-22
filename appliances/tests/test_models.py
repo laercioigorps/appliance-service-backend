@@ -10,6 +10,7 @@ from appliances.models import (
     Historic,
 )
 from profiles.models import Organization
+from .factories import BrandFactory
 
 # Create your tests here.
 
@@ -21,6 +22,14 @@ class BrandTest(TestCase):
         Brand.objects.create(name="Brastemp")
         myBrand = Brand.objects.get(name="Brastemp")
         self.assertEquals(myBrand.name, "Brastemp")
+
+        newBrandCount = Brand.objects.all().count()
+        self.assertEqual(newBrandCount, brandCount+1)
+
+    def test_create_brand_with_factory(self):
+        brandCount = Brand.objects.all().count()
+
+        brand = BrandFactory()
 
         newBrandCount = Brand.objects.all().count()
         self.assertEqual(newBrandCount, brandCount+1)
