@@ -10,7 +10,13 @@ from appliances.models import (
     Historic,
 )
 from profiles.models import Organization
-from .factories import ApplianceFactory, BrandFactory, CategoryFactory, ProblemFactory, SolutionFactory
+from .factories import (
+    ApplianceFactory,
+    BrandFactory,
+    CategoryFactory,
+    ProblemFactory,
+    SolutionFactory,
+)
 
 # Create your tests here.
 
@@ -80,7 +86,7 @@ class ApplianceTest(TestCase):
         appliance = ApplianceFactory()
 
         newApplianceCount = Appliance.objects.all().count()
-        self.assertEqual(newApplianceCount, applianceCount + 1) 
+        self.assertEqual(newApplianceCount, applianceCount + 1)
 
 
 class SymptomTest(TestCase):
@@ -147,9 +153,9 @@ class SymptomTest(TestCase):
 
 
 class ProblemTest(TestCase):
-
     def setUp(self):
         self.solution1 = SolutionFactory()
+
     def test_create_problem(self):
         problem_count = Problem.objects.all().count()
         self.assertEquals(problem_count, 0)
@@ -180,7 +186,6 @@ class ProblemTest(TestCase):
         )
         self.assertEqual(str(problem), "Evaporador bloqueado")
 
-    
     def test_create_problem_using_factory(self):
         problem_count = Problem.objects.all().count()
         self.assertEquals(problem_count, 0)
@@ -190,14 +195,15 @@ class ProblemTest(TestCase):
         problem_count = Problem.objects.all().count()
         self.assertEquals(problem_count, 1)
 
-    
     def test_add_solution_to_problem_using_factory(self):
 
-
-        problem = ProblemFactory(solutions=(SolutionFactory(), SolutionFactory(), SolutionFactory()))
+        problem = ProblemFactory(
+            solutions=(SolutionFactory(), SolutionFactory(), SolutionFactory())
+        )
 
         solution_for_problem_count = problem.solutions.all().count()
         self.assertEquals(solution_for_problem_count, 3)
+
 
 class SolutionTest(TestCase):
     def test_create_solution(self):
