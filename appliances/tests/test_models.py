@@ -147,6 +147,9 @@ class SymptomTest(TestCase):
 
 
 class ProblemTest(TestCase):
+
+    def setUp(self):
+        self.solution1 = SolutionFactory()
     def test_create_problem(self):
         problem_count = Problem.objects.all().count()
         self.assertEquals(problem_count, 0)
@@ -159,9 +162,6 @@ class ProblemTest(TestCase):
         self.assertEquals(problem_count, 1)
 
     def test_add_solution_to_problem(self):
-        trocaDeSensor = Solution.objects.create(
-            name="Troca do sensor", description="se for de sensor"
-        )
 
         problem = Problem.objects.create(
             name="Evaporador bloqueado", description="caso seja frost free"
@@ -169,7 +169,7 @@ class ProblemTest(TestCase):
         solution_for_problem_count = problem.solutions.all().count()
         self.assertEquals(solution_for_problem_count, 0)
 
-        problem.solutions.add(trocaDeSensor)
+        problem.solutions.add(self.solution1)
 
         solution_for_problem_count = problem.solutions.all().count()
         self.assertEquals(solution_for_problem_count, 1)
