@@ -43,3 +43,14 @@ class ProblemFactory(factory.django.DjangoModelFactory):
 
     name = factory.LazyAttribute(lambda _: faker.name())
     description = factory.LazyAttribute(lambda _: faker.paragraph(nb_sentences=5))
+
+    @factory.post_generation
+    def solutions(self, create, extracted, **kwargs):
+        if not create:
+            # Simple build, do nothing.
+            return
+
+        if extracted:
+            # A list of solutions were passed in, use them
+            for solution in extracted:
+                self.solutions.add(solution)
