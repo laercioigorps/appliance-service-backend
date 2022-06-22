@@ -10,7 +10,7 @@ from appliances.models import (
     Historic,
 )
 from profiles.models import Organization
-from .factories import ApplianceFactory, BrandFactory, CategoryFactory
+from .factories import ApplianceFactory, BrandFactory, CategoryFactory, SolutionFactory
 
 # Create your tests here.
 
@@ -198,6 +198,15 @@ class SolutionTest(TestCase):
             name="Troca do sensor", description="se for de sensor"
         )
         self.assertEqual(str(solution), "Troca do sensor")
+
+    def test_create_solution_using_factory(self):
+        solution_count = Solution.objects.all().count()
+        self.assertEquals(solution_count, 0)
+
+        solution = SolutionFactory()
+
+        solution_count = Solution.objects.all().count()
+        self.assertEquals(solution_count, 1)
 
 
 class ApplianceHistoricTest(TestCase):
