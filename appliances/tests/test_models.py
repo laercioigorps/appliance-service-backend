@@ -10,7 +10,7 @@ from appliances.models import (
     Historic,
 )
 from profiles.models import Organization
-from .factories import BrandFactory
+from .factories import BrandFactory, CategoryFactory
 
 # Create your tests here.
 
@@ -43,6 +43,15 @@ class CategoryTest(TestCase):
         Category.objects.create(name="Geladeira")
         category = Category.objects.get(name="Geladeira")
         self.assertEquals(category.name, "Geladeira")
+
+        newCatCount = Category.objects.all().count()
+        self.assertEqual(newCatCount, catCount+1)
+
+    def test_create_category_using_factory(self):
+        catCount = Category.objects.all().count()
+
+        category = CategoryFactory()
+
 
         newCatCount = Category.objects.all().count()
         self.assertEqual(newCatCount, catCount+1)
