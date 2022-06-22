@@ -5,8 +5,8 @@ from core.utils.tests.base import faker
 
 from appliances.models import Appliance, Brand, Category
 
-class BrandFactory(factory.django.DjangoModelFactory):
 
+class BrandFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Brand
 
@@ -14,7 +14,6 @@ class BrandFactory(factory.django.DjangoModelFactory):
 
 
 class CategoryFactory(factory.django.DjangoModelFactory):
-
     class Meta:
         model = Category
 
@@ -22,10 +21,9 @@ class CategoryFactory(factory.django.DjangoModelFactory):
 
 
 class ApplianceFactory(factory.django.DjangoModelFactory):
-
     class Meta:
         model = Appliance
 
-    model = factory.LazyAttribute(lambda _: faker.lexify(text='??????????'))
+    model = factory.LazyAttribute(lambda _: faker.lexify(text="??????????"))
     category = factory.SubFactory(CategoryFactory)
     brand = factory.SubFactory(BrandFactory)
