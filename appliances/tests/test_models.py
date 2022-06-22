@@ -16,9 +16,15 @@ from profiles.models import Organization
 
 class BrandTest(TestCase):
     def test_create_brand(self):
+        brandCount = Brand.objects.all().count()
+
         Brand.objects.create(name="Brastemp")
         myBrand = Brand.objects.get(name="Brastemp")
         self.assertEquals(myBrand.name, "Brastemp")
+
+        newBrandCount = Brand.objects.all().count()
+        self.assertEqual(newBrandCount, brandCount+1)
+
 
 
 class CategoryTest(TestCase):
