@@ -38,9 +38,14 @@ class BrandTest(TestCase):
 
 class CategoryTest(TestCase):
     def test_create_category(self):
+        catCount = Category.objects.all().count()
+
         Category.objects.create(name="Geladeira")
         category = Category.objects.get(name="Geladeira")
         self.assertEquals(category.name, "Geladeira")
+
+        newCatCount = Category.objects.all().count()
+        self.assertEqual(newCatCount, catCount+1)
 
 
 class ApplianceTest(TestCase):
