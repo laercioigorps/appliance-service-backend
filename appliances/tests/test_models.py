@@ -190,6 +190,15 @@ class ProblemTest(TestCase):
         problem_count = Problem.objects.all().count()
         self.assertEquals(problem_count, 1)
 
+    
+    def test_add_solution_to_problem_using_factory(self):
+
+
+        problem = ProblemFactory(solutions=(SolutionFactory(), SolutionFactory(), SolutionFactory()))
+
+        solution_for_problem_count = problem.solutions.all().count()
+        self.assertEquals(solution_for_problem_count, 3)
+
 class SolutionTest(TestCase):
     def test_create_solution(self):
         solution_count = Solution.objects.all().count()
