@@ -161,6 +161,13 @@ class SymptomTest(TestCase):
         causes_count = symptom.causes.all().count()
         self.assertEquals(causes_count, 1)
 
+    
+    def test_add_cause_to_symptom_using_factory(self):
+
+        symptom = SymptomFactory(causes=(ProblemFactory(), ProblemFactory()))
+        causes_count = symptom.causes.all().count()
+        self.assertEquals(causes_count, 2)
+
     def test_symptom__str__(self):
         symptom = Symptom.objects.create(
             name="Não gela o refrigerador", description="A sample description"
