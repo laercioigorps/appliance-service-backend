@@ -14,6 +14,7 @@ from .factories import (
     ApplianceFactory,
     BrandFactory,
     CategoryFactory,
+    HistoricFactory,
     ProblemFactory,
     SolutionFactory,
 )
@@ -270,6 +271,16 @@ class ApplianceHistoricTest(TestCase):
 
     def test_historic_create_with_no_data(self):
         historic = Historic.objects.create()
+        self.assertEqual(historic.completed, False)
+
+    def test_historic_create_with_no_data_using_factory(self):
+        histCount = Historic.objects.all().count()
+
+        historic = HistoricFactory()
+
+        newHistCount = Historic.objects.all().count()
+        self.assertEqual(newHistCount, histCount + 1)
+
         self.assertEqual(historic.completed, False)
 
     def test_add_symptoms_to_historic(self):
