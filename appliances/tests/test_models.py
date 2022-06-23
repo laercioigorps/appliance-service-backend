@@ -364,6 +364,12 @@ class ApplianceHistoricTest(TestCase):
         historic_solutions_count = historic.solutions.all().count()
         self.assertEqual(historic_solutions_count, 2)
 
+    def test_add_solution_to_historic_using_factory(self):
+        historic = HistoricFactory(solutions=(SolutionFactory(), SolutionFactory()))
+
+        historic_solutions_count = historic.solutions.all().count()
+        self.assertEqual(historic_solutions_count, 2)
+
     def test_add_appliance_to_historic(self):
         historic = Historic.objects.create()
 
