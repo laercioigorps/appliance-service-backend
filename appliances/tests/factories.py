@@ -82,6 +82,17 @@ class SymptomFactory(factory.django.DjangoModelFactory):
             for category in extracted:
                 self.categories.add(category)
 
+    @factory.post_generation
+    def causes(self, create, extracted, **kwargs):
+        if not create:
+            # Simple build, do nothing.
+            return
+
+        if extracted:
+            # A list of solutions were passed in, use them
+            for cause in extracted:
+                self.causes.add(cause)
+
 
 class HistoricFactory(factory.django.DjangoModelFactory):
     class Meta:
