@@ -13,6 +13,8 @@ from appliances.models import (
     Symptom,
 )
 
+from profiles.tests.factories import OrganizationFactory
+
 
 class BrandFactory(factory.django.DjangoModelFactory):
     class Meta:
@@ -99,6 +101,7 @@ class HistoricFactory(factory.django.DjangoModelFactory):
         model = Historic
 
     appliance = factory.SubFactory(ApplianceFactory)
+    org = factory.SubFactory(OrganizationFactory)
 
     @factory.post_generation
     def symptoms(self, create, extracted, **kwargs):
