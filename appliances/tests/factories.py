@@ -3,7 +3,15 @@ import factory
 
 from core.utils.tests.base import faker
 
-from appliances.models import Appliance, Brand, Category, Historic, Problem, Solution, Symptom
+from appliances.models import (
+    Appliance,
+    Brand,
+    Category,
+    Historic,
+    Problem,
+    Solution,
+    Symptom,
+)
 
 
 class BrandFactory(factory.django.DjangoModelFactory):
@@ -54,6 +62,26 @@ class ProblemFactory(factory.django.DjangoModelFactory):
             # A list of solutions were passed in, use them
             for solution in extracted:
                 self.solutions.add(solution)
+
+
+class SymptomFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Symptom
+
+    name = factory.LazyAttribute(lambda _: faker.name())
+    description = factory.LazyAttribute(lambda _: faker.paragraph(nb_sentences=5))
+
+    @factory.post_generation
+    def categories(self, create, extracted, **kwargs):
+        if not create:
+            # Simple build, do nothing.
+            return
+
+        if extracted:
+            # A list of solutions were passed in, use them
+            for category in extracted:
+                self.categories.add(category)
+
 
 class HistoricFactory(factory.django.DjangoModelFactory):
     class Meta:
