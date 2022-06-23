@@ -97,3 +97,14 @@ class SymptomFactory(factory.django.DjangoModelFactory):
 class HistoricFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Historic
+
+    @factory.post_generation
+    def symptoms(self, create, extracted, **kwargs):
+        if not create:
+            # Simple build, do nothing.
+            return
+
+        if extracted:
+            # A list of solutions were passed in, use them
+            for symptom in extracted:
+                self.symptoms.add(symptom)
