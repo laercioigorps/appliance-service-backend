@@ -385,6 +385,12 @@ class ApplianceHistoricTest(TestCase):
         self.assertEqual(historicCopy.appliance.model, "DF50x")
         self.assertEqual(historicCopy.appliance.brand.name, "Electrolux")
 
+    def test_add_appliance_to_historic_using_factory(self):
+        appliancesCount = Appliance.objects.all().count()
+        historic = HistoricFactory()
+        NewAppliancesCount = Appliance.objects.all().count()
+        self.assertEqual(NewAppliancesCount, appliancesCount + 1)
+
     def test_add_organization_to_historic(self):
         historic = Historic.objects.create()
 
