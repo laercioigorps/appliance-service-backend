@@ -161,7 +161,6 @@ class SymptomTest(TestCase):
         causes_count = symptom.causes.all().count()
         self.assertEquals(causes_count, 1)
 
-    
     def test_add_cause_to_symptom_using_factory(self):
 
         symptom = SymptomFactory(causes=(ProblemFactory(), ProblemFactory()))
@@ -317,6 +316,12 @@ class ApplianceHistoricTest(TestCase):
         self.assertEqual(historic_symptoms_count, 1)
 
         historic.symptoms.add(self.naoLiga)
+
+        historic_symptoms_count = historic.symptoms.all().count()
+        self.assertEqual(historic_symptoms_count, 2)
+
+    def test_add_symptoms_to_historic_using_factory(self):
+        historic = HistoricFactory(symptoms=(SymptomFactory(), SymptomFactory()))
 
         historic_symptoms_count = historic.symptoms.all().count()
         self.assertEqual(historic_symptoms_count, 2)
