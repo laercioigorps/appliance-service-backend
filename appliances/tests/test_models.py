@@ -17,6 +17,7 @@ from .factories import (
     HistoricFactory,
     ProblemFactory,
     SolutionFactory,
+    SymptomFactory,
 )
 
 # Create your tests here.
@@ -104,6 +105,14 @@ class SymptomTest(TestCase):
         self.assertEquals(symptoms_count, 1)
 
         self.assertEquals(symptom.name, "Não gela o refrigerador")
+
+    def test_create_symptom_using_factory(self):
+        symptoms_count = Symptom.objects.all().count()
+
+        symptom = SymptomFactory()
+
+        newSymptoms_count = Symptom.objects.all().count()
+        self.assertEquals(newSymptoms_count, symptoms_count + 1)
 
     def test_add_category_to_symptom(self):
         symptom = Symptom.objects.create(
