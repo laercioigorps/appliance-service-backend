@@ -3,7 +3,7 @@ import factory
 
 from core.utils.tests.base import faker
 
-from appliances.models import Appliance, Brand, Category, Problem, Solution, Symptom
+from appliances.models import Appliance, Brand, Category, Historic, Problem, Solution, Symptom
 
 
 class BrandFactory(factory.django.DjangoModelFactory):
@@ -54,3 +54,7 @@ class ProblemFactory(factory.django.DjangoModelFactory):
             # A list of solutions were passed in, use them
             for solution in extracted:
                 self.solutions.add(solution)
+
+class HistoricFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Historic
