@@ -98,6 +98,8 @@ class HistoricFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Historic
 
+    appliance = factory.SubFactory(ApplianceFactory)
+
     @factory.post_generation
     def symptoms(self, create, extracted, **kwargs):
         if not create:
