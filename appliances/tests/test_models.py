@@ -127,6 +127,12 @@ class SymptomTest(TestCase):
         symptoms_count = symptom.categories.all().count()
         self.assertEquals(symptoms_count, 1)
 
+    def test_add_category_to_symptom_using_factory(self):
+        symptom = SymptomFactory(categories=(CategoryFactory(), CategoryFactory()))
+
+        symptoms_count = symptom.categories.all().count()
+        self.assertEquals(symptoms_count, 2)
+
     def test_list_symptoms_by_category(self):
         symptom = Symptom.objects.create(
             name="Não gela o refrigerador", description="A sample description"
