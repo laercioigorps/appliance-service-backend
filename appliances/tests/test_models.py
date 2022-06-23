@@ -399,3 +399,9 @@ class ApplianceHistoricTest(TestCase):
 
         histCopy = Historic.objects.get(pk=historic.id)
         self.assertEquals(histCopy.org.name, self.org1.name)
+
+    def test_add_organization_to_historic_using_factory(self):
+        orgCount = Organization.objects.all().count()
+        historic = HistoricFactory()
+        newOrgCount = Organization.objects.all().count()
+        self.assertEqual(newOrgCount, orgCount + 1)
