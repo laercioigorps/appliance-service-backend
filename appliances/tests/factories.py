@@ -119,3 +119,14 @@ class HistoricFactory(factory.django.DjangoModelFactory):
             # A list of solutions were passed in, use them
             for problem in extracted:
                 self.problems.add(problem)
+
+    @factory.post_generation
+    def solutions(self, create, extracted, **kwargs):
+        if not create:
+            # Simple build, do nothing.
+            return
+
+        if extracted:
+            # A list of solutions were passed in, use them
+            for solution in extracted:
+                self.solutions.add(solution)
