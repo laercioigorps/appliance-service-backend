@@ -342,6 +342,12 @@ class ApplianceHistoricTest(TestCase):
         historic_problems_count = historic.problems.all().count()
         self.assertEqual(historic_problems_count, 2)
 
+    def test_add_problems_to_historic_using_factory(self):
+        historic = HistoricFactory(problems=(ProblemFactory(), ProblemFactory()))
+
+        historic_problems_count = historic.problems.all().count()
+        self.assertEqual(historic_problems_count, 2)
+
     def test_add_solution_to_historic(self):
         historic = Historic.objects.create()
 
