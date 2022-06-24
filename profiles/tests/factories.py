@@ -31,3 +31,14 @@ class CustomerFactory(factory.django.DjangoModelFactory):
 
     name = factory.LazyAttribute(lambda _: faker.name())
     owner = factory.SubFactory(OrganizationFactory)
+
+    @factory.post_generation
+    def address(self, create, extracted, **kwargs):
+        if not create:
+            # Simple build, do nothing.
+            return
+
+        if extracted:
+            # A list of solutions were passed in, use them
+            for ad in extracted:
+                self.address.add(ad)
