@@ -353,9 +353,8 @@ class HistoricViewTest(TestCase):
             symptoms=(SymptomFactory(), SymptomFactory()),
             problems=(ProblemFactory(), ProblemFactory()),
             solutions=(SolutionFactory(), SolutionFactory()),
-            org = self.user1.profile.org
+            org=self.user1.profile.org,
         )
-
 
         response = self.authenticatedClient.get(
             reverse("appliances:historic_detail", kwargs={"historic_pk": historic.id}),
@@ -394,9 +393,15 @@ class HistoricViewTest(TestCase):
     def test_get_historic_detail_wich_authenticated_user_does_not_own(self):
 
         response = self.authenticatedClient.get(
-            reverse(
-                "appliances:historic_detail", kwargs={"historic_pk": self.h3.id}
-            ),
+            reverse("appliances:historic_detail", kwargs={"historic_pk": self.h3.id}),
             format="json",
         )
         self.assertEqual(response.status_code, 403)
+
+    def test_get_invalid_historic_detail_with_authenticated_user(self):
+
+        response = self.authenticatedClient.get(
+            reverse("appliances:historic_detail", kwargs={"historic_pk": 100}),
+            format="json",
+        )
+        self.assertEqual(response.status_code, 404)
