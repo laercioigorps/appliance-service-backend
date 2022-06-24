@@ -12,6 +12,7 @@ from .serializers import (
 )
 from .models import Appliance, Brand, Category, Historic, Problem, Solution, Symptom
 from rest_framework.permissions import IsAuthenticated
+from .permissions import IsHistoricOwner
 
 # Create your views here.
 
@@ -70,9 +71,10 @@ class HistoricListView(APIView):
 
 class HistoricDetailView(APIView):
 
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsHistoricOwner]
 
     def get(self, request, historic_pk, format=None):
         historic = Historic.objects.get(pk=historic_pk)
+        self.check_object_permissions(request, historic)
         serializer = HistoricSerializer(historic)
         return Response(data=serializer.data)
