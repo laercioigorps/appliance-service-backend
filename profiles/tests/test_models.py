@@ -105,6 +105,13 @@ class TestCustomer(TestCase):
         address_count = customer.address.count()
         self.assertEqual(address_count, 2)
 
+    def test_add_two_address_to_customer_using_factory(self):
+
+        customer = CustomerFactory(address=(AddressFactory(), AddressFactory()))
+
+        customer_address_count = customer.address.all().count()
+        self.assertEqual(customer_address_count, 2)
+
 
 class TestProfile(TestCase):
     def test_create_profile_by_creating_user(self):
