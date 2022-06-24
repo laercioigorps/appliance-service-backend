@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
 from profiles.models import Address, Organization, Customer, Profile
-from .factories import OrganizationFactory
+from .factories import AddressFactory, OrganizationFactory
 
 # Create your tests here.
 class TestAddress(TestCase):
@@ -14,6 +14,13 @@ class TestAddress(TestCase):
         address_count = Address.objects.all().count()
         self.assertEqual(address_count, 1)
 
+    def test_create_address_using_factory(self):
+        address_count = Address.objects.all().count()
+
+        address = AddressFactory()
+
+        newAddress_count = Address.objects.all().count()
+        self.assertEqual(newAddress_count, address_count + 1)
 
 class TestOrganization(TestCase):
     def test_create_organizarion(self):
