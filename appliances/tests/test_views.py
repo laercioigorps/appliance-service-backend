@@ -323,7 +323,7 @@ class HistoricViewTest(TestCase):
 
         self.notAuthenticatedClient = APIClient()
 
-        self.h1 = Historic.objects.create(org=self.user1.profile.org)
+        self.historic1 = Historic.objects.create(org=self.user1.profile.org)
         self.h2 = Historic.objects.create(org=self.user1.profile.org)
 
         self.h3 = Historic.objects.create(org=self.user2.profile.org)
@@ -379,3 +379,13 @@ class HistoricViewTest(TestCase):
             [historic.solutions.all()[0].id, historic.solutions.all()[1].id],
         )
         self.assertEqual(data["appliance"], historic.appliance.id)
+
+    def test_get_historic_detail_using_not_authenticated_user(self):
+
+        response = self.notAuthenticatedClient.get(
+            reverse(
+                "appliances:historic_detail", kwargs={"historic_pk": self.historic1.id}
+            ),
+            format="json",
+        )
+        self.assertEqual(response.status_code, 403)
