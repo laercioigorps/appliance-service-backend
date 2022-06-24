@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import (
@@ -74,7 +74,7 @@ class HistoricDetailView(APIView):
     permission_classes = [IsAuthenticated, IsHistoricOwner]
 
     def get(self, request, historic_pk, format=None):
-        historic = Historic.objects.get(pk=historic_pk)
+        historic = get_object_or_404(Historic, pk=historic_pk)
         self.check_object_permissions(request, historic)
         serializer = HistoricSerializer(historic)
         return Response(data=serializer.data)
