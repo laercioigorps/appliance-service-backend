@@ -12,6 +12,7 @@ urlpatterns = [
     path("problems/", views.ProblemListView.as_view(), name="problem_list"),
     path("symptoms/", views.SymptomListView.as_view(), name="symptom_list"),
     path("historics/", views.HistoricListView.as_view(), name="historic_list"),
+    path("historics/<int:historic_pk>/", views.HistoricDetailView.as_view(), name="historic_detail"),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
