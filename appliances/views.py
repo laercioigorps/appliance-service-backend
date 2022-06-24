@@ -62,3 +62,9 @@ class HistoricListView(APIView):
         historics = Historic.objects.filter(org = request.user.profile.org)
         serializer = HistoricSerializer(historics, many=True)
         return Response(data = serializer.data)
+
+class HistoricDetailView(APIView):
+    def get(self, request, historic_pk, format=None):
+        historic = Historic.objects.get(pk=historic_pk)
+        serializer = HistoricSerializer(historic)
+        return Response(data=serializer.data)
