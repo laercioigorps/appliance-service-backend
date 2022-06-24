@@ -1,5 +1,5 @@
 import factory
-
+from django.contrib.auth.models import User
 from profiles.models import Address, Customer, Organization
 
 
@@ -42,3 +42,11 @@ class CustomerFactory(factory.django.DjangoModelFactory):
             # A list of solutions were passed in, use them
             for ad in extracted:
                 self.address.add(ad)
+
+
+class UserFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = User
+
+    username = factory.LazyAttribute(lambda _: faker.first_name())
+    password = "root"
