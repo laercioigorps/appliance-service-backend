@@ -1,6 +1,6 @@
 import factory
 
-from profiles.models import Address, Organization
+from profiles.models import Address, Customer, Organization
 
 
 from core.utils.tests.base import faker
@@ -23,3 +23,11 @@ class AddressFactory(factory.django.DjangoModelFactory):
     city = factory.LazyAttribute(lambda _: faker.city())
     state = factory.LazyAttribute(lambda _: faker.state())
     country = factory.LazyAttribute(lambda _: faker.country())
+
+
+class CustomerFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Customer
+
+    name = factory.LazyAttribute(lambda _: faker.name())
+    owner = factory.SubFactory(OrganizationFactory)
