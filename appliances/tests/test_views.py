@@ -15,6 +15,12 @@ from rest_framework.test import APIClient
 from django.contrib.auth.models import User
 import io
 from rest_framework.parsers import JSONParser
+from appliances.tests.factories import (
+    HistoricFactory,
+    ProblemFactory,
+    SolutionFactory,
+    SymptomFactory,
+)
 
 
 class BrandViewTest(TestCase):
@@ -341,3 +347,35 @@ class HistoricViewTest(TestCase):
             reverse("appliances:historic_list"), format="json"
         )
         self.assertEqual(response.status_code, 403)
+
+    def test_get_historic_detail_using_valid_authenticated_user(self):
+        historic = HistoricFactory(
+            symptoms=(SymptomFactory(), SymptomFactory()),
+            problems=(ProblemFactory(), ProblemFactory()),
+            solutions=(SolutionFactory(), SolutionFactory()),
+        )
+        historic.org = self.user1.profile.org
+
+        response = self.authenticatedClient.get(
+            reverse("appliances:historic_detail", kwargs={"historic_pk": historic.id}),
+            format="json",
+        )
+        self.assertEqual(response.status_code, 200)
+
+        stream = io.BytesIO(response.content)
+        data = JSONParser().parse(stream)
+        # assert fields are equal
+        self.assertEqual(data["completed"], False)
+        self.assertEqual(
+            data["symptoms"],
+            [historic.symptoms.all()[0].id, historic.symptoms.all()[1].id],
+        )
+        self.assertEqual(
+            data["problems"],
+            [historic.problems.all()[0].id, historic.problems.all()[1].id],
+        )
+        self.assertEqual(
+            data["solutions"],
+            [historic.solutions.all()[0].id, historic.solutions.all()[1].id],
+        )
+        self.assertEqual(data["appliance"], historic.appliance.id)
