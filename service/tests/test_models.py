@@ -1,3 +1,4 @@
+from datetime import date
 from django.test import TestCase
 from service.models import Service
 
@@ -74,3 +75,7 @@ class ServiceModelTest(TestCase):
 
         newSolutionCount = self.service.historic.solutions.all().count()
         self.assertEqual(newSolutionCount, solutionCount + 2)
+
+    def test_service_starting_date(self):
+        today = date.today()
+        self.assertEqual(self.service.start_date, today)
