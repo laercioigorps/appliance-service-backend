@@ -9,3 +9,4 @@ class Service(models.Model):
     historic = models.ForeignKey(Historic, on_delete=models.CASCADE)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, null=True)
     address = models.ForeignKey(Address, on_delete=models.CASCADE, null=True)
+    start_date = models.DateField(auto_now_add=True)
