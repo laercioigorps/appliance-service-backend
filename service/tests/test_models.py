@@ -30,3 +30,9 @@ class ServiceModelTest(TestCase):
         self.service.customer = self.customer
         self.assertEqual(self.service.customer.name, self.customer.name)
 
+    def test_add_address_to_service(self):
+        self.assertEqual(self.service.address, None)
+        self.service.address = self.customer.address.first()
+        self.assertEqual(
+            self.service.address.number, self.customer.address.first().number
+        )
