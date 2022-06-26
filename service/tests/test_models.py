@@ -6,7 +6,7 @@ from profiles.tests.factories import (
     CustomerFactory,
     OrganizationFactory,
 )
-from appliances.tests.factories import HistoricFactory
+from appliances.tests.factories import HistoricFactory, SymptomFactory
 
 
 class ServiceModelTest(TestCase):
@@ -36,3 +36,14 @@ class ServiceModelTest(TestCase):
         self.assertEqual(
             self.service.address.number, self.customer.address.first().number
         )
+
+    def test_add_symptoms_to_service_historic(self):
+        symptomCount = self.service.historic.symptoms.all().count()
+        symptom1 = SymptomFactory()
+        symptom2 = SymptomFactory()
+
+        self.service.historic.symptoms.add(symptom1)
+        self.service.historic.symptoms.add(symptom2)
+
+        newSymptomCount = self.service.historic.symptoms.all().count()
+        self.assertEqual(newSymptomCount, symptomCount + 2)
