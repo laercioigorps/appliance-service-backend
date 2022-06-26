@@ -6,7 +6,12 @@ from profiles.tests.factories import (
     CustomerFactory,
     OrganizationFactory,
 )
-from appliances.tests.factories import HistoricFactory, SymptomFactory
+from appliances.tests.factories import (
+    HistoricFactory,
+    ProblemFactory,
+    SolutionFactory,
+    SymptomFactory,
+)
 
 
 class ServiceModelTest(TestCase):
@@ -47,3 +52,25 @@ class ServiceModelTest(TestCase):
 
         newSymptomCount = self.service.historic.symptoms.all().count()
         self.assertEqual(newSymptomCount, symptomCount + 2)
+
+    def test_add_problems_to_service_historic(self):
+        problemCount = self.service.historic.problems.all().count()
+        problem1 = ProblemFactory()
+        problem2 = ProblemFactory()
+
+        self.service.historic.problems.add(problem1)
+        self.service.historic.problems.add(problem2)
+
+        newproblemCount = self.service.historic.problems.all().count()
+        self.assertEqual(newproblemCount, problemCount + 2)
+
+    def test_add_solutions_to_service_historic(self):
+        solutionCount = self.service.historic.solutions.all().count()
+        solution1 = SolutionFactory()
+        solution2 = SolutionFactory()
+
+        self.service.historic.solutions.add(solution1)
+        self.service.historic.solutions.add(solution2)
+
+        newSolutionCount = self.service.historic.solutions.all().count()
+        self.assertEqual(newSolutionCount, solutionCount + 2)
