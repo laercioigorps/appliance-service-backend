@@ -54,3 +54,14 @@ class ServiceViewTest(TestCase):
     def test_list_services_with_not_authenticated_user(self):
         response = self.notAuthenticatedClient.get(reverse("service:service_list"), format="json")
         self.assertEqual(response.status_code, 403)
+
+    def test_create_service_only_with_required_data(self):
+        serviceCount = Service.objects.filter(owner=self.user1.profile.org).count()
+        self.assertEqual(serviceCount, 2)
+
+        response = self.user1Client.post(reverse("service:service_list"), format="json")
+
+        self.assertEqual(response.status_code, 201)
+
+        serviceCount = Service.objects.filter(owner=self.user1.profile.org).count()
+        self.assertEqual(serviceCount, 3)
