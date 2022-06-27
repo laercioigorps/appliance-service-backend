@@ -32,6 +32,8 @@ class ServiceViewTest(TestCase):
 
         self.service3 = ServiceFactory(owner=self.user1.profile.org)
 
+        self.notAuthenticatedClient = APIClient()
+
     def test_list_services_by_user_org(self):
         serviceCount = Service.objects.filter(owner=self.user1.profile.org).count()
         self.assertEqual(serviceCount, 2)
@@ -48,3 +50,7 @@ class ServiceViewTest(TestCase):
         self.assertEqual(data[0]["customer"]["name"], self.service1.customer.name)
         self.assertEqual(data[0]["address"]["number"], self.service1.address.number)
         self.assertEqual(data[0]["price"], str(self.service1.price))
+
+    def test_list_services_with_not_authenticated_user(self):
+        response = self.notAuthenticatedClient.get(reverse("service:service_list"), format="json")
+        self.assertEqual(response.status_code, 403)
