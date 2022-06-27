@@ -101,3 +101,10 @@ class ServiceViewTest(TestCase):
             format="json",
         )
         self.assertEqual(response.status_code, 404)
+
+    def test_get_service_detail_wich_the_user_does_not_own(self):
+        response = self.user2Client.get(
+            reverse("service:service_detail", kwargs={"service_pk": self.service1.id}),
+            format="json",
+        )
+        self.assertEqual(response.status_code, 403)
