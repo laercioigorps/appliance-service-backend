@@ -52,7 +52,9 @@ class ServiceViewTest(TestCase):
         self.assertEqual(data[0]["price"], str(self.service1.price))
 
     def test_list_services_with_not_authenticated_user(self):
-        response = self.notAuthenticatedClient.get(reverse("service:service_list"), format="json")
+        response = self.notAuthenticatedClient.get(
+            reverse("service:service_list"), format="json"
+        )
         self.assertEqual(response.status_code, 403)
 
     def test_create_service_only_with_required_data(self):
@@ -67,5 +69,20 @@ class ServiceViewTest(TestCase):
         self.assertEqual(serviceCount, 3)
 
     def test_create_service_with_not_authenticated_user(self):
-        response = self.notAuthenticatedClient.post(reverse("service:service_list"), format="json")
+        response = self.notAuthenticatedClient.post(
+            reverse("service:service_list"), format="json"
+        )
         self.assertEqual(response.status_code, 403)
+
+    def test_get_service_detail_with_valid_user(self):
+        response = self.user1Client.get(
+            reverse("service:service_detail", kwargs={"service_pk": self.service1.id}), format="json"
+        )
+        self.assertEqual(response.status_code, 200)
+
+        stream = io.BytesIO(response.content)
+        data = JSONParser().parse(stream)
+
+        self.assertEqual(data["customer"]["name"], self.service1.customer.name)
+        self.assertEqual(data["address"]["number"], self.service1.address.number)
+        self.assertEqual(data["price"], str(self.service1.price))
