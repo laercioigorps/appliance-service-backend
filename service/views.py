@@ -36,6 +36,9 @@ class ServiceListView(APIView):
 
 
 class ServiceDetailView(APIView):
+
+    permission_classes = [IsAuthenticated]
+
     class ServiceDetailSerializer(serializers.ModelSerializer):
         class Meta:
             model = Service
