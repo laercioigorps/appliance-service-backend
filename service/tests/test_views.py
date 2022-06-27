@@ -65,3 +65,7 @@ class ServiceViewTest(TestCase):
 
         serviceCount = Service.objects.filter(owner=self.user1.profile.org).count()
         self.assertEqual(serviceCount, 3)
+
+    def test_create_service_with_not_authenticated_user(self):
+        response = self.notAuthenticatedClient.post(reverse("service:service_list"), format="json")
+        self.assertEqual(response.status_code, 403)
