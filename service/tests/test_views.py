@@ -94,3 +94,10 @@ class ServiceViewTest(TestCase):
             format="json",
         )
         self.assertEqual(response.status_code, 403)
+
+    def test_get_not_valid_service_detail_with_authenticated_user(self):
+        response = self.user1Client.get(
+            reverse("service:service_detail", kwargs={"service_pk": 100}),
+            format="json",
+        )
+        self.assertEqual(response.status_code, 404)
