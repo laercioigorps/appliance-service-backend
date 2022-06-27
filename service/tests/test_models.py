@@ -87,3 +87,9 @@ class ServiceModelTest(TestCase):
         self.service.price = Decimal("120.2")
         self.service.save()
         self.assertEqual(self.service.price, Decimal("120.2"))
+
+    def test_service_price_with_bing_number(self):
+        self.assertEqual(self.service.price, 0)
+        self.service.price = Decimal("9999.21")
+        self.service.save()
+        self.assertEqual(self.service.price, Decimal("9999.21"))
