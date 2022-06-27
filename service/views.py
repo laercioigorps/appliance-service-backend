@@ -2,6 +2,7 @@ from django.shortcuts import get_object_or_404, render
 from rest_framework.views import APIView
 
 from appliances.models import Historic
+from service.permissions import IsServiceOwner
 from .models import Service
 from rest_framework import serializers, status
 from rest_framework.response import Response
@@ -37,7 +38,7 @@ class ServiceListView(APIView):
 
 class ServiceDetailView(APIView):
 
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsServiceOwner]
 
     class ServiceDetailSerializer(serializers.ModelSerializer):
         class Meta:
@@ -47,5 +48,6 @@ class ServiceDetailView(APIView):
 
     def get(self, request, service_pk):
         service = get_object_or_404(Service, pk=service_pk)
+        self.check_object_permissions(request, service)
         serializer = self.ServiceDetailSerializer(service)
         return Response(data=serializer.data)
