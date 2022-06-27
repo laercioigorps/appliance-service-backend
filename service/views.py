@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from rest_framework.views import APIView
 
 from appliances.models import Historic
@@ -46,6 +46,6 @@ class ServiceDetailView(APIView):
             depth = 1
 
     def get(self, request, service_pk):
-        service = Service.objects.get(pk=service_pk)
+        service = get_object_or_404(Service, pk=service_pk)
         serializer = self.ServiceDetailSerializer(service)
         return Response(data=serializer.data)
