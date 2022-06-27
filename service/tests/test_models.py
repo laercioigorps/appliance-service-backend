@@ -14,6 +14,8 @@ from appliances.tests.factories import (
     SymptomFactory,
 )
 
+from decimal import Decimal
+
 
 class ServiceModelTest(TestCase):
     def setUp(self):
@@ -79,3 +81,8 @@ class ServiceModelTest(TestCase):
     def test_service_starting_date(self):
         today = date.today()
         self.assertEqual(self.service.start_date, today)
+
+    def test_service_price_with_new_service(self):
+        self.assertEqual(self.service.price, 0)
+        self.service.price = Decimal("120.2")
+        self.assertEqual(self.service.price, Decimal("120.2"))
