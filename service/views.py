@@ -1,9 +1,12 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
+
+from appliances.models import Historic
 from .models import Service
-from rest_framework import serializers
+from rest_framework import serializers, status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+
 
 # Create your views here.
 
@@ -22,3 +25,9 @@ class ServiceListView(APIView):
         services = Service.objects.filter(owner=request.user.profile.org)
         serializer = self.ServiceListSerializer(services, many=True)
         return Response(data=serializer.data)
+
+    def post(self, request):
+        org = request.user.profile.org
+        service = Service.objects.create(owner=org, historic = Historic.objects.create(org=org))
+        serializer = self.ServiceListSerializer(service)
+        return Response(data=serializer.data, status=status.HTTP_201_CREATED)
