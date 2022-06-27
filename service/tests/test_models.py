@@ -2,10 +2,11 @@ from datetime import date
 from django.test import TestCase
 from service.models import Service
 
-from profiles.tests.factories import (
+from service.tests.factories import (
     AddressFactory,
     CustomerFactory,
     OrganizationFactory,
+    ServiceFactory,
 )
 from appliances.tests.factories import (
     HistoricFactory,
@@ -30,6 +31,12 @@ class ServiceModelTest(TestCase):
     def test_create_service_only_with_required_data(self):
         service_count = Service.objects.all().count()
         service = Service.objects.create(owner=self.org, historic=self.historic)
+        newServiceCount = Service.objects.all().count()
+        self.assertEqual(newServiceCount, service_count + 1)
+
+    def test_create_service_using_factory(self):
+        service_count = Service.objects.all().count()
+        service = ServiceFactory()
         newServiceCount = Service.objects.all().count()
         self.assertEqual(newServiceCount, service_count + 1)
 
