@@ -3,11 +3,14 @@ from rest_framework.views import APIView
 from .models import Service
 from rest_framework import serializers
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 
 # Create your views here.
 
 
 class ServiceListView(APIView):
+
+    permission_classes = [IsAuthenticated]
 
     class ServiceListSerializer(serializers.ModelSerializer):
         class Meta:
