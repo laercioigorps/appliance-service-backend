@@ -72,10 +72,10 @@ class TestCustomer(TestCase):
         customer = Customer.objects.create(
             name="first customer", owner=self.organization1
         )
-        customer.address.add(address)
+        customer.addresses.add(address)
 
         c = Customer.objects.get(pk=customer.pk)
-        a = c.address.first()
+        a = c.addresses.first()
         self.assertEqual(a.street, "street1")
         self.assertEqual(a.neighborhood, "caic")
         self.assertEqual(a.number, "5")
@@ -92,24 +92,24 @@ class TestCustomer(TestCase):
             name="first customer", owner=self.organization1
         )
 
-        address_count = customer.address.count()
+        address_count = customer.addresses.count()
         self.assertEqual(address_count, 0)
 
-        customer.address.add(address1)
+        customer.addresses.add(address1)
 
-        address_count = customer.address.count()
+        address_count = customer.addresses.count()
         self.assertEqual(address_count, 1)
 
-        customer.address.add(address2)
+        customer.addresses.add(address2)
 
-        address_count = customer.address.count()
+        address_count = customer.addresses.count()
         self.assertEqual(address_count, 2)
 
     def test_add_two_address_to_customer_using_factory(self):
 
-        customer = CustomerFactory(address=(AddressFactory(), AddressFactory()))
+        customer = CustomerFactory(addresses=(AddressFactory(), AddressFactory()))
 
-        customer_address_count = customer.address.all().count()
+        customer_address_count = customer.addresses.all().count()
         self.assertEqual(customer_address_count, 2)
 
 

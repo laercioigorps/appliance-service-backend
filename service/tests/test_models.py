@@ -22,9 +22,9 @@ class ServiceModelTest(TestCase):
     def setUp(self):
         self.org = OrganizationFactory()
         self.customer = CustomerFactory(
-            address=(AddressFactory(), AddressFactory()), owner=self.org
+            addresses=(AddressFactory(), AddressFactory()), owner=self.org
         )
-        self.address = self.customer.address.first()
+        self.address = self.customer.addresses.first()
         self.historic = HistoricFactory(org=self.org)
         self.service = Service.objects.create(owner=self.org, historic=self.historic)
 
@@ -60,9 +60,9 @@ class ServiceModelTest(TestCase):
 
     def test_add_address_to_service(self):
         self.assertEqual(self.service.address, None)
-        self.service.address = self.customer.address.first()
+        self.service.address = self.customer.addresses.first()
         self.assertEqual(
-            self.service.address.number, self.customer.address.first().number
+            self.service.address.number, self.customer.addresses.first().number
         )
 
     def test_add_symptoms_to_service_historic(self):

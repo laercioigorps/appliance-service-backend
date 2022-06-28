@@ -225,7 +225,7 @@ class TestAddressView(TestCase):
         )
 
     def test_create_address_to_custumer_with_authenticated_user(self):
-        addressCount = self.customer1.address.count()
+        addressCount = self.customer1.addresses.count()
         self.assertEqual(addressCount, 0)
 
         client = APIClient()
@@ -243,11 +243,11 @@ class TestAddressView(TestCase):
         )
         self.assertEquals(response.status_code, 201)
 
-        addressCount = self.customer1.address.count()
+        addressCount = self.customer1.addresses.count()
         self.assertEqual(addressCount, 1)
 
     def test_create_address_to_custumer_with_not_authenticated_user(self):
-        addressCount = self.customer2.address.count()
+        addressCount = self.customer2.addresses.count()
         self.assertEqual(addressCount, 0)
 
         client = APIClient()
@@ -264,11 +264,11 @@ class TestAddressView(TestCase):
         )
         self.assertEquals(response.status_code, 403)
 
-        addressCount = self.customer2.address.count()
+        addressCount = self.customer2.addresses.count()
         self.assertEqual(addressCount, 0)
 
     def test_create_address_to_custumer_wich_the_user_organization_not_own(self):
-        addressCount = self.customer2.address.count()
+        addressCount = self.customer2.addresses.count()
         self.assertEqual(addressCount, 0)
 
         client = APIClient()
@@ -286,7 +286,7 @@ class TestAddressView(TestCase):
         )
         self.assertEquals(response.status_code, 403)
 
-        addressCount = self.customer2.address.count()
+        addressCount = self.customer2.addresses.count()
         self.assertEqual(addressCount, 0)
 
     def test_create_address_to_invalid_customer_with_authenticated_user(self):
@@ -313,7 +313,7 @@ class TestAddressView(TestCase):
         self.assertEquals(addressCount, 0)
 
     def test_create_address_to_custumer_with_not_valid_data(self):
-        addressCount = self.customer1.address.count()
+        addressCount = self.customer1.addresses.count()
         self.assertEqual(addressCount, 0)
 
         client = APIClient()
@@ -330,7 +330,7 @@ class TestAddressView(TestCase):
         )
         self.assertEquals(response.status_code, 400)
 
-        addressCount = self.customer1.address.count()
+        addressCount = self.customer1.addresses.count()
         self.assertEqual(addressCount, 0)
 
 
@@ -359,10 +359,10 @@ class TestAddressListGetView(TestCase):
             number="3", street="street3", neighborhood="neigh3"
         )
 
-        self.customer1.address.add(self.address1)
-        self.customer1.address.add(self.address2)
+        self.customer1.addresses.add(self.address1)
+        self.customer1.addresses.add(self.address2)
 
-        self.customer2.address.add(self.address3)
+        self.customer2.addresses.add(self.address3)
 
     def test_list_address_from_customer_with_authenticated_user(self):
 
@@ -437,10 +437,10 @@ class TestCustomerAddressDetailView(TestCase):
             number="3", street="street3", neighborhood="neigh3"
         )
 
-        self.customer1.address.add(self.address1)
-        self.customer1.address.add(self.address2)
+        self.customer1.addresses.add(self.address1)
+        self.customer1.addresses.add(self.address2)
 
-        self.customer2.address.add(self.address3)
+        self.customer2.addresses.add(self.address3)
 
     def test_retrieve_customer_address_with_valid_authenticated_user(self):
         client = APIClient()
