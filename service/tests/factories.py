@@ -16,7 +16,9 @@ class ServiceFactory(factory.django.DjangoModelFactory):
 
     owner = factory.SubFactory(OrganizationFactory)
     historic = factory.SubFactory(HistoricFactory)
-    customer = factory.SubFactory(CustomerFactory)
+    customer = factory.SubFactory(
+        CustomerFactory, owner=factory.SelfAttribute("..owner")
+    )
     address = factory.SubFactory(AddressFactory)
     price = factory.LazyAttribute(
         lambda _: faker.pydecimal(left_digits=4, right_digits=2)
