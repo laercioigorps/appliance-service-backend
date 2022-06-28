@@ -49,6 +49,11 @@ class ServiceModelTest(TestCase):
         service = ServiceFactory()
         self.assertEqual(service.owner.id, service.customer.owner.id)
 
+    def test_create_service_using_factory_with_the_same_customer_org_passing_at_creation(self):
+        org = OrganizationFactory()
+        service = ServiceFactory(owner=org)
+        self.assertEqual(service.owner.id, service.customer.owner.id)
+
     def test_add_address_to_service(self):
         self.assertEqual(self.service.address, None)
         self.service.address = self.customer.address.first()
