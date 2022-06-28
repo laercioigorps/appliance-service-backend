@@ -15,7 +15,7 @@ class ServiceFactory(factory.django.DjangoModelFactory):
         model = Service
 
     owner = factory.SubFactory(OrganizationFactory)
-    historic = factory.SubFactory(HistoricFactory)
+    historic = factory.SubFactory(HistoricFactory, org=factory.SelfAttribute("..owner"))
     customer = factory.SubFactory(
         CustomerFactory, owner=factory.SelfAttribute("..owner")
     )
