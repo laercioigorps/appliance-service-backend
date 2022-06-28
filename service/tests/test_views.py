@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.urls import reverse
-from profiles.tests.factories import UserFactory
+from profiles.tests.factories import AddressFactory, CustomerFactory, UserFactory
 from service.models import Service
 from rest_framework.test import APIClient
 import io
@@ -20,9 +20,12 @@ class ServiceViewTest(TestCase):
         self.user2Client = APIClient()
         self.user2Client.force_authenticate(user=self.user2)
 
-        self.service1 = ServiceFactory(owner=self.user1.profile.org)
 
-        self.service2 = ServiceFactory(owner=self.user2.profile.org)
+        customer1 = CustomerFactory(owner=self.user1.profile.org, addresses=(AddressFactory(), AddressFactory()))
+        self.service1 = ServiceFactory(owner=self.user1.profile.org, customer=customer1, address=customer1.addresses.first())
+
+        customer2 = CustomerFactory(owner=self.user2.profile.org, addresses=(AddressFactory(), AddressFactory()))
+        self.service2 = ServiceFactory(owner=self.user2.profile.org, customer=customer2, address=customer2.addresses.first())
 
         self.service3 = ServiceFactory(owner=self.user1.profile.org)
 
