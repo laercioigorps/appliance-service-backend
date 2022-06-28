@@ -20,12 +20,23 @@ class ServiceViewTest(TestCase):
         self.user2Client = APIClient()
         self.user2Client.force_authenticate(user=self.user2)
 
+        customer1 = CustomerFactory(
+            owner=self.user1.profile.org, addresses=(AddressFactory(), AddressFactory())
+        )
+        self.service1 = ServiceFactory(
+            owner=self.user1.profile.org,
+            customer=customer1,
+            address=customer1.addresses.first(),
+        )
 
-        customer1 = CustomerFactory(owner=self.user1.profile.org, addresses=(AddressFactory(), AddressFactory()))
-        self.service1 = ServiceFactory(owner=self.user1.profile.org, customer=customer1, address=customer1.addresses.first())
-
-        customer2 = CustomerFactory(owner=self.user2.profile.org, addresses=(AddressFactory(), AddressFactory()))
-        self.service2 = ServiceFactory(owner=self.user2.profile.org, customer=customer2, address=customer2.addresses.first())
+        customer2 = CustomerFactory(
+            owner=self.user2.profile.org, addresses=(AddressFactory(), AddressFactory())
+        )
+        self.service2 = ServiceFactory(
+            owner=self.user2.profile.org,
+            customer=customer2,
+            address=customer2.addresses.first(),
+        )
 
         self.service3 = ServiceFactory(owner=self.user1.profile.org)
 
