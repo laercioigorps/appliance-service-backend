@@ -21,14 +21,8 @@ class ServiceViewTest(TestCase):
         self.user2Client.force_authenticate(user=self.user2)
 
         self.service1 = ServiceFactory(owner=self.user1.profile.org)
-        self.service1.historic.org = self.user1.profile.org
-        self.service1.customer.owner = self.user1.profile.org
-        self.service1.save()
 
         self.service2 = ServiceFactory(owner=self.user2.profile.org)
-        self.service2.historic.org = self.user2.profile.org
-        self.service2.customer.owner = self.user2.profile.org
-        self.service2.save()
 
         self.service3 = ServiceFactory(owner=self.user1.profile.org)
 
