@@ -24,7 +24,7 @@ class Organization(models.Model):
 class Customer(models.Model):
     name = models.CharField(max_length=30)
     owner = models.ForeignKey(Organization, on_delete=models.CASCADE)
-    address = models.ManyToManyField(Address, blank=True)
+    addresses = models.ManyToManyField(Address, blank=True)
 
     def has_object_permission(self, request):
         return self.owner == request.user.profile.org
