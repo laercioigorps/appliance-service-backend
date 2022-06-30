@@ -158,3 +158,13 @@ class ServiceViewTest(TestCase):
             format="json",
         )
         self.assertEqual(response.status_code, 403)
+
+    def test_create_service_for_invalid_customer(self):
+        response = self.user1Client.post(
+            reverse(
+                "service:customer_service_list",
+                kwargs={"customer_pk": 100},
+            ),
+            format="json",
+        )
+        self.assertEqual(response.status_code, 404)
