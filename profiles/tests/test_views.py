@@ -91,6 +91,7 @@ class TestCustomerDetailView(TestCase):
         data = JSONParser().parse(stream)
 
         self.assertEqual(data["name"], self.customer4.name)
+        self.assertEqual(data["id"], self.customer4.id)
 
     def test_get_customer_with_not_authenticated_user(self):
         client = APIClient()
