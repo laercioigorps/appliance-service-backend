@@ -18,7 +18,7 @@ class CategorySerializer(serializers.ModelSerializer):
 class ApplianceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Appliance
-        fields = ["model", "brand", "category"]
+        fields = ["id", "model", "brand", "category"]
 
 
 class SolutionSerializer(serializers.ModelSerializer):
