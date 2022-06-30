@@ -20,13 +20,13 @@ class ServiceViewTest(TestCase):
         self.user2Client = APIClient()
         self.user2Client.force_authenticate(user=self.user2)
 
-        customer1 = CustomerFactory(
+        self.customer1 = CustomerFactory(
             owner=self.user1.profile.org, addresses=(AddressFactory(), AddressFactory())
         )
         self.service1 = ServiceFactory(
             owner=self.user1.profile.org,
-            customer=customer1,
-            address=customer1.addresses.first(),
+            customer=self.customer1,
+            address=self.customer1.addresses.first(),
         )
 
         customer2 = CustomerFactory(
@@ -116,3 +116,19 @@ class ServiceViewTest(TestCase):
             format="json",
         )
         self.assertEqual(response.status_code, 403)
+
+    def test_create_service_for_valid_user(self):
+        serviceCount = Service.objects.filter(customer=self.customer1).count()
+
+        response = self.user1Client.post(
+            reverse(
+                "service:customer_service_list",
+                kwargs={"customer_pk": self.customer1.id},
+            ),
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, 201)
+
+        newServiceCount = Service.objects.filter(customer=self.customer1).count()
+        self.assertEqual(newServiceCount, serviceCount + 1)
