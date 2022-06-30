@@ -3,6 +3,7 @@ from rest_framework.views import APIView
 
 from appliances.models import Historic
 from profiles.models import Customer
+from profiles.permissions import IsCustomerOwner
 from profiles.serializers import CustomerSerializer
 from service.permissions import IsServiceOwner
 from .models import Service
@@ -57,7 +58,7 @@ class ServiceDetailView(APIView):
 
 class CustomerServiceListView(APIView):
 
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsCustomerOwner]
 
     class ServiceListSerializer(serializers.ModelSerializer):
         class Meta:
@@ -67,6 +68,7 @@ class CustomerServiceListView(APIView):
 
     def post(self, request, customer_pk):
         customer = Customer.objects.get(pk=customer_pk)
+        self.check_object_permissions(request, customer)
         org = request.user.profile.org
         service = Service.objects.create(
             owner=org, historic=Historic.objects.create(org=org), customer=customer
