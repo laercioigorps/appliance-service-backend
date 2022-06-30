@@ -358,7 +358,10 @@ class HistoricViewTest(TestCase):
 
         self.assertEqual(len(data), 2)
 
+        self.assertEqual(data[0]["id"], self.historic1.id)
         self.assertEqual(data[0]["org"], self.user1.profile.org.id)
+        self.assertEqual(data[0]["completed"], self.historic1.completed)
+
         self.assertEqual(data[1]["org"], self.user1.profile.org.id)
 
     def test_list_historic_with_not_authenticated_user(self):
