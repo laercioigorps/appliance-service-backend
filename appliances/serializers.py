@@ -24,7 +24,7 @@ class ApplianceSerializer(serializers.ModelSerializer):
 class SolutionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Solution
-        fields = ["name", "description"]
+        fields = ["id", "name", "description"]
 
 
 class ProblemSerializer(serializers.ModelSerializer):
