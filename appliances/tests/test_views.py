@@ -65,8 +65,8 @@ class BrandViewTest(TestCase):
 
 class CategoryViewTest(TestCase):
     def setUp(self):
-        self.Category1 = Category.objects.create(name="cat1")
-        self.Category2 = Category.objects.create(name="cat2")
+        self.category1 = Category.objects.create(name="cat1")
+        self.category2 = Category.objects.create(name="cat2")
 
         self.user1 = User.objects.create_user("root1", "email1@exemple.com", "root")
 
@@ -86,8 +86,10 @@ class CategoryViewTest(TestCase):
 
         self.assertEqual(len(data), 2)
 
-        self.assertEqual(data[0]["name"], "cat1")
-        self.assertEqual(data[1]["name"], "cat2")
+        self.assertEqual(data[0]["name"], self.category1.name)
+        self.assertEqual(data[0]["id"], self.category1.id)
+
+        self.assertEqual(data[1]["name"], self.category2.name)
 
     def test_list_category_with_not_authenticated_user(self):
         response = self.notAuthenticatedClient.get(
