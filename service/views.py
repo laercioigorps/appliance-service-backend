@@ -67,7 +67,7 @@ class CustomerServiceListView(APIView):
             depth = 1
 
     def post(self, request, customer_pk):
-        customer = Customer.objects.get(pk=customer_pk)
+        customer = get_object_or_404(Customer, pk=customer_pk)
         self.check_object_permissions(request, customer)
         org = request.user.profile.org
         service = Service.objects.create(
