@@ -29,13 +29,13 @@ class ServiceViewTest(TestCase):
             address=self.customer1.addresses.first(),
         )
 
-        customer2 = CustomerFactory(
+        self.customer2 = CustomerFactory(
             owner=self.user2.profile.org, addresses=(AddressFactory(), AddressFactory())
         )
         self.service2 = ServiceFactory(
             owner=self.user2.profile.org,
-            customer=customer2,
-            address=customer2.addresses.first(),
+            customer=self.customer2,
+            address=self.customer2.addresses.first(),
         )
 
         self.service3 = ServiceFactory(owner=self.user1.profile.org)
@@ -148,3 +148,13 @@ class ServiceViewTest(TestCase):
 
         newServiceCount = Service.objects.filter(customer=self.customer1).count()
         self.assertEqual(newServiceCount, serviceCount)
+
+    def test_create_service_for_customer_wich_the_user_does_not_own(self):
+        response = self.user1Client.post(
+            reverse(
+                "service:customer_service_list",
+                kwargs={"customer_pk": self.customer2.id},
+            ),
+            format="json",
+        )
+        self.assertEqual(response.status_code, 403)
