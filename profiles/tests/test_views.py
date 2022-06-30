@@ -380,6 +380,12 @@ class TestAddressListGetView(TestCase):
         data = JSONParser().parse(stream)
         self.assertEqual(len(data), 2)
 
+        firstAddress = self.customer1.addresses.first()
+
+        self.assertEqual(data[0]["id"], firstAddress.id)
+        self.assertEqual(data[0]["number"], firstAddress.number)
+        self.assertEqual(data[0]["street"], firstAddress.street)
+
     def test_list_address_from_customer_with_not_authenticated_user(self):
 
         client = APIClient()
@@ -605,7 +611,6 @@ class TestCustomerAddressDetailView(TestCase):
         )
         self.assertEqual(response.status_code, 403)
 
-
     def test_delete_customer_address_wich_authenticated_user_does_not_own(self):
         client = APIClient()
         client.force_authenticate(self.user1)
@@ -618,7 +623,6 @@ class TestCustomerAddressDetailView(TestCase):
         )
         self.assertEqual(response.status_code, 403)
 
-    
     def test_delete_not_valid_customer_address(self):
         client = APIClient()
         client.force_authenticate(self.user2)
