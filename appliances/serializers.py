@@ -30,13 +30,13 @@ class SolutionSerializer(serializers.ModelSerializer):
 class ProblemSerializer(serializers.ModelSerializer):
     class Meta:
         model = Problem
-        fields = ["name", "description", "solutions"]
+        fields = ["id", "name", "description", "solutions"]
 
 
 class SymptomSerializer(serializers.ModelSerializer):
     class Meta:
         model = Symptom
-        fields = ["name", "description", "causes"]
+        fields = ["id", "name", "description", "causes"]
 
 
 class HistoricSerializer(serializers.ModelSerializer):
