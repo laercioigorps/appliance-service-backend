@@ -189,7 +189,10 @@ class SolutionViewTest(TestCase):
 
         self.assertEqual(len(data), 3)
 
-        self.assertEqual(data[0]["name"], "solution1")
+        self.assertEqual(data[0]["id"], self.solution1.id)
+        self.assertEqual(data[0]["name"], self.solution1.name)
+        self.assertEqual(data[0]["description"], self.solution1.description)
+
         self.assertEqual(data[1]["name"], "solution2")
 
     def test_list_solutions_with_not_authenticated_user(self):
