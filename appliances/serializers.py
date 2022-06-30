@@ -6,7 +6,7 @@ from .models import Appliance, Brand, Category, Historic, Problem, Solution, Sym
 class BrandSerializer(serializers.ModelSerializer):
     class Meta:
         model = Brand
-        fields = ["name"]
+        fields = ["id", "name"]
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -37,6 +37,7 @@ class SymptomSerializer(serializers.ModelSerializer):
     class Meta:
         model = Symptom
         fields = ["name", "description", "causes"]
+
 
 class HistoricSerializer(serializers.ModelSerializer):
     class Meta:
