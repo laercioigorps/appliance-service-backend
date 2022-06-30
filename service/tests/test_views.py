@@ -132,3 +132,19 @@ class ServiceViewTest(TestCase):
 
         newServiceCount = Service.objects.filter(customer=self.customer1).count()
         self.assertEqual(newServiceCount, serviceCount + 1)
+
+    def test_create_service_for_customer_with_not_authenticated_user(self):
+        serviceCount = Service.objects.filter(customer=self.customer1).count()
+
+        response = self.notAuthenticatedClient.post(
+            reverse(
+                "service:customer_service_list",
+                kwargs={"customer_pk": self.customer1.id},
+            ),
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, 403)
+
+        newServiceCount = Service.objects.filter(customer=self.customer1).count()
+        self.assertEqual(newServiceCount, serviceCount)
