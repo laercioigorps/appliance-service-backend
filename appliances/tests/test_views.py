@@ -255,7 +255,11 @@ class ProblemViewTest(TestCase):
 
         self.assertEqual(len(data), 4)
 
-        self.assertEqual(data[0]["name"], "Problem1")
+        self.assertEqual(data[0]["id"], self.problem1.id)
+        self.assertEqual(data[0]["name"], self.problem1.name)
+        self.assertEqual(data[0]["description"], self.problem1.description)
+        self.assertEqual(data[0]["solutions"][0], self.problem1.solutions.first().id)
+
         self.assertEqual(data[1]["name"], "Problem2")
         self.assertEqual(data[2]["name"], "Problem3")
         self.assertEqual(data[3]["name"], "Problem4")
@@ -305,8 +309,12 @@ class SymptomViewTest(TestCase):
 
         self.assertEqual(len(data), 2)
 
-        self.assertEqual(data[0]["name"], "symptom1")
-        self.assertEqual(data[1]["name"], "symptom2")
+        self.assertEqual(data[0]["id"], self.symptom1.id)
+        self.assertEqual(data[0]["name"], self.symptom1.name)
+        self.assertEqual(data[0]["description"], self.symptom1.description)
+        self.assertEqual(data[0]["causes"][0], self.symptom1.causes.first().id)
+
+        self.assertEqual(data[1]["name"], self.symptom2.name)
 
     def test_list_symptoms_with_not_authenticated_user(self):
         response = self.notAuthenticatedClient.get(
