@@ -46,7 +46,9 @@ class BrandViewTest(TestCase):
 
         self.assertEqual(len(data), 2)
 
-        self.assertEqual(data[0]["name"], "Brand1")
+        self.assertEqual(data[0]["name"], self.brand1.name)
+        self.assertEqual(data[0]["id"], self.brand1.id)
+
         self.assertEqual(data[1]["name"], "Brand2")
 
     def test_list_brand_with_not_authenticated_user(self):
