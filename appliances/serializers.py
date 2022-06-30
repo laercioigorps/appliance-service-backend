@@ -42,4 +42,4 @@ class SymptomSerializer(serializers.ModelSerializer):
 class HistoricSerializer(serializers.ModelSerializer):
     class Meta:
         model = Historic
-        fields = ["appliance", "symptoms", "problems", "solutions", "org", "completed"]
+        fields = ["id", "appliance", "symptoms", "problems", "solutions", "org", "completed"]
