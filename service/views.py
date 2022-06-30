@@ -2,6 +2,8 @@ from django.shortcuts import get_object_or_404, render
 from rest_framework.views import APIView
 
 from appliances.models import Historic
+from profiles.models import Customer
+from profiles.serializers import CustomerSerializer
 from service.permissions import IsServiceOwner
 from .models import Service
 from rest_framework import serializers, status
@@ -51,3 +53,20 @@ class ServiceDetailView(APIView):
         self.check_object_permissions(request, service)
         serializer = self.ServiceDetailSerializer(service)
         return Response(data=serializer.data)
+
+
+class CustomerServiceListView(APIView):
+    class ServiceListSerializer(serializers.ModelSerializer):
+        class Meta:
+            model = Service
+            fields = "__all__"
+            depth = 1
+
+    def post(self, request, customer_pk):
+        customer = Customer.objects.get(pk=customer_pk)
+        org = request.user.profile.org
+        service = Service.objects.create(
+            owner=org, historic=Historic.objects.create(org=org), customer=customer
+        )
+        serializer = self.ServiceListSerializer(service)
+        return Response(data=serializer.data, status=status.HTTP_201_CREATED)
