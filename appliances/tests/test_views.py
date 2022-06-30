@@ -139,9 +139,13 @@ class ApplianceViewTest(TestCase):
 
         self.assertEqual(len(data), 3)
 
-        self.assertEqual(data[0]["model"], "BRW15ABANA")
-        self.assertEqual(data[1]["model"], "BRW17ABANA")
-        self.assertEqual(data[2]["model"], "BRW18ABANA")
+        self.assertEqual(data[0]["model"], self.appliance1.model)
+        self.assertEqual(data[0]["id"], self.appliance1.id)
+        self.assertEqual(data[0]["brand"], self.appliance1.brand.id)
+        self.assertEqual(data[0]["category"], self.appliance1.category.id)
+
+        self.assertEqual(data[1]["model"], self.appliance2.model)
+        self.assertEqual(data[2]["model"], self.appliance3.model)
 
     def test_list_appliances_with_not_authenticated_user(self):
         response = self.notAuthenticatedClient.get(
