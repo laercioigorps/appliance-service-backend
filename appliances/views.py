@@ -1,3 +1,4 @@
+from functools import partial
 from django.shortcuts import get_object_or_404, render
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -78,3 +79,10 @@ class HistoricDetailView(APIView):
         self.check_object_permissions(request, historic)
         serializer = HistoricSerializer(historic)
         return Response(data=serializer.data)
+
+    def put(self, request, historic_pk, format=None):
+        historic = Historic.objects.get(pk=historic_pk)
+        serializer = HistoricSerializer(historic, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=200)
