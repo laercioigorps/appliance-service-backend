@@ -14,6 +14,7 @@ from .serializers import (
 from .models import Appliance, Brand, Category, Historic, Problem, Solution, Symptom
 from rest_framework.permissions import IsAuthenticated
 from .permissions import IsHistoricOwner
+from rest_framework import status
 
 # Create your views here.
 
@@ -87,3 +88,4 @@ class HistoricDetailView(APIView):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=200)
+        return Response(serializer.errors, status=status.HTTP_404_NOT_FOUND)
