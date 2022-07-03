@@ -427,3 +427,20 @@ class HistoricViewTest(TestCase):
             format="json",
         )
         self.assertEqual(response.status_code, 404)
+
+    def test_partialy_update_historic_with_authenticated_valid_user(self):
+        symptom1 = SymptomFactory()
+        symptom2 = SymptomFactory()
+        response = self.authenticatedClient.put(
+            reverse(
+                "appliances:historic_detail", kwargs={"historic_pk": self.historic1.id}
+            ),
+            {"symptoms": [symptom1.id, symptom2.id]},
+            format="json",
+        )
+        self.assertEqual(response.status_code, 200)
+
+        stream = io.BytesIO(response.content)
+        data = JSONParser().parse(stream)
+
+        self.assertEqual(data["symptoms"], [symptom1.id, symptom2.id])
