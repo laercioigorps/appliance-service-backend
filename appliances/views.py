@@ -81,7 +81,7 @@ class HistoricDetailView(APIView):
         return Response(data=serializer.data)
 
     def put(self, request, historic_pk, format=None):
-        historic = Historic.objects.get(pk=historic_pk)
+        historic = get_object_or_404(Historic, pk=historic_pk)
         self.check_object_permissions(request, historic)
         serializer = HistoricSerializer(historic, data=request.data, partial=True)
         if serializer.is_valid():
