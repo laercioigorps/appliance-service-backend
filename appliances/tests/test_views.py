@@ -428,7 +428,7 @@ class HistoricViewTest(TestCase):
         )
         self.assertEqual(response.status_code, 404)
 
-    def test_partialy_update_historic_with_authenticated_valid_user(self):
+    def test_partialy_update_historic_symptoms_with_authenticated_valid_user(self):
         symptom1 = SymptomFactory()
         symptom2 = SymptomFactory()
         response = self.authenticatedClient.put(
