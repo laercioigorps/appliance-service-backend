@@ -496,3 +496,14 @@ class HistoricViewTest(TestCase):
             format="json",
         )
         self.assertEqual(response.status_code, 403)
+
+    def test_partialy_update_not_valid_historic_with_authenticated_user(self):
+        solution1 = SolutionFactory()
+        solution2 = SolutionFactory()
+
+        response = self.authenticatedClient.put(
+            reverse("appliances:historic_detail", kwargs={"historic_pk": 100}),
+            {"solutions": [solution1.id, solution2.id]},
+            format="json",
+        )
+        self.assertEqual(response.status_code, 404)
