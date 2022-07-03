@@ -478,3 +478,21 @@ class HistoricViewTest(TestCase):
         data = JSONParser().parse(stream)
 
         self.assertEqual(data["solutions"], [solution1.id, solution2.id])
+
+    def test_partialy_update_historic_solutions_wich_authenticated_user_does_not_own(
+        self,
+    ):
+        solution1 = SolutionFactory()
+        solution2 = SolutionFactory()
+
+        client = APIClient()
+        client.force_authenticate(self.user2)
+
+        response = client.put(
+            reverse(
+                "appliances:historic_detail", kwargs={"historic_pk": self.historic1.id}
+            ),
+            {"solutions": [solution1.id, solution2.id]},
+            format="json",
+        )
+        self.assertEqual(response.status_code, 403)
