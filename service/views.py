@@ -1,3 +1,4 @@
+from functools import partial
 from django.shortcuts import get_object_or_404, render
 from rest_framework.views import APIView
 
@@ -47,13 +48,20 @@ class ServiceDetailView(APIView):
         class Meta:
             model = Service
             fields = "__all__"
-            depth = 1
+            depth = 2
 
     def get(self, request, service_pk):
         service = get_object_or_404(Service, pk=service_pk)
         self.check_object_permissions(request, service)
         serializer = self.ServiceDetailSerializer(service)
         return Response(data=serializer.data)
+
+    def put(self, request, service_pk):
+        service = Service.objects.get(pk=service_pk)
+        serializer = self.ServiceDetailSerializer(service, request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class CustomerServiceListView(APIView):
