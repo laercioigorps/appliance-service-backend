@@ -197,3 +197,12 @@ class ServiceViewTest(TestCase):
             format="json",
         )
         self.assertEqual(response.status_code, 403)
+
+    def test_partially_update_service_with_price_using_not_valid_data(self):
+        client = APIClient()
+        response = self.user1Client.put(
+            reverse("service:service_detail", kwargs={"service_pk": self.service1.id}),
+            {"price": "testing"},
+            format="json",
+        )
+        self.assertEqual(response.status_code, 400)
