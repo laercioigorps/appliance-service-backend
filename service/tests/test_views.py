@@ -180,3 +180,11 @@ class ServiceViewTest(TestCase):
         stream = io.BytesIO(response.content)
         data = JSONParser().parse(stream)
         self.assertEqual(data["price"], str(125.99))
+
+    def test_partially_update_service_with_price_using_not_valid_user(self):
+        response = self.user2Client.put(
+            reverse("service:service_detail", kwargs={"service_pk": self.service1.id}),
+            {"price": 125.99},
+            format="json",
+        )
+        self.assertEqual(response.status_code, 403)
