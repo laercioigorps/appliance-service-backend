@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 from appliances.models import Historic
 from profiles.models import Customer
 from profiles.permissions import IsCustomerOwner
-from profiles.serializers import CustomerSerializer
+from profiles.serializers import AddressSerializer, CustomerSerializer
 from service.permissions import IsServiceOwner
 from .models import Service
 from rest_framework import serializers, status
@@ -58,6 +58,7 @@ class ServiceDetailView(APIView):
 
     def put(self, request, service_pk):
         service = Service.objects.get(pk=service_pk)
+        self.check_object_permissions(request, service)
         serializer = self.ServiceDetailSerializer(service, request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
