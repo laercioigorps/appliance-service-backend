@@ -24,7 +24,7 @@ class ServiceListView(APIView):
         class Meta:
             model = Service
             fields = "__all__"
-            depth = 1
+            depth = 2
 
     def get(self, request):
         services = Service.objects.filter(owner=request.user.profile.org)
