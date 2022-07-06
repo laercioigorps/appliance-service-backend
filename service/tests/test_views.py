@@ -1,5 +1,6 @@
 from django.test import TestCase
 from django.urls import reverse
+from profiles.models import Customer
 from profiles.tests.factories import AddressFactory, CustomerFactory, UserFactory
 from service.models import Service
 from rest_framework.test import APIClient
@@ -206,3 +207,17 @@ class ServiceViewTest(TestCase):
             format="json",
         )
         self.assertEqual(response.status_code, 400)
+
+    def test_partially_update_service_with_address_using_valid_user(self):
+        address = AddressFactory()
+        response = self.user1Client.put(
+            reverse("service:service_detail", kwargs={"service_pk": self.service1.id}),
+            {"address": address.id},
+            format="json",
+        )
+        self.assertEqual(response.status_code, 200)
+
+        stream = io.BytesIO(response.content)
+        data = JSONParser().parse(stream)
+
+        self.assertEqual(data["address"], address.id)
