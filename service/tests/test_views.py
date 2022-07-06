@@ -1,5 +1,6 @@
 from django.test import TestCase
 from django.urls import reverse
+from appliances.tests.factories import ApplianceFactory
 from profiles.models import Customer
 from profiles.tests.factories import AddressFactory, CustomerFactory, UserFactory
 from service.models import Service
@@ -29,6 +30,8 @@ class ServiceViewTest(TestCase):
             customer=self.customer1,
             address=self.customer1.addresses.first(),
         )
+        self.service1.historic.appliance = ApplianceFactory()
+        self.service1.historic.save()
 
         self.customer2 = CustomerFactory(
             owner=self.user2.profile.org, addresses=(AddressFactory(), AddressFactory())
@@ -58,6 +61,10 @@ class ServiceViewTest(TestCase):
 
         self.assertEqual(data[0]["customer"]["name"], self.service1.customer.name)
         self.assertEqual(data[0]["address"]["number"], self.service1.address.number)
+        self.assertEqual(
+            data[0]["historic"]["appliance"]["model"],
+            self.service1.historic.appliance.model,
+        )
         self.assertEqual(data[0]["price"], str(self.service1.price))
 
     def test_list_services_with_not_authenticated_user(self):
