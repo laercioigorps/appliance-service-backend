@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404, render
 from rest_framework.views import APIView
 
 from appliances.models import Historic
-from profiles.models import Customer
+from profiles.models import Address, Customer
 from profiles.permissions import IsCustomerOwner
 from profiles.serializers import AddressSerializer, CustomerSerializer
 from service.permissions import IsServiceOwner
@@ -50,6 +50,14 @@ class ServiceDetailView(APIView):
             fields = "__all__"
             depth = 2
 
+    class ServiceDetailEditSerializer(serializers.ModelSerializer):
+
+        address = AddressSerializer
+
+        class Meta:
+            model = Service
+            fields = "__all__"
+
     def get(self, request, service_pk):
         service = get_object_or_404(Service, pk=service_pk)
         self.check_object_permissions(request, service)
@@ -59,7 +67,9 @@ class ServiceDetailView(APIView):
     def put(self, request, service_pk):
         service = Service.objects.get(pk=service_pk)
         self.check_object_permissions(request, service)
-        serializer = self.ServiceDetailSerializer(service, request.data, partial=True)
+        serializer = self.ServiceDetailEditSerializer(
+            service, data=request.data, partial=True
+        )
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
