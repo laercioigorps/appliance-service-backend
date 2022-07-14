@@ -1,3 +1,4 @@
+import email
 from django.db import models
 from django.contrib.auth.models import User
 from django.dispatch import receiver
@@ -25,6 +26,11 @@ class Customer(models.Model):
     name = models.CharField(max_length=30)
     owner = models.ForeignKey(Organization, on_delete=models.CASCADE)
     addresses = models.ManyToManyField(Address, blank=True)
+    email = models.EmailField(max_length=20, null=True)
+    nickname = models.CharField(max_length=30, null=True)
+    profession = models.CharField(max_length=20, null=True)
+    phone1 = models.CharField(max_length=15, null=True)
+    phone2 = models.CharField(max_length=15, null=True)
 
     def has_object_permission(self, request):
         return self.owner == request.user.profile.org
