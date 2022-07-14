@@ -31,6 +31,11 @@ class CustomerFactory(factory.django.DjangoModelFactory):
 
     name = factory.LazyAttribute(lambda _: faker.name())
     owner = factory.SubFactory(OrganizationFactory)
+    email = factory.LazyAttribute(lambda _: faker.name())
+    profession = factory.LazyAttribute(lambda _: faker.job())
+    nickname = factory.LazyAttribute(lambda _: faker.first_name())
+    phone1 = factory.LazyAttribute(lambda _: faker.phone_number())
+    phone2 = factory.LazyAttribute(lambda _: faker.phone_number())
 
     @factory.post_generation
     def addresses(self, create, extracted, **kwargs):
