@@ -120,3 +120,10 @@ class ServiceModelTest(TestCase):
     def test_service_start_date(self):
         service = ServiceFactory()
         self.assertIsNotNone(service.start_date)
+
+    def test_service_end_date(self):
+        service = ServiceFactory()
+        self.assertIsNone(service.end_date)
+
+        service.end_date = date.today()
+        self.assertEqual(service.end_date, date.today())
