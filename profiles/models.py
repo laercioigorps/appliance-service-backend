@@ -3,6 +3,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.dispatch import receiver
 from django.db.models.signals import post_save
+from datetime import date
 
 # Create your models here.
 class Address(models.Model):
@@ -31,6 +32,7 @@ class Customer(models.Model):
     profession = models.CharField(max_length=20, null=True)
     phone1 = models.CharField(max_length=15, null=True)
     phone2 = models.CharField(max_length=15, null=True)
+    created_at = models.DateField(default=date.today())
 
     def has_object_permission(self, request):
         return self.owner == request.user.profile.org
