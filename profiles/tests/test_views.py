@@ -7,6 +7,7 @@ import io
 from rest_framework.parsers import JSONParser
 
 from profiles.models import Address, Customer
+from profiles.tests.factories import CustomerFactory
 
 
 class TestCustomerView(TestCase):
@@ -92,6 +93,31 @@ class TestCustomerDetailView(TestCase):
 
         self.assertEqual(data["name"], self.customer4.name)
         self.assertEqual(data["id"], self.customer4.id)
+
+    def test_get_customer_fields(self):
+        client = APIClient()
+        client.force_authenticate(self.user1)
+
+        customer = CustomerFactory(owner=self.user1.profile.org)
+
+        response = client.get(
+            reverse("profiles:customer_detail", kwargs={"pk": customer.id}),
+            format="json",
+        )
+
+        self.assertEquals(response.status_code, 200)
+
+        stream = io.BytesIO(response.content)
+        data = JSONParser().parse(stream)
+
+        self.assertEqual(data["name"], customer.name)
+        self.assertEqual(data["nickname"], customer.nickname)
+        self.assertEqual(data["email"], customer.email)
+        self.assertEqual(data["profession"], customer.profession)
+        self.assertEqual(data["phone1"], customer.phone1)
+        self.assertEqual(data["phone2"], customer.phone2)
+        self.assertEqual(data["owner"], customer.owner.id)
+        self.assertEqual(data["created_at"], customer.created_at.strftime('%Y-%m-%d'))
 
     def test_get_customer_with_not_authenticated_user(self):
         client = APIClient()
@@ -634,3 +660,8 @@ class TestCustomerAddressDetailView(TestCase):
             )
         )
         self.assertEqual(response.status_code, 404)
+
+
+class CustomerHistoryTest(TestCase):
+    def setUp(self):
+        pass
