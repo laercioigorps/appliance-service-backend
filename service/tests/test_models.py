@@ -1,6 +1,7 @@
 from datetime import date
 from django.test import TestCase
 from service.models import Service
+from datetime import date
 
 from service.tests.factories import (
     AddressFactory,
@@ -49,7 +50,9 @@ class ServiceModelTest(TestCase):
         service = ServiceFactory()
         self.assertEqual(service.owner.id, service.customer.owner.id)
 
-    def test_create_service_using_factory_with_the_same_customer_org_passing_at_creation(self):
+    def test_create_service_using_factory_with_the_same_customer_org_passing_at_creation(
+        self,
+    ):
         org = OrganizationFactory()
         service = ServiceFactory(owner=org)
         self.assertEqual(service.owner.id, service.customer.owner.id)
@@ -113,3 +116,7 @@ class ServiceModelTest(TestCase):
         self.service.price = Decimal("9999.21")
         self.service.save()
         self.assertEqual(self.service.price, Decimal("9999.21"))
+
+    def test_service_start_date(self):
+        service = ServiceFactory()
+        self.assertIsNotNone(service.start_date)
