@@ -2,6 +2,7 @@ from django.test import TestCase
 from django.contrib.auth.models import User
 from profiles.models import Address, Organization, Customer, Profile
 from .factories import AddressFactory, CustomerFactory, OrganizationFactory, UserFactory
+from datetime import date
 
 # Create your tests here.
 class TestAddress(TestCase):
@@ -68,7 +69,7 @@ class TestCustomer(TestCase):
             profession="professor",
             phone1="91999999999",
             phone2="91999999999",
-            email="hello@gmail.com"
+            email="hello@gmail.com",
         )
 
         customer_count = Customer.objects.all().count()
@@ -81,6 +82,19 @@ class TestCustomer(TestCase):
 
         newCustomer_count = Customer.objects.all().count()
         self.assertEqual(newCustomer_count, customer_count + 1)
+
+    def test_create_customer_with_aditional_fields_using_factory(self):
+        customer_count = Customer.objects.all().count()
+
+        customer = CustomerFactory()
+
+        newCustomer_count = Customer.objects.all().count()
+        self.assertEqual(newCustomer_count, customer_count + 1)
+        self.assertIsNotNone(customer.nickname)
+        self.assertIsNotNone(customer.profession)
+        self.assertIsNotNone(customer.phone1)
+        self.assertIsNotNone(customer.phone2)
+        self.assertIsNotNone(customer.email)
 
     def test_add_address_to_customer(self):
         address = Address.objects.create(
