@@ -75,6 +75,19 @@ class TestCustomer(TestCase):
         customer_count = Customer.objects.all().count()
         self.assertEqual(customer_count, 1)
 
+    def test_customer_created_at(self):
+        customer = Customer.objects.create(
+            name="first customer",
+            owner=self.organization1,
+            nickname="first",
+            profession="professor",
+            phone1="91999999999",
+            phone2="91999999999",
+            email="hello@gmail.com",
+        )
+
+        self.assertEqual(customer.created_at, date.today())
+
     def test_create_customer_with_organization_using_factory(self):
         customer_count = Customer.objects.all().count()
 
