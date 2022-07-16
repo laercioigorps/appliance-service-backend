@@ -6,6 +6,7 @@ from profiles.models import Address, Customer
 from profiles.serializers import AddressSerializer, CustomerSerializer
 from rest_framework.permissions import IsAuthenticated
 from .permissions import IsAddressOwner, IsCustomerOwner
+from django.db.models import Count
 
 # Create your views here.
 @api_view(["GET", "POST"])
@@ -47,6 +48,17 @@ class CustomerDetailView(APIView):
         self.check_object_permissions(request, customer)
         customer.delete()
         return Response(status=status.HTTP_200_OK)
+
+
+class CustomerHistoryView(APIView):
+    def get(self, request, format=None):
+        customers = Customer.objects.filter(owner=request.user.profile.org).values("created_at__month").annotate(
+            Count("created_at__month")
+        )
+        data = []
+        for n in customers:
+            data.append(n["created_at__month__count"])
+        return Response({"data": data})
 
 
 """ @api_view(["POST"])
