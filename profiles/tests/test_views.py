@@ -1,3 +1,4 @@
+from datetime import date, timedelta
 from django import views
 from django.test import TestCase
 from django.urls import reverse
@@ -117,7 +118,7 @@ class TestCustomerDetailView(TestCase):
         self.assertEqual(data["phone1"], customer.phone1)
         self.assertEqual(data["phone2"], customer.phone2)
         self.assertEqual(data["owner"], customer.owner.id)
-        self.assertEqual(data["created_at"], customer.created_at.strftime('%Y-%m-%d'))
+        self.assertEqual(data["created_at"], customer.created_at.strftime("%Y-%m-%d"))
 
     def test_get_customer_with_not_authenticated_user(self):
         client = APIClient()
@@ -234,6 +235,59 @@ class TestCustomerDetailView(TestCase):
 
         customer_count = Customer.objects.filter(owner=self.user2.profile.org).count()
         self.assertEquals(customer_count, 3)
+
+
+class TestCustomerHistoricView(TestCase):
+    def setUp(self):
+        self.user1 = User.objects.create_user("root1", "email1@exemple.com", "root")
+
+        for i in range(4):
+            customer = CustomerFactory(
+                owner=self.user1.profile.org,
+                created_at=date(year=2022, month=1, day=15),
+            )
+        customer = CustomerFactory(
+                owner=self.user1.profile.org,
+                created_at=date(year=2022, month=1, day=5),
+            )
+        for i in range(4):
+            customer = CustomerFactory(
+                owner=self.user1.profile.org,
+                created_at=date(year=2022, month=2, day=15),
+            )
+        for i in range(3):
+            customer = CustomerFactory(
+                owner=self.user1.profile.org,
+                created_at=date(year=2022, month=3, day=15),
+            )
+        for i in range(2):
+            customer = CustomerFactory(
+                owner=self.user1.profile.org,
+                created_at=date(year=2022, month=4, day=15),
+            )
+        for i in range(1):
+            customer = CustomerFactory(
+                owner=self.user1.profile.org,
+                created_at=date(year=2022, month=5, day=15),
+            )
+
+    def test_new_customers_history(self):
+        client = APIClient()
+        client.force_authenticate(self.user1)
+
+        customerCount = Customer.objects.all().count()
+        self.assertEqual(customerCount, 15)
+
+        response = client.get(
+            reverse("profiles:customer_history"),
+            format="json",
+        )
+        self.assertEquals(response.status_code, 200)
+
+        stream = io.BytesIO(response.content)
+        data = JSONParser().parse(stream)
+
+        self.assertEqual(data["data"], [5, 4, 3, 2, 1])
 
 
 class TestAddressView(TestCase):
