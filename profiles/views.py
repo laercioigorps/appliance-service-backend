@@ -55,6 +55,9 @@ class CustomerHistoryView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, format=None):
+        customerTotalCount = Customer.objects.filter(
+            owner=request.user.profile.org
+        ).count()
         customers = (
             Customer.objects.filter(owner=request.user.profile.org)
             .values("created_at__month", "created_at__year")
@@ -65,7 +68,7 @@ class CustomerHistoryView(APIView):
         for n in customers:
             data.append(n["count"])
             labels.append("%s-%s" % (n["created_at__month"], n["created_at__year"]))
-        return Response({"data": data, "labels": labels})
+        return Response({"data": data, "labels": labels, "total": customerTotalCount})
 
 
 """ @api_view(["POST"])
