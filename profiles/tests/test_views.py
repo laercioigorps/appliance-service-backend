@@ -241,6 +241,9 @@ class TestCustomerHistoricView(TestCase):
     def setUp(self):
         self.user1 = User.objects.create_user("root1", "email1@exemple.com", "root")
 
+        self.client1Authenticated = APIClient()
+        self.client1Authenticated.force_authenticate(self.user1)
+
         for i in range(4):
             customer = CustomerFactory(
                 owner=self.user1.profile.org,
@@ -272,13 +275,10 @@ class TestCustomerHistoricView(TestCase):
             )
 
     def test_new_customers_history(self):
-        client = APIClient()
-        client.force_authenticate(self.user1)
-
         customerCount = Customer.objects.all().count()
         self.assertEqual(customerCount, 15)
 
-        response = client.get(
+        response = self.client1Authenticated.get(
             reverse("profiles:customer_history"),
             format="json",
         )
@@ -297,6 +297,22 @@ class TestCustomerHistoricView(TestCase):
             format="json",
         )
         self.assertEquals(response.status_code, 403)
+
+    def test_get_new_customers_history_with_different_years(self):
+
+        newCustomer = CustomerFactory(
+            owner=self.user1.profile.org, created_at=date(year=2021, month=1, day=17)
+        )
+        response = self.client1Authenticated.get(
+            reverse("profiles:customer_history"),
+            format="json",
+        )
+        self.assertEquals(response.status_code, 200)
+
+        stream = io.BytesIO(response.content)
+        data = JSONParser().parse(stream)
+
+        self.assertEqual(data["data"], [1, 5, 4, 3, 2, 1])
 
 
 class TestAddressView(TestCase):
