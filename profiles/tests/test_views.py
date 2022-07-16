@@ -332,6 +332,19 @@ class TestCustomerHistoricView(TestCase):
             data["labels"], ["1-2021", "1-2022", "2-2022", "3-2022", "4-2022", "5-2022"]
         )
 
+    def test_get_new_customers_history_total_customers(self):
+
+        response = self.client1Authenticated.get(
+            reverse("profiles:customer_history"),
+            format="json",
+        )
+        self.assertEquals(response.status_code, 200)
+
+        stream = io.BytesIO(response.content)
+        data = JSONParser().parse(stream)
+
+        self.assertEqual(data["total"], 15)
+
 
 class TestAddressView(TestCase):
     def setUp(self):
