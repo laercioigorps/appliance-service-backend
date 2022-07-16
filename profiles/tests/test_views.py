@@ -247,9 +247,9 @@ class TestCustomerHistoricView(TestCase):
                 created_at=date(year=2022, month=1, day=15),
             )
         customer = CustomerFactory(
-                owner=self.user1.profile.org,
-                created_at=date(year=2022, month=1, day=5),
-            )
+            owner=self.user1.profile.org,
+            created_at=date(year=2022, month=1, day=5),
+        )
         for i in range(4):
             customer = CustomerFactory(
                 owner=self.user1.profile.org,
@@ -288,6 +288,15 @@ class TestCustomerHistoricView(TestCase):
         data = JSONParser().parse(stream)
 
         self.assertEqual(data["data"], [5, 4, 3, 2, 1])
+
+    def test_get_new_customers_history_with_not_authenticated_user(self):
+        client = APIClient()
+
+        response = client.get(
+            reverse("profiles:customer_history"),
+            format="json",
+        )
+        self.assertEquals(response.status_code, 403)
 
 
 class TestAddressView(TestCase):
