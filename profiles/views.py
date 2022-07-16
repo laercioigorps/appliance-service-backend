@@ -51,9 +51,14 @@ class CustomerDetailView(APIView):
 
 
 class CustomerHistoryView(APIView):
+    
+    permission_classes = [IsAuthenticated]
+
     def get(self, request, format=None):
-        customers = Customer.objects.filter(owner=request.user.profile.org).values("created_at__month").annotate(
-            Count("created_at__month")
+        customers = (
+            Customer.objects.filter(owner=request.user.profile.org)
+            .values("created_at__month")
+            .annotate(Count("created_at__month"))
         )
         data = []
         for n in customers:
