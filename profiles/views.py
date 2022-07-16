@@ -58,12 +58,14 @@ class CustomerHistoryView(APIView):
         customers = (
             Customer.objects.filter(owner=request.user.profile.org)
             .values("created_at__month", "created_at__year")
-            .annotate(Count("created_at__month"))
+            .annotate(count=Count("created_at__month"))
         )
         data = []
+        labels = []
         for n in customers:
-            data.append(n["created_at__month__count"])
-        return Response({"data": data})
+            data.append(n["count"])
+            labels.append("%s-%s" % (n["created_at__month"], n["created_at__year"]))
+        return Response({"data": data, "labels": labels})
 
 
 """ @api_view(["POST"])
