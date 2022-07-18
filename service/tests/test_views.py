@@ -293,3 +293,18 @@ class ServiceHistoryTest(TestCase):
             data["incomeHistoryLabels"],
             ["1-2021", "2-2021", "1-2022", "2-2022", "3-2022", "4-2022", "5-2022"],
         )
+
+    def test_service_count_history_data_using_valid_user(self):
+        response = self.user1Client.get(
+            reverse("service:service_history"), format="json"
+        )
+
+        self.assertEqual(response.status_code, 200)
+
+        stream = io.BytesIO(response.content)
+        data = JSONParser().parse(stream)
+
+        self.assertEqual(
+            data["serviceCountHistoryData"],
+            [2, 1, 5, 4, 3, 2, 1],
+        )
