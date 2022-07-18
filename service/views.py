@@ -111,6 +111,11 @@ class ServiceHistoryView(APIView):
             .order_by("end_date__year", "end_date__month")
         )
         data = []
+        labels = []
         for instruction in serviceHistory:
             data.append(instruction["price__sum"])
-        return Response({"incomeHistoryData": data})
+            labels.append(
+                "%s-%s"
+                % (instruction["end_date__month"], instruction["end_date__year"])
+            )
+        return Response({"incomeHistoryData": data, "incomeHistoryLabels": labels})
