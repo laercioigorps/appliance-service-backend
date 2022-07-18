@@ -1,5 +1,5 @@
 from django.test import TestCase
-from core.utils.utils import getDisctionaryOfLists
+from core.utils.utils import concatenateLists, getDisctionaryOfLists
 
 
 class ArrayOfDictionariesToDictionatyOfArraysTest(TestCase):
@@ -19,3 +19,25 @@ class ArrayOfDictionariesToDictionatyOfArraysTest(TestCase):
         self.assertEqual(dict["input_month"], [1, 2, 1, 2, 3, 4, 5])
         self.assertEqual(dict["input_year"], [2021, 2021, 2022, 2022, 2022, 2022, 2022])
         self.assertEqual(dict["count"], [1, 2, 5, 4, 3, 2, 1])
+
+
+class ConcatenateListsTest(TestCase):
+    def setUp(self):
+        self.years = [2020, 2020, 2021, 2021, 2021, 2022, 2022, 2022]
+        self.months = [1, 2, 1, 2, 3, 1, 2, 3]
+
+    def test_concatenate_lists(self):
+        newList = concatenateLists(self.months, self.years, "-")
+        self.assertEqual(
+            newList,
+            [
+                "1-2020",
+                "2-2020",
+                "1-2021",
+                "2-2021",
+                "3-2021",
+                "1-2022",
+                "2-2022",
+                "3-2022",
+            ],
+        )
