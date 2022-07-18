@@ -11,6 +11,7 @@ from .models import Service
 from rest_framework import serializers, status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+from django.db.models import Count, Sum
 
 
 # Create your views here.
@@ -95,3 +96,20 @@ class CustomerServiceListView(APIView):
         )
         serializer = self.ServiceListSerializer(service)
         return Response(data=serializer.data, status=status.HTTP_201_CREATED)
+
+
+class ServiceHistoryView(APIView):
+    def get(self, request, format=None):
+
+        serviceHistory = (
+            Service.objects.filter(owner=request.user.profile.org)
+            .values("end_date__month", "end_date__year")
+            .annotate(Sum("price"))
+            .order_by("end_date__year", "end_date__month")
+        )
+        data = []
+        for instruction in serviceHistory:
+            data.append(instruction["price__sum"])
+
+        print(serviceHistory)
+        return Response({"incomeHistoryData": data})
