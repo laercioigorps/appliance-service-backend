@@ -12,6 +12,7 @@ from rest_framework import serializers, status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django.db.models import Count, Sum
+from core.utils.utils import concatenateLists, getDisctionaryOfLists
 
 
 # Create your views here.
@@ -110,20 +111,13 @@ class ServiceHistoryView(APIView):
             .annotate(Sum("price"), Count("end_date__month"))
             .order_by("end_date__year", "end_date__month")
         )
-        data = []
-        labels = []
-        count = []
-        for instruction in serviceHistory:
-            data.append(instruction["price__sum"])
-            labels.append(
-                "%s-%s"
-                % (instruction["end_date__month"], instruction["end_date__year"])
-            )
-            count.append(instruction["end_date__month__count"])
+
+        dict = getDisctionaryOfLists(serviceHistory)
+        labels = concatenateLists(dict["end_date__month"], dict["end_date__year"], "-")
         return Response(
             {
-                "incomeHistoryData": data,
+                "incomeHistoryData": dict["price__sum"],
                 "incomeHistoryLabels": labels,
-                "serviceCountHistoryData": count,
+                "serviceCountHistoryData": dict["end_date__month__count"],
             }
         )
