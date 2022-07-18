@@ -270,5 +270,11 @@ class ServiceHistoryTest(TestCase):
 
         stream = io.BytesIO(response.content)
         data = JSONParser().parse(stream)
-        
+
         self.assertEqual(data["incomeHistoryData"], [200, 100, 500, 400, 300, 200, 100])
+
+    def test_service_income_history_data_using_now_authenticated_user(self):
+        client = APIClient()
+        response = client.get(reverse("service:service_history"), format="json")
+
+        self.assertEqual(response.status_code, 403)
