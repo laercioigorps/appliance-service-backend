@@ -1,3 +1,5 @@
+from datetime import date
+from decimal import Decimal
 from django.test import TestCase
 from django.urls import reverse
 from appliances.tests.factories import ApplianceFactory
@@ -228,3 +230,45 @@ class ServiceViewTest(TestCase):
         data = JSONParser().parse(stream)
 
         self.assertEqual(data["address"], address.id)
+
+
+class ServiceHistoryTest(TestCase):
+    def setUp(self):
+        self.user1 = UserFactory()
+        self.user1Client = APIClient()
+        self.user1Client.force_authenticate(user=self.user1)
+
+        instructions = [
+            {"month": 1, "year": 2021, "count": 2},
+            {"month": 2, "year": 2021, "count": 1},
+            {"month": 1, "year": 2022, "count": 5},
+            {"month": 2, "year": 2022, "count": 4},
+            {"month": 3, "year": 2022, "count": 3},
+            {"month": 4, "year": 2022, "count": 2},
+            {"month": 5, "year": 2022, "count": 1},
+        ]
+        for instruction in instructions:
+            for i in range(instruction["count"]):
+                ServiceFactory(
+                    owner=self.user1.profile.org,
+                    end_date=date(
+                        year=instruction["year"], month=instruction["month"], day=15
+                    ),
+                    price=Decimal("100"),
+                )
+
+    def test_setUP(self):
+        serviceCount = Service.objects.count()
+        self.assertEqual(serviceCount, 18)
+
+    def test_service_income_history_data_using_valid_user(self):
+        response = self.user1Client.get(
+            reverse("service:service_history"), format="json"
+        )
+
+        self.assertEqual(response.status_code, 200)
+
+        stream = io.BytesIO(response.content)
+        data = JSONParser().parse(stream)
+        
+        self.assertEqual(data["incomeHistoryData"], [200, 100, 500, 400, 300, 200, 100])
