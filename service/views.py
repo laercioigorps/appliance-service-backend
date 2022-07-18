@@ -110,6 +110,4 @@ class ServiceHistoryView(APIView):
         data = []
         for instruction in serviceHistory:
             data.append(instruction["price__sum"])
-
-        print(serviceHistory)
         return Response({"incomeHistoryData": data})
