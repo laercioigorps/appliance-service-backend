@@ -99,6 +99,9 @@ class CustomerServiceListView(APIView):
 
 
 class ServiceHistoryView(APIView):
+
+    permission_classes = [IsAuthenticated]
+
     def get(self, request, format=None):
 
         serviceHistory = (
