@@ -107,15 +107,23 @@ class ServiceHistoryView(APIView):
         serviceHistory = (
             Service.objects.filter(owner=request.user.profile.org)
             .values("end_date__month", "end_date__year")
-            .annotate(Sum("price"))
+            .annotate(Sum("price"), Count("end_date__month"))
             .order_by("end_date__year", "end_date__month")
         )
         data = []
         labels = []
+        count = []
         for instruction in serviceHistory:
             data.append(instruction["price__sum"])
             labels.append(
                 "%s-%s"
                 % (instruction["end_date__month"], instruction["end_date__year"])
             )
-        return Response({"incomeHistoryData": data, "incomeHistoryLabels": labels})
+            count.append(instruction["end_date__month__count"])
+        return Response(
+            {
+                "incomeHistoryData": data,
+                "incomeHistoryLabels": labels,
+                "serviceCountHistoryData": count,
+            }
+        )
