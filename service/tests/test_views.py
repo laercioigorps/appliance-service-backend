@@ -5,7 +5,7 @@ from django.urls import reverse
 from appliances.tests.factories import ApplianceFactory
 from profiles.models import Customer
 from profiles.tests.factories import AddressFactory, CustomerFactory, UserFactory
-from service.models import Service
+from service.models import Service, Status
 from rest_framework.test import APIClient
 import io
 from rest_framework.parsers import JSONParser
@@ -308,3 +308,28 @@ class ServiceHistoryTest(TestCase):
             data["serviceCountHistoryData"],
             [2, 1, 5, 4, 3, 2, 1],
         )
+
+
+class StatusViewTest(TestCase):
+    def setUp(self):
+        self.user1 = UserFactory()
+        self.user1Client = APIClient()
+        self.user1Client.force_authenticate(user=self.user1)
+
+        self.status1 = Status.objects.create(name="Visit Scheduled")
+        self.status2 = Status.objects.create(name="Analysis")
+        self.status3 = Status.objects.create(name="Completed")
+
+    def test_list_status_using_authenticated_user(self):
+        response = self.user1Client.get(reverse("service:status_list"), format="json")
+
+        self.assertEqual(response.status_code, 200)
+
+        stream = io.BytesIO(response.content)
+        data = JSONParser().parse(stream)
+
+        self.assertEqual(len(data), 3)
+
+        self.assertEqual(data[0]["name"], self.status1.name)
+        self.assertEqual(data[1]["name"], self.status2.name)
+        self.assertEqual(data[2]["name"], self.status3.name)
