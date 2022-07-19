@@ -7,7 +7,7 @@ from profiles.models import Address, Customer
 from profiles.permissions import IsCustomerOwner
 from profiles.serializers import AddressSerializer, CustomerSerializer
 from service.permissions import IsServiceOwner
-from .models import Service
+from .models import Service, Status
 from rest_framework import serializers, status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
@@ -121,3 +121,15 @@ class ServiceHistoryView(APIView):
                 "serviceCountHistoryData": dict["end_date__month__count"],
             }
         )
+
+
+class StatusListView(APIView):
+    class StatusListSerializer(serializers.ModelSerializer):
+        class Meta:
+            model = Status
+            fields = ["id", "name", "description", "is_active", "is_conclusive"]
+
+    def get(self, request, format=None):
+        statuses = Status.objects.all()
+        serializer = self.StatusListSerializer(statuses, many=True)
+        return Response(data=serializer.data)
