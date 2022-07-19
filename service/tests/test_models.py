@@ -1,6 +1,6 @@
 from datetime import date
 from django.test import TestCase
-from service.models import Service
+from service.models import Service, Status
 from datetime import date
 
 from service.tests.factories import (
@@ -127,3 +127,16 @@ class ServiceModelTest(TestCase):
 
         service.end_date = date.today()
         self.assertEqual(service.end_date, date.today())
+
+
+class StatusModelTest(TestCase):
+    def test_create_status(self):
+        statusCount = Status.objects.count()
+        waiting_payment = Status.objects.create(
+            name="Waiting payment",
+            description="happens when the service is completed",
+            is_conclusive=False,
+            is_active=True,
+        )
+        newStatusCount = Status.objects.count()
+        self.assertEqual(newStatusCount, statusCount + 1)
