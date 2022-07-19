@@ -2,6 +2,7 @@ from django.shortcuts import get_object_or_404, render
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes, APIView
+from core.utils.utils import concatenateLists, getDisctionaryOfLists
 from profiles.models import Address, Customer
 from profiles.serializers import AddressSerializer, CustomerSerializer
 from rest_framework.permissions import IsAuthenticated
@@ -63,12 +64,15 @@ class CustomerHistoryView(APIView):
             .values("created_at__month", "created_at__year")
             .annotate(count=Count("created_at__month"))
         )
+
+        dict = getDisctionaryOfLists(customers)
         data = []
-        labels = []
-        for n in customers:
-            data.append(n["count"])
-            labels.append("%s-%s" % (n["created_at__month"], n["created_at__year"]))
-        return Response({"data": data, "labels": labels, "total": customerTotalCount})
+        labels = concatenateLists(
+            dict["created_at__month"], dict["created_at__year"], "-"
+        )
+        return Response(
+            {"data": dict["count"], "labels": labels, "total": customerTotalCount}
+        )
 
 
 """ @api_view(["POST"])
