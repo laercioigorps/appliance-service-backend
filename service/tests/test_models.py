@@ -128,6 +128,17 @@ class ServiceModelTest(TestCase):
         service.end_date = date.today()
         self.assertEqual(service.end_date, date.today())
 
+    def test_add_status_to_service(self):
+        service = ServiceFactory()
+        waiting_approval = Status.objects.create(
+            name="waiting approval", description="waiting"
+        )
+        service.status = waiting_approval
+        service.save()
+
+        serviceCopy = Service.objects.get(pk=service.id)
+        self.assertEqual(serviceCopy.status.name, "waiting approval")
+
 
 class StatusModelTest(TestCase):
     def test_create_status(self):
