@@ -331,6 +331,29 @@ class ServiceHistoryTest(TestCase):
             [2, 1, 5, 4, 3, 2, 1],
         )
 
+    def test_add_services_with_no_end_date(self):
+        for i in range(5):
+            service = ServiceFactory(owner=self.user1.profile.org, price=50)
+
+        response = self.user1Client.get(
+            reverse("service:service_history"), format="json"
+        )
+
+        self.assertEqual(response.status_code, 200)
+
+        stream = io.BytesIO(response.content)
+        data = JSONParser().parse(stream)
+
+        self.assertEqual(
+            data["serviceCountHistoryData"],
+            [2, 1, 5, 4, 3, 2, 1],
+        )
+        self.assertEqual(
+            data["incomeHistoryLabels"],
+            ["1-2021", "2-2021", "1-2022", "2-2022", "3-2022", "4-2022", "5-2022"],
+        )
+        self.assertEqual(data["incomeHistoryData"], [200, 100, 500, 400, 300, 200, 100])
+
 
 class StatusViewTest(TestCase):
     def setUp(self):
