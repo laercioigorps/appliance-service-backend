@@ -6,7 +6,7 @@ app_name = "service"
 
 urlpatterns = [
     path("", views.ServiceListView.as_view(), name="service_list"),
-    path("<int:service_pk>", views.ServiceDetailView.as_view(), name="service_detail"),
+    path("<int:service_pk>/", views.ServiceDetailView.as_view(), name="service_detail"),
     path("customer/<int:customer_pk>", views.CustomerServiceListView.as_view(), name="customer_service_list"),
     path("service-history/", views.ServiceHistoryView.as_view(), name="service_history"),
     path("status/", views.StatusListView.as_view(), name="status_list"),
