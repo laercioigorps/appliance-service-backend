@@ -111,7 +111,7 @@ class ServiceHistoryView(APIView):
     def get(self, request, format=None):
 
         serviceHistory = (
-            Service.objects.filter(owner=request.user.profile.org)
+            Service.objects.filter(owner=request.user.profile.org).filter(end_date__isnull=False)
             .values("end_date__month", "end_date__year")
             .annotate(Sum("price"), Count("end_date__month"))
             .order_by("end_date__year", "end_date__month")
