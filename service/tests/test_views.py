@@ -231,6 +231,28 @@ class ServiceViewTest(TestCase):
 
         self.assertEqual(data["address"], address.id)
 
+    def test_update_service_with_conclusive_status_using_valid_user(self):
+
+        self.assertEqual(self.service1.status, None)
+        self.assertEqual(self.service1.end_date, None)
+
+        conclusive = Status.objects.create(
+            name="completed", description="completed", is_conclusive=True
+        )
+
+        response = self.user1Client.put(
+            reverse("service:service_detail", kwargs={"service_pk": self.service1.id}),
+            {"status": conclusive.id},
+            format="json",
+        )
+        self.assertEqual(response.status_code, 200)
+
+        stream = io.BytesIO(response.content)
+        data = JSONParser().parse(stream)
+
+        self.assertEqual(data["status"], conclusive.id)
+        self.assertEqual(data["end_date"], date.today().strftime("%Y-%m-%d"))
+
 
 class ServiceHistoryTest(TestCase):
     def setUp(self):
