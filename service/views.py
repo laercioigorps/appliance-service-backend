@@ -1,3 +1,4 @@
+from datetime import date
 from functools import partial
 from django.shortcuts import get_object_or_404, render
 from rest_framework.views import APIView
@@ -73,7 +74,11 @@ class ServiceDetailView(APIView):
             service, data=request.data, partial=True
         )
         if serializer.is_valid():
-            serializer.save()
+            serviceStatus = serializer.validated_data.get("status")
+            if serviceStatus and serviceStatus.is_conclusive:
+                serializer.save(end_date=date.today())
+            else:
+                serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
