@@ -510,7 +510,7 @@ class TopCustomerTest(TestCase):
             {"customer": self.customer1, "quantity": 2, "total_price": 1500},
             {"customer": self.customer2, "quantity": 10, "total_price": 500},
             {"customer": self.customer3, "quantity": 5, "total_price": 400},
-            {"customer": self.customer4, "quantity": 3, "total_price": 700},
+            {"customer": self.customer4, "quantity": 3, "total_price": 600},
             {"customer": self.customer5, "quantity": 2, "total_price": 200},
             {"customer": self.customer6, "quantity": 2, "total_price": 100},
         ]
@@ -534,3 +534,31 @@ class TopCustomerTest(TestCase):
 
         serviceCount = Service.objects.count()
         self.assertEqual(24, serviceCount)
+
+    def test_top_5_customer_income_with_valid_user(self):
+        response = self.user1Client.get(
+            reverse("service:top_customers_income"), format="json"
+        )
+
+        self.assertEqual(response.status_code, 200)
+
+        stream = io.BytesIO(response.content)
+        data = JSONParser().parse(stream)
+
+        self.assertEqual(data[0]["customer__id"], self.customer1.id)
+        self.assertEqual(data[1]["customer__id"], self.customer4.id)
+        self.assertEqual(data[2]["customer__id"], self.customer2.id)
+        self.assertEqual(data[3]["customer__id"], self.customer3.id)
+        self.assertEqual(data[4]["customer__id"], self.customer5.id)
+
+        self.assertEqual(data[0]["income"], 1500)
+        self.assertEqual(data[1]["income"], 600)
+        self.assertEqual(data[2]["income"], 500)
+        self.assertEqual(data[3]["income"], 400)
+        self.assertEqual(data[4]["income"], 200)
+
+        self.assertEqual(data[0]["services"], 2)
+        self.assertEqual(data[1]["services"], 3)
+        self.assertEqual(data[2]["services"], 10)
+        self.assertEqual(data[3]["services"], 5)
+        self.assertEqual(data[4]["services"], 2)
