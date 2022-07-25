@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, timedelta
 from functools import partial
 from django.shortcuts import get_object_or_404, render
 from rest_framework.views import APIView
@@ -143,10 +143,9 @@ class StatusListView(APIView):
 
 class ServiceByStatusView(APIView):
     def get(self, request, days, format=None):
-        current_month = date.today().month
         servicesByStatus = (
             Service.objects.filter(owner=request.user.profile.org)
-            .filter(start_date__month=current_month)
+            .filter(start_date__gte=date.today() - timedelta(days=days))
             .order_by("status__id")
             .values("status__name")
             .annotate(Count("status"))
