@@ -487,3 +487,50 @@ class StatusViewTest(TestCase):
             ],
         )
         self.assertEqual(data["data"], [1, 5, 4, 3, 2, 2, 3])
+
+
+class TopCustomerTest(TestCase):
+    def setUp(self):
+        self.user1 = UserFactory()
+        self.user1Client = APIClient()
+        self.user1Client.force_authenticate(user=self.user1)
+
+        self.completed = Status.objects.create(
+            name="completed", description="completed", is_conclusive=True
+        )
+
+        self.customer1 = CustomerFactory(owner=self.user1.profile.org)
+        self.customer2 = CustomerFactory(owner=self.user1.profile.org)
+        self.customer3 = CustomerFactory(owner=self.user1.profile.org)
+        self.customer4 = CustomerFactory(owner=self.user1.profile.org)
+        self.customer5 = CustomerFactory(owner=self.user1.profile.org)
+        self.customer6 = CustomerFactory(owner=self.user1.profile.org)
+
+        instructions = [
+            {"customer": self.customer1, "quantity": 2, "total_price": 1500},
+            {"customer": self.customer2, "quantity": 10, "total_price": 500},
+            {"customer": self.customer3, "quantity": 5, "total_price": 400},
+            {"customer": self.customer4, "quantity": 3, "total_price": 700},
+            {"customer": self.customer5, "quantity": 2, "total_price": 200},
+            {"customer": self.customer6, "quantity": 2, "total_price": 100},
+        ]
+
+        self.serviceCount = 0
+
+        for instruction in instructions:
+            for i in range(instruction["quantity"]):
+                service = ServiceFactory(
+                    owner=self.user1.profile.org,
+                    customer=instruction["customer"],
+                    price=instruction["total_price"] / instruction["quantity"],
+                    status=self.completed,
+                    end_date=date.today(),
+                )
+                self.serviceCount += 1
+
+    def test_setUp(self):
+        customerCount = Customer.objects.count()
+        self.assertEqual(customerCount, 6)
+
+        serviceCount = Service.objects.count()
+        self.assertEqual(24, serviceCount)
