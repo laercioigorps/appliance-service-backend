@@ -111,7 +111,8 @@ class ServiceHistoryView(APIView):
     def get(self, request, format=None):
 
         serviceHistory = (
-            Service.objects.filter(owner=request.user.profile.org).filter(end_date__isnull=False)
+            Service.objects.filter(owner=request.user.profile.org)
+            .filter(end_date__isnull=False)
             .values("end_date__month", "end_date__year")
             .annotate(Sum("price"), Count("end_date__month"))
             .order_by("end_date__year", "end_date__month")
@@ -138,3 +139,23 @@ class StatusListView(APIView):
         statuses = Status.objects.all()
         serializer = self.StatusListSerializer(statuses, many=True)
         return Response(data=serializer.data)
+
+
+class ServiceByStatusView(APIView):
+    def get(self, request, format=None):
+        current_month = date.today().month
+        servicesByStatus = (
+            Service.objects.filter(owner=request.user.profile.org)
+            .filter(start_date__month=current_month)
+            .order_by("status__id")
+            .values("status__name")
+            .annotate(Count("status"))
+        )
+        dict = getDisctionaryOfLists(servicesByStatus)
+
+        return Response(
+            {
+                "data": dict["status__count"],
+                "labels": dict["status__name"],
+            }
+        )
