@@ -1,5 +1,5 @@
 from django.test import TestCase
-from core.utils.utils import concatenateLists, getDisctionaryOfLists
+from core.utils.utils import concatenateLists, getDisctionaryOfLists, renameListNulls
 
 
 class ArrayOfDictionariesToDictionatyOfArraysTest(TestCase):
@@ -41,3 +41,12 @@ class ConcatenateListsTest(TestCase):
                 "3-2022",
             ],
         )
+
+
+class RenameListNullsTest(TestCase):
+    def setUp(self):
+        self.mainList = [1, 2, 3, None, 1, None]
+
+    def test_rename_list_nulls_with_0(self):
+        l = renameListNulls(self.mainList, 0)
+        self.assertEqual(l, [1, 2, 3, 0, 1, 0])
