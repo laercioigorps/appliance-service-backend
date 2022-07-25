@@ -362,8 +362,35 @@ class StatusViewTest(TestCase):
         self.user1Client.force_authenticate(user=self.user1)
 
         self.status1 = Status.objects.create(name="Visit Scheduled")
-        self.status2 = Status.objects.create(name="Analysis")
-        self.status3 = Status.objects.create(name="Completed")
+        self.status2 = Status.objects.create(name="waiting approval")
+        self.status3 = Status.objects.create(name="Analysis")
+        self.status4 = Status.objects.create(name="Waiting Payment")
+        self.status5 = Status.objects.create(name="Completed")
+        self.status6 = Status.objects.create(name="Cancelled")
+
+        instructions = {
+            "1": 5,
+            "2": 4,
+            "3": 3,
+            "4": 2,
+            "5": 1,
+            "6": 3,
+        }
+
+        self.serviceCount = sum(instructions.values())
+
+        self.keys = [int(x) for x in instructions.keys()]
+
+        for key in self.keys:
+            count = instructions[str(key)]
+            for i in range(count):
+                service = ServiceFactory(
+                    owner=self.user1.profile.org, status=Status.objects.get(pk=key)
+                )
+
+    def test_initial_service_count(self):
+        count = Service.objects.filter(owner=self.user1.profile.org).count()
+        self.assertEqual(self.serviceCount, count)
 
     def test_list_status_using_authenticated_user(self):
         response = self.user1Client.get(reverse("service:status_list"), format="json")
@@ -373,7 +400,7 @@ class StatusViewTest(TestCase):
         stream = io.BytesIO(response.content)
         data = JSONParser().parse(stream)
 
-        self.assertEqual(len(data), 3)
+        self.assertEqual(len(data), 6)
 
         self.assertEqual(data[0]["name"], self.status1.name)
         self.assertEqual(data[1]["name"], self.status2.name)
