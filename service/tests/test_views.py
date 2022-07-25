@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, timedelta
 from decimal import Decimal
 from django.test import TestCase
 from django.urls import reverse
@@ -389,9 +389,15 @@ class StatusViewTest(TestCase):
                     owner=self.user1.profile.org, status=Status.objects.get(pk=key)
                 )
 
+        oldService = ServiceFactory(
+            owner=self.user1.profile.org,
+            status=self.status5,
+            start_date=date.today() - timedelta(days=90),
+        )
+
     def test_initial_service_count(self):
         count = Service.objects.filter(owner=self.user1.profile.org).count()
-        self.assertEqual(self.serviceCount, count)
+        self.assertEqual(self.serviceCount + 1, count)
 
     def test_list_status_using_authenticated_user(self):
         response = self.user1Client.get(reverse("service:status_list"), format="json")
@@ -409,7 +415,7 @@ class StatusViewTest(TestCase):
 
     def test_service_count_order_by_status_using_valid_user(self):
         response = self.user1Client.get(
-            reverse("service:services_status_count",kwargs={"days" : 30}), format="json"
+            reverse("service:services_status_count", kwargs={"days": 30}), format="json"
         )
 
         self.assertEqual(response.status_code, 200)
@@ -426,6 +432,6 @@ class StatusViewTest(TestCase):
                 self.status4.name,
                 self.status5.name,
                 self.status6.name,
-            ]
+            ],
         )
         self.assertEqual(data["data"], self.values)
