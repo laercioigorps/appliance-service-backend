@@ -13,7 +13,7 @@ from rest_framework import serializers, status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django.db.models import Count, Sum
-from core.utils.utils import concatenateLists, getDisctionaryOfLists
+from core.utils.utils import concatenateLists, getDisctionaryOfLists, renameListNulls
 
 
 # Create your views here.
@@ -148,13 +148,13 @@ class ServiceByStatusView(APIView):
             .filter(start_date__gte=date.today() - timedelta(days=days))
             .order_by("status__id")
             .values("status__name")
-            .annotate(Count("status"))
+            .annotate(status__count= Count("*"))
         )
         dict = getDisctionaryOfLists(servicesByStatus)
 
         return Response(
             {
                 "data": dict["status__count"],
-                "labels": dict["status__name"],
+                "labels": renameListNulls(dict["status__name"], "null"),
             }
         )
