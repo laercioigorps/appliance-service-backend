@@ -148,7 +148,7 @@ class ServiceByStatusView(APIView):
             .filter(start_date__gte=date.today() - timedelta(days=days))
             .order_by("status__id")
             .values("status__name")
-            .annotate(status__count= Count("*"))
+            .annotate(status__count=Count("*"))
         )
         dict = getDisctionaryOfLists(servicesByStatus)
 
@@ -158,3 +158,15 @@ class ServiceByStatusView(APIView):
                 "labels": renameListNulls(dict["status__name"], "null"),
             }
         )
+
+
+class TopCustomersIncomeView(APIView):
+    def get(self, request, format=None):
+
+        topCustomers = (
+            Service.objects.filter(owner=request.user.profile.org)
+            .values("customer__id", "customer__name")
+            .annotate(income=Sum("price"), services=Count("id"))
+        ).order_by("-income")
+
+        return Response(topCustomers)
