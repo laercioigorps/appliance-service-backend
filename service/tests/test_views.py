@@ -460,3 +460,30 @@ class StatusViewTest(TestCase):
         val = self.values
         val[4] += 1
         self.assertEqual(data["data"], val)
+
+    def test_service_count_order_by_status_with_null_services_using_valid_user(self):
+        service = ServiceFactory(
+            owner=self.user1.profile.org,
+        )
+        response = self.user1Client.get(
+            reverse("service:services_status_count", kwargs={"days": 90}), format="json"
+        )
+
+        self.assertEqual(response.status_code, 200)
+
+        stream = io.BytesIO(response.content)
+        data = JSONParser().parse(stream)
+
+        self.assertEqual(
+            data["labels"],
+            [
+                "null",
+                self.status1.name,
+                self.status2.name,
+                self.status3.name,
+                self.status4.name,
+                self.status5.name,
+                self.status6.name,
+            ],
+        )
+        self.assertEqual(data["data"], [1, 5, 4, 3, 2, 2, 3])
