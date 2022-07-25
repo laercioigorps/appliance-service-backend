@@ -409,7 +409,7 @@ class StatusViewTest(TestCase):
 
     def test_service_count_order_by_status_using_valid_user(self):
         response = self.user1Client.get(
-            reverse("service:services_status_count"), format="json"
+            reverse("service:services_status_count",kwargs={"days" : 30}), format="json"
         )
 
         self.assertEqual(response.status_code, 200)
