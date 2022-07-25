@@ -161,12 +161,12 @@ class ServiceByStatusView(APIView):
 
 
 class TopCustomersIncomeView(APIView):
-    def get(self, request, format=None):
+    def get(self, request, quantity, format=None):
 
         topCustomers = (
             Service.objects.filter(owner=request.user.profile.org)
             .values("customer__id", "customer__name")
             .annotate(income=Sum("price"), services=Count("id"))
-        ).order_by("-income")
+        ).order_by("-income")[:quantity]
 
         return Response(topCustomers)
