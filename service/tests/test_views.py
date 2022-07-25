@@ -536,14 +536,18 @@ class TopCustomerTest(TestCase):
         self.assertEqual(24, serviceCount)
 
     def test_top_5_customer_income_with_valid_user(self):
+        quantity = 5
         response = self.user1Client.get(
-            reverse("service:top_customers_income"), format="json"
+            reverse("service:top_customers_income", kwargs={"quantity": quantity}),
+            format="json",
         )
 
         self.assertEqual(response.status_code, 200)
 
         stream = io.BytesIO(response.content)
         data = JSONParser().parse(stream)
+
+        self.assertEqual(len(data), quantity)
 
         self.assertEqual(data[0]["customer__id"], self.customer1.id)
         self.assertEqual(data[1]["customer__id"], self.customer4.id)
