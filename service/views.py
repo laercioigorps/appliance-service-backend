@@ -142,7 +142,7 @@ class StatusListView(APIView):
 
 
 class ServiceByStatusView(APIView):
-    def get(self, request, format=None):
+    def get(self, request, days, format=None):
         current_month = date.today().month
         servicesByStatus = (
             Service.objects.filter(owner=request.user.profile.org)
