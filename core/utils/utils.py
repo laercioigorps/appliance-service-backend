@@ -14,3 +14,10 @@ def concatenateLists(list1, list2, separator):
     for i in range(len(list1)):
         newList.append("%s%s%s" % (list1[i], separator, list2[i]))
     return newList
+
+
+def renameListNulls(list, value):
+    for i in range(len(list)):
+        if list[i] == None:
+            list[i] = value
+    return list
