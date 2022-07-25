@@ -376,8 +376,9 @@ class StatusViewTest(TestCase):
             "5": 1,
             "6": 3,
         }
+        self.values = list(instructions.values())
 
-        self.serviceCount = sum(instructions.values())
+        self.serviceCount = sum(self.values)
 
         self.keys = [int(x) for x in instructions.keys()]
 
@@ -405,3 +406,26 @@ class StatusViewTest(TestCase):
         self.assertEqual(data[0]["name"], self.status1.name)
         self.assertEqual(data[1]["name"], self.status2.name)
         self.assertEqual(data[2]["name"], self.status3.name)
+
+    def test_service_count_order_by_status_using_valid_user(self):
+        response = self.user1Client.get(
+            reverse("service:services_status_count"), format="json"
+        )
+
+        self.assertEqual(response.status_code, 200)
+
+        stream = io.BytesIO(response.content)
+        data = JSONParser().parse(stream)
+
+        self.assertEqual(
+            data["labels"],
+            [
+                self.status1.name,
+                self.status2.name,
+                self.status3.name,
+                self.status4.name,
+                self.status5.name,
+                self.status6.name,
+            ]
+        )
+        self.assertEqual(data["data"], self.values)
