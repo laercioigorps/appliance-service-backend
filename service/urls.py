@@ -12,6 +12,7 @@ urlpatterns = [
     path("status/", views.StatusListView.as_view(), name="status_list"),
     path("services-by-status/<int:days>/", views.ServiceByStatusView.as_view(), name="services_status_count"),
     path("top-customers-income/<int:quantity>/", views.TopCustomersIncomeView.as_view(), name="top_customers_income"),
+    path("top-customers-services/<int:quantity>/", views.TopCustomersServicesView.as_view(), name="top_customers_services"),
 
 ]
 
