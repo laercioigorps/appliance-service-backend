@@ -17,3 +17,6 @@ class InitialSampleDataCreation:
         self.brands = []
         self.categories = []
         self.appliances = []
+        self.symptoms = []
+        self.problems = []
+        self.solutions = []
