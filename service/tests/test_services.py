@@ -6,6 +6,8 @@ from profiles.models import Organization
 
 from service.services import SampleDataCreation
 
+class SampleInitialDataCreationTest(TestCase):
+    pass
 
 class SampleDataCreationServiceTest(TestCase):
     def setUp(self):
