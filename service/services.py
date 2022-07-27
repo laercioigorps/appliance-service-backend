@@ -23,6 +23,7 @@ class InitialSampleDataCreation:
         self.symptoms = []
         self.problems = []
         self.solutions = []
+        self.statuses = []
 
     def generateRandomBrands(self, quantity):
         self.brands = BrandFactory.create_batch(quantity)
@@ -32,7 +33,6 @@ class InitialSampleDataCreation:
 
     def generateRandomAppliances(self, quantity):
         for i in range(quantity):
-
             self.appliances.append(
                 ApplianceFactory(
                     brand=faker.random_element(elements=self.brands),
