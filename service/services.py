@@ -1,3 +1,5 @@
+from appliances.models import Brand
+from appliances.tests.factories import BrandFactory
 from service.models import Status
 
 
@@ -20,3 +22,6 @@ class InitialSampleDataCreation:
         self.symptoms = []
         self.problems = []
         self.solutions = []
+
+    def generateRandomBrands(self, quantity):
+        self.brands = BrandFactory.create_batch(quantity)
