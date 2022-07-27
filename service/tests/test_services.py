@@ -4,19 +4,25 @@ from appliances.tests.factories import BrandFactory, CategoryFactory
 from service.models import Status
 from profiles.models import Organization
 
-from service.services import SampleDataCreation
+from service.services import InitialSampleDataCreation, SampleDataCreation
+
 
 class SampleInitialDataCreationTest(TestCase):
-    pass
+    def setUp(self):
+        self.sampleData = InitialSampleDataCreation()
+
+    def test_initial_sample_data_setUp(self):
+        self.assertIsNotNone(self.sampleData)
+
 
 class SampleDataCreationServiceTest(TestCase):
     def setUp(self):
-        self.brand
+        self.brands = []
         self.sampleData = SampleDataCreation()
         self.organization = Organization.objects.create(name="own")
         self.setTestStatuses()
         self.setTestBrands()
-        self.setTestTypes()
+        self.setTestCategories()
 
     def setTestStatuses(self):
         self.awaiting = Status.objects.create(
@@ -65,8 +71,3 @@ class SampleDataCreationServiceTest(TestCase):
 
     def test_initial_appliances(self):
         self.assertEqual(len(self.sampleData.appliances), 0)
-
-    def test_update_available_appliances(self):
-        allAppliances = Appliance.objects.all()
-        self.sampleData.updateAppliances()
-        self.assertEqual(allAppliances.count(), len(self.sampleData.appliances))
