@@ -16,21 +16,25 @@ class SampleInitialDataCreationTest(TestCase):
 
     def test_initial_brands(self):
         self.assertEqual(len(self.sampleData.brands), 0)
-    
+
     def test_initial_categories(self):
         self.assertEqual(len(self.sampleData.categories), 0)
-    
+
     def test_initial_appliances(self):
         self.assertEqual(len(self.sampleData.appliances), 0)
 
     def test_initial_symptoms(self):
         self.assertEqual(len(self.sampleData.symptoms), 0)
-    
+
     def test_initial_problems(self):
         self.assertEqual(len(self.sampleData.problems), 0)
 
     def test_initial_solutions(self):
         self.assertEqual(len(self.sampleData.solutions), 0)
+
+    def test_generate_5_random_brands(self):
+        self.sampleData.generateRandomBrands(5)
+        self.assertEqual(len(self.sampleData.brands), 5)
 
 
 class SampleDataCreationServiceTest(TestCase):
