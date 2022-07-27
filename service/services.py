@@ -16,3 +16,4 @@ class InitialSampleDataCreation:
     def __init__(self):
         self.brands = []
         self.categories = []
+        self.appliances = []
