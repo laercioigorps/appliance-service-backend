@@ -14,6 +14,9 @@ class SampleInitialDataCreationTest(TestCase):
     def test_initial_sample_data_setUp(self):
         self.assertIsNotNone(self.sampleData)
 
+    def test_initial_brands(self):
+        self.assertEqual(len(self.sampleData.brands), 0)
+
 
 class SampleDataCreationServiceTest(TestCase):
     def setUp(self):
