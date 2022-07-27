@@ -9,3 +9,6 @@ class SampleDataCreationServiceTest(TestCase):
 
     def test_initial_customers(self):
         self.assertEqual(len(self.sampleData.customers), 0)
+
+    def test_initial_available_status(self):
+        self.assertEqual(len(self.sampleData.statuses), 0)
