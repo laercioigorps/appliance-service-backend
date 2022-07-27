@@ -6,7 +6,7 @@ class SampleDataCreation:
         self.customers = []
         self.statuses = []
         self.organization = None
-        self.models = []
+        self.appliances = []
 
     def updateStatuses(self):
         self.statuses = Status.objects.all()
