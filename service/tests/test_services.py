@@ -32,6 +32,9 @@ class SampleInitialDataCreationTest(TestCase):
     def test_initial_solutions(self):
         self.assertEqual(len(self.sampleData.solutions), 0)
 
+    def test_initial_statuses(self):
+        self.assertEqual(len(self.sampleData.statuses), 0)
+
     def test_generate_5_random_brands(self):
         self.sampleData.generateRandomBrands(5)
         self.assertEqual(len(self.sampleData.brands), 5)
