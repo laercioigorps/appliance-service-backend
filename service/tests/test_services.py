@@ -16,6 +16,9 @@ class SampleInitialDataCreationTest(TestCase):
 
     def test_initial_brands(self):
         self.assertEqual(len(self.sampleData.brands), 0)
+    
+    def test_initial_categories(self):
+        self.assertEqual(len(self.sampleData.categories), 0)
 
 
 class SampleDataCreationServiceTest(TestCase):
