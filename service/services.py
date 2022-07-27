@@ -1,6 +1,7 @@
 from appliances.models import Brand
-from appliances.tests.factories import BrandFactory, CategoryFactory
+from appliances.tests.factories import ApplianceFactory, BrandFactory, CategoryFactory
 from service.models import Status
+from core.utils.tests.base import faker
 
 
 class SampleDataCreation:
@@ -28,3 +29,13 @@ class InitialSampleDataCreation:
 
     def generateRandomCategories(self, quantity):
         self.categories = CategoryFactory.create_batch(quantity)
+
+    def generateRandomAppliances(self, quantity):
+        for i in range(quantity):
+
+            self.appliances.append(
+                ApplianceFactory(
+                    brand=faker.random_element(elements=self.brands),
+                    category=faker.random_element(elements=self.categories),
+                )
+            )
