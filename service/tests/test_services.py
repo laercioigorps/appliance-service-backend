@@ -1,5 +1,6 @@
 from django.test import TestCase
-from appliances.models import Appliance
+from appliances.models import Appliance, Brand
+from appliances.tests.factories import BrandFactory, CategoryFactory
 from service.models import Status
 from profiles.models import Organization
 
@@ -8,9 +9,12 @@ from service.services import SampleDataCreation
 
 class SampleDataCreationServiceTest(TestCase):
     def setUp(self):
+        self.brand
         self.sampleData = SampleDataCreation()
         self.organization = Organization.objects.create(name="own")
         self.setTestStatuses()
+        self.setTestBrands()
+        self.setTestTypes()
 
     def setTestStatuses(self):
         self.awaiting = Status.objects.create(
@@ -29,6 +33,14 @@ class SampleDataCreationServiceTest(TestCase):
             name="Concluded", description="Concluded", is_conclusive=True
         )
         self.completed = Status.objects.create(name="Canceled", description="Canceled")
+
+    def setTestBrands(self):
+        for i in range(5):
+            brand = BrandFactory()
+
+    def setTestCategories(self):
+        for i in range(5):
+            category = CategoryFactory()
 
     def test_initial_customers(self):
         self.assertEqual(len(self.sampleData.customers), 0)
@@ -51,3 +63,8 @@ class SampleDataCreationServiceTest(TestCase):
 
     def test_initial_appliances(self):
         self.assertEqual(len(self.sampleData.appliances), 0)
+
+    def test_update_available_appliances(self):
+        allAppliances = Appliance.objects.all()
+        self.sampleData.updateAppliances()
+        self.assertEqual(allAppliances.count(), len(self.sampleData.appliances))
