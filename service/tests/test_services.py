@@ -36,6 +36,10 @@ class SampleInitialDataCreationTest(TestCase):
         self.sampleData.generateRandomBrands(5)
         self.assertEqual(len(self.sampleData.brands), 5)
 
+    def test_generate_5_random_categories(self):
+        self.sampleData.generateRandomCategories(5)
+        self.assertEqual(len(self.sampleData.categories), 5)
+
 
 class SampleDataCreationServiceTest(TestCase):
     def setUp(self):
