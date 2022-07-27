@@ -1,4 +1,5 @@
 from django.test import TestCase
+from appliances.models import Appliance
 from service.models import Status
 from profiles.models import Organization
 
@@ -48,5 +49,5 @@ class SampleDataCreationServiceTest(TestCase):
         self.sampleData.organization = self.organization
         self.assertEqual(self.sampleData.organization, self.organization)
 
-    def test_initial_models(self):
-        self.assertEqual(len(self.sampleData.models), 0)
+    def test_initial_appliances(self):
+        self.assertEqual(len(self.sampleData.appliances), 0)
