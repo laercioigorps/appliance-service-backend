@@ -47,3 +47,6 @@ class SampleDataCreationServiceTest(TestCase):
     def test_set_organization(self):
         self.sampleData.organization = self.organization
         self.assertEqual(self.sampleData.organization, self.organization)
+
+    def test_initial_models(self):
+        self.assertEqual(len(self.sampleData.models), 0)
