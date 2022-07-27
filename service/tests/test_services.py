@@ -23,6 +23,15 @@ class SampleInitialDataCreationTest(TestCase):
     def test_initial_appliances(self):
         self.assertEqual(len(self.sampleData.appliances), 0)
 
+    def test_initial_symptoms(self):
+        self.assertEqual(len(self.sampleData.symptoms), 0)
+    
+    def test_initial_problems(self):
+        self.assertEqual(len(self.sampleData.problems), 0)
+
+    def test_initial_solutions(self):
+        self.assertEqual(len(self.sampleData.solutions), 0)
+
 
 class SampleDataCreationServiceTest(TestCase):
     def setUp(self):
