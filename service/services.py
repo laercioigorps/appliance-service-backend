@@ -11,5 +11,7 @@ class SampleDataCreation:
     def updateStatuses(self):
         self.statuses = Status.objects.all()
 
+
 class InitialSampleDataCreation:
-    pass
+    def __init__(self):
+        self.brands = []
