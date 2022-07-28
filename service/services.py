@@ -45,3 +45,8 @@ class InitialSampleDataCreation:
             self.statuses.append(
                 Status.objects.create(name=faker.color_name(), description="status")
             )
+
+    def setRandomStatusAsConclusive(self, quantity):
+        randomStatus = faker.random_element(self.statuses)
+        randomStatus.is_conclusive = True
+        randomStatus.save()
