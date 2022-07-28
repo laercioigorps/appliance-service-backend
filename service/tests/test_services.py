@@ -95,6 +95,17 @@ class SampleDataCreationServiceTest(TestCase):
         self.setTestStatuses()
         self.setTestBrands()
         self.setTestCategories()
+        self.initialData = InitialSampleDataCreation()
+        self.setInitialData()
+
+    def setInitialData(self):
+        self.initialData.generateRandomBrands(3)
+        self.initialData.generateRandomCategories(3)
+        self.initialData.generateRandomAppliances(5)
+        self.initialData.generateRandomSymptoms(10)
+        self.initialData.generateRandomProblems(10)
+        self.initialData.generateRandomSolutions(10)
+        self.initialData.statuses = list(Status.objects.all())
 
     def setTestStatuses(self):
         self.awaiting = Status.objects.create(
