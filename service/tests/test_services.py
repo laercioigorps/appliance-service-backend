@@ -95,6 +95,7 @@ class SampleDataCreationServiceTest(TestCase):
         self.sampleData.organization = self.organization
         self.setTestStatuses()
         self.generateInitialData()
+        self.sampleData.fetchInitialData()
 
     def generateInitialData(self):
         self.initialData.generateRandomBrands(3)
@@ -192,6 +193,18 @@ class SampleDataCreationServiceTest(TestCase):
         self.sampleData.generateRandomServices(3)
         twoEach = True
         for service in self.sampleData.services:
-            if(service.historic.symptoms.count() != 2):
+            if service.historic.symptoms.count() != 2:
                 twoEach = False
+                break
         self.assertTrue(twoEach)
+
+    def test_generate_3_random_services_with_symptoms_initially_fetched(self):
+        self.sampleData.generateRandomCustomers(3)
+        self.sampleData.generateRandomServices(3)
+        inTheList = True
+        for service in self.sampleData.services:
+            for symptom in service.historic.symptoms.all():
+                if symptom not in self.sampleData.symptoms:
+                    inTheList = False
+                    break
+        self.assertTrue(inTheList)
