@@ -74,6 +74,10 @@ class SampleInitialDataCreationTest(TestCase):
         self.sampleData.statuses = myStatus
         self.assertEqual(myStatus, self.sampleData.statuses)
 
+    def test_generate_10_random_symptoms(self):
+        self.sampleData.generateRandomSymptoms(10)
+        self.assertEqual(len(self.sampleData.symptoms), 10)
+
 
 class SampleDataCreationServiceTest(TestCase):
     def setUp(self):
