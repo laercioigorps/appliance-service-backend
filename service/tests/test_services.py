@@ -78,6 +78,9 @@ class SampleInitialDataCreationTest(TestCase):
         self.sampleData.generateRandomSymptoms(10)
         self.assertEqual(len(self.sampleData.symptoms), 10)
 
+    def test_generate_10_random_problems(self):
+        self.sampleData.generateRandomProblems(10)
+        self.assertEqual(len(self.sampleData.problems), 10)
 
 class SampleDataCreationServiceTest(TestCase):
     def setUp(self):
