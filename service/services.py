@@ -1,5 +1,10 @@
 from appliances.models import Brand
-from appliances.tests.factories import ApplianceFactory, BrandFactory, CategoryFactory
+from appliances.tests.factories import (
+    ApplianceFactory,
+    BrandFactory,
+    CategoryFactory,
+    SymptomFactory,
+)
 from service.models import Status
 from core.utils.tests.base import faker
 
@@ -50,3 +55,6 @@ class InitialSampleDataCreation:
         randomStatus = faker.random_element(self.statuses)
         randomStatus.is_conclusive = True
         randomStatus.save()
+
+    def generateRandomSymptoms(self, quantity):
+        self.symptoms = SymptomFactory.create_batch(quantity)
