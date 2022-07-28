@@ -1,7 +1,7 @@
 from django.test import TestCase
 from appliances.models import Appliance, Brand
 from appliances.tests.factories import BrandFactory, CategoryFactory
-from service.models import Status
+from service.models import Service, Status
 from profiles.models import Address, Customer, Organization
 
 from service.services import InitialSampleDataCreation, SampleDataCreation
@@ -160,3 +160,17 @@ class SampleDataCreationServiceTest(TestCase):
         self.assertEqual(addressCount, 20)
         testCustomer = Customer.objects.all().first()
         self.assertEqual(testCustomer.addresses.count(), 2)
+
+    def test_generate_10_random_services(self):
+        self.sampleData.generateRandomServices(10)
+        serviceCount = Service.objects.count()
+        self.assertEqual(serviceCount, 10)
+
+    def test_generate_3_random_services_with_provided_organization(self):
+        self.sampleData.generateRandomServices(3)
+        sameOwner = True
+        for service in self.sampleData.services:
+            if service.owner != self.organization:
+                sameOwner = False
+                break
+        self.assertTrue(sameOwner)
