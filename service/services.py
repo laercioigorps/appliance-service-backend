@@ -3,6 +3,7 @@ from appliances.tests.factories import (
     ApplianceFactory,
     BrandFactory,
     CategoryFactory,
+    HistoricFactory,
     ProblemFactory,
     SolutionFactory,
     SymptomFactory,
@@ -42,10 +43,12 @@ class SampleDataCreation:
 
     def generateRandomServices(self, quantity):
         for i in range(quantity):
+            historic = HistoricFactory(symptoms=SymptomFactory.create_batch(2))
             self.services.append(
                 ServiceFactory(
                     owner=self.organization,
                     customer=faker.random_element(self.customers),
+                    historic=historic,
                 )
             )
 
