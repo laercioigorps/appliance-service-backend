@@ -22,9 +22,6 @@ class SampleDataCreation:
         self.solutions = []
         self.services = []
 
-    def updateStatuses(self):
-        self.statuses = Status.objects.all()
-
     def fetchInitialData(self):
         self.statuses = list(Status.objects.all())
         self.appliances = list(Appliance.objects.all())
