@@ -186,3 +186,12 @@ class SampleDataCreationServiceTest(TestCase):
                 sameCustomers = False
                 break
         self.assertTrue(sameCustomers)
+
+    def test_generate_3_random_services_with_2_symptoms_each(self):
+        self.sampleData.generateRandomCustomers(3)
+        self.sampleData.generateRandomServices(3)
+        twoEach = True
+        for service in self.sampleData.services:
+            if(service.historic.symptoms.count() != 2):
+                twoEach = False
+        self.assertTrue(twoEach)
