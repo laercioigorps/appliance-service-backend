@@ -94,9 +94,9 @@ class SampleDataCreationServiceTest(TestCase):
         self.organization = Organization.objects.create(name="own")
         self.setTestStatuses()
         self.initialData = InitialSampleDataCreation()
-        self.setInitialData()
+        self.generateInitialData()
 
-    def setInitialData(self):
+    def generateInitialData(self):
         self.initialData.generateRandomBrands(3)
         self.initialData.generateRandomCategories(3)
         self.initialData.generateRandomAppliances(5)
