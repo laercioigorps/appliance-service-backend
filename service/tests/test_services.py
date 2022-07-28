@@ -89,11 +89,11 @@ class SampleInitialDataCreationTest(TestCase):
 
 class SampleDataCreationServiceTest(TestCase):
     def setUp(self):
-        self.brands = []
-        self.sampleData = SampleDataCreation()
         self.organization = Organization.objects.create(name="own")
-        self.setTestStatuses()
+        self.sampleData = SampleDataCreation()
         self.initialData = InitialSampleDataCreation()
+        self.sampleData.organization = self.organization
+        self.setTestStatuses()
         self.generateInitialData()
 
     def generateInitialData(self):
@@ -145,3 +145,4 @@ class SampleDataCreationServiceTest(TestCase):
         self.assertEqual(self.sampleData.symptoms, self.initialData.symptoms)
         self.assertEqual(self.sampleData.problems, self.initialData.problems)
         self.assertEqual(self.sampleData.solutions, self.initialData.solutions)
+
