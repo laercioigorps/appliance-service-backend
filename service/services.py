@@ -50,7 +50,9 @@ class SampleDataCreation:
                 problems=faker.random_elements(
                     elements=self.problems, unique=True, length=2
                 ),
-                solutions=SolutionFactory.create_batch(2),
+                solutions=faker.random_elements(
+                    elements=self.solutions, unique=True, length=2
+                ),
             )
             self.services.append(
                 ServiceFactory(
