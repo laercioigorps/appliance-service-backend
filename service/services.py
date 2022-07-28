@@ -42,7 +42,12 @@ class SampleDataCreation:
 
     def generateRandomServices(self, quantity):
         for i in range(quantity):
-            self.services.append(ServiceFactory(owner=self.organization))
+            self.services.append(
+                ServiceFactory(
+                    owner=self.organization,
+                    customer=faker.random_element(self.customers),
+                )
+            )
 
 
 class InitialSampleDataCreation:
