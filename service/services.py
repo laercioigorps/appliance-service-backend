@@ -7,7 +7,7 @@ from appliances.tests.factories import (
     SolutionFactory,
     SymptomFactory,
 )
-from profiles.tests.factories import CustomerFactory
+from profiles.tests.factories import AddressFactory, CustomerFactory
 from service.models import Status
 from core.utils.tests.base import faker
 
@@ -33,6 +33,11 @@ class SampleDataCreation:
     def generateRandomCustomers(self, quantity):
         for i in range(quantity):
             self.customers.append(CustomerFactory(owner=self.organization))
+
+    def generateRandomAddressForCustomers(self, quantity):
+        for customer in self.customers:
+            for i in range(quantity):
+                customer.addresses.add(AddressFactory())
 
 
 class InitialSampleDataCreation:
