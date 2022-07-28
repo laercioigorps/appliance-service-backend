@@ -123,11 +123,16 @@ class SampleDataCreationServiceTest(TestCase):
         )
         self.completed = Status.objects.create(name="Canceled", description="Canceled")
 
-    def test_initial_customers(self):
-        self.assertEqual(len(self.sampleData.customers), 0)
+    def test_default_initial_values(self):
+        myData = SampleDataCreation()
+        self.assertEqual(len(myData.appliances), 0)
+        self.assertEqual(len(myData.statuses), 0)
+        self.assertEqual(len(myData.symptoms), 0)
+        self.assertEqual(len(myData.problems), 0)
+        self.assertEqual(len(myData.solutions), 0)
 
-    def test_initial_available_status(self):
-        self.assertEqual(len(self.sampleData.statuses), 0)
+        self.assertEqual(len(myData.customers), 0)
+        self.assertEqual(len(myData.services), 0)
 
     def test_update_available_status(self):
         allStatuses = Status.objects.all()
@@ -135,12 +140,6 @@ class SampleDataCreationServiceTest(TestCase):
         self.assertEqual(len(self.sampleData.statuses), allStatuses.count())
         self.assertEqual(list(allStatuses), list(self.sampleData.statuses))
 
-    def test_initial_organization(self):
-        self.assertEqual(self.sampleData.organization, None)
-
     def test_set_organization(self):
         self.sampleData.organization = self.organization
         self.assertEqual(self.sampleData.organization, self.organization)
-
-    def test_initial_appliances(self):
-        self.assertEqual(len(self.sampleData.appliances), 0)
