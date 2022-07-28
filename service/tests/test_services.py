@@ -67,6 +67,13 @@ class SampleInitialDataCreationTest(TestCase):
                 break
         self.assertTrue(is_conclusive)
 
+    def test_set_status_manually(self):
+        myStatus = []
+        for i in range(3):
+            myStatus.append(Status.objects.create(name="test", description="test"))
+        self.sampleData.statuses = myStatus
+        self.assertEqual(myStatus, self.sampleData.statuses)
+
 
 class SampleDataCreationServiceTest(TestCase):
     def setUp(self):
