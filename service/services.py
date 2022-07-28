@@ -47,7 +47,9 @@ class SampleDataCreation:
                 symptoms=faker.random_elements(
                     elements=self.symptoms, unique=True, length=2
                 ),
-                problems=ProblemFactory.create_batch(2),
+                problems=faker.random_elements(
+                    elements=self.problems, unique=True, length=2
+                ),
             )
             self.services.append(
                 ServiceFactory(
