@@ -137,3 +137,11 @@ class SampleDataCreationServiceTest(TestCase):
     def test_set_organization(self):
         self.sampleData.organization = self.organization
         self.assertEqual(self.sampleData.organization, self.organization)
+
+    def test_fetched_initial_data(self):
+        self.sampleData.fetchInitialData()
+        self.assertEqual(self.sampleData.statuses, self.initialData.statuses)
+        self.assertEqual(self.sampleData.appliances, self.initialData.appliances)
+        self.assertEqual(self.sampleData.symptoms, self.initialData.symptoms)
+        self.assertEqual(self.sampleData.problems, self.initialData.problems)
+        self.assertEqual(self.sampleData.solutions, self.initialData.solutions)
