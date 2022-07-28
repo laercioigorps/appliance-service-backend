@@ -17,6 +17,10 @@ class SampleDataCreation:
         self.statuses = []
         self.organization = None
         self.appliances = []
+        self.symptoms = []
+        self.problems = []
+        self.solutions = []
+        self.services = []
 
     def updateStatuses(self):
         self.statuses = Status.objects.all()
