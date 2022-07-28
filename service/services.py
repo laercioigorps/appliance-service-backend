@@ -43,7 +43,11 @@ class SampleDataCreation:
 
     def generateRandomServices(self, quantity):
         for i in range(quantity):
-            historic = HistoricFactory(symptoms=SymptomFactory.create_batch(2))
+            historic = HistoricFactory(
+                symptoms=faker.random_elements(
+                    elements=self.symptoms, unique=True, length=2
+                )
+            )
             self.services.append(
                 ServiceFactory(
                     owner=self.organization,
