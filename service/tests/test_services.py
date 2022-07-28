@@ -162,11 +162,13 @@ class SampleDataCreationServiceTest(TestCase):
         self.assertEqual(testCustomer.addresses.count(), 2)
 
     def test_generate_10_random_services(self):
+        self.sampleData.generateRandomCustomers(2)
         self.sampleData.generateRandomServices(10)
         serviceCount = Service.objects.count()
         self.assertEqual(serviceCount, 10)
 
     def test_generate_3_random_services_with_provided_organization(self):
+        self.sampleData.generateRandomCustomers(1)
         self.sampleData.generateRandomServices(3)
         sameOwner = True
         for service in self.sampleData.services:
@@ -174,3 +176,13 @@ class SampleDataCreationServiceTest(TestCase):
                 sameOwner = False
                 break
         self.assertTrue(sameOwner)
+
+    def test_generate_3_random_services_with_provided_customers(self):
+        self.sampleData.generateRandomCustomers(3)
+        self.sampleData.generateRandomServices(3)
+        sameCustomers = True
+        for service in self.sampleData.services:
+            if service.customer not in self.sampleData.customers:
+                sameCustomers = False
+                break
+        self.assertTrue(sameCustomers)
