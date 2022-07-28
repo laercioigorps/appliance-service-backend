@@ -1,4 +1,4 @@
-from appliances.models import Brand
+from appliances.models import Appliance, Brand, Problem, Solution, Symptom
 from appliances.tests.factories import (
     ApplianceFactory,
     BrandFactory,
@@ -24,6 +24,13 @@ class SampleDataCreation:
 
     def updateStatuses(self):
         self.statuses = Status.objects.all()
+
+    def fetchInitialData(self):
+        self.statuses = list(Status.objects.all())
+        self.appliances = list(Appliance.objects.all())
+        self.symptoms = list(Symptom.objects.all())
+        self.problems = list(Problem.objects.all())
+        self.solutions = list(Solution.objects.all())
 
 
 class InitialSampleDataCreation:
