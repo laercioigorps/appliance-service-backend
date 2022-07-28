@@ -46,7 +46,8 @@ class SampleDataCreation:
             historic = HistoricFactory(
                 symptoms=faker.random_elements(
                     elements=self.symptoms, unique=True, length=2
-                )
+                ),
+                problems=ProblemFactory.create_batch(2),
             )
             self.services.append(
                 ServiceFactory(
