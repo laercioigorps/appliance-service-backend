@@ -82,6 +82,11 @@ class SampleInitialDataCreationTest(TestCase):
         self.sampleData.generateRandomProblems(10)
         self.assertEqual(len(self.sampleData.problems), 10)
 
+    def test_generate_10_random_solutions(self):
+        self.sampleData.generateRandomSolutions(10)
+        self.assertEqual(len(self.sampleData.solutions), 10)
+
+
 class SampleDataCreationServiceTest(TestCase):
     def setUp(self):
         self.brands = []
