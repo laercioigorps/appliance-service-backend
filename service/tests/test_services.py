@@ -93,8 +93,6 @@ class SampleDataCreationServiceTest(TestCase):
         self.sampleData = SampleDataCreation()
         self.organization = Organization.objects.create(name="own")
         self.setTestStatuses()
-        self.setTestBrands()
-        self.setTestCategories()
         self.initialData = InitialSampleDataCreation()
         self.setInitialData()
 
@@ -124,14 +122,6 @@ class SampleDataCreationServiceTest(TestCase):
             name="Concluded", description="Concluded", is_conclusive=True
         )
         self.completed = Status.objects.create(name="Canceled", description="Canceled")
-
-    def setTestBrands(self):
-        for i in range(5):
-            brand = BrandFactory()
-
-    def setTestCategories(self):
-        for i in range(5):
-            category = CategoryFactory()
 
     def test_initial_customers(self):
         self.assertEqual(len(self.sampleData.customers), 0)
