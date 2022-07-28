@@ -134,12 +134,6 @@ class SampleDataCreationServiceTest(TestCase):
         self.assertEqual(len(myData.customers), 0)
         self.assertEqual(len(myData.services), 0)
 
-    def test_update_available_status(self):
-        allStatuses = Status.objects.all()
-        self.sampleData.updateStatuses()
-        self.assertEqual(len(self.sampleData.statuses), allStatuses.count())
-        self.assertEqual(list(allStatuses), list(self.sampleData.statuses))
-
     def test_set_organization(self):
         self.sampleData.organization = self.organization
         self.assertEqual(self.sampleData.organization, self.organization)
