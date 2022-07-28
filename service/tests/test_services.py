@@ -146,3 +146,7 @@ class SampleDataCreationServiceTest(TestCase):
         self.assertEqual(self.sampleData.problems, self.initialData.problems)
         self.assertEqual(self.sampleData.solutions, self.initialData.solutions)
 
+    def test_generate_10_customers(self):
+        self.sampleData.generateRandomCustomers(10)
+        self.assertEqual(len(self.sampleData.customers), 10)
+        self.assertEqual(self.sampleData.customers[0].owner, self.organization)
