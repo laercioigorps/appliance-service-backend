@@ -39,3 +39,9 @@ class InitialSampleDataCreation:
                     category=faker.random_element(elements=self.categories),
                 )
             )
+
+    def generateRandonStatus(self, quantity):
+        for i in range(quantity):
+            self.statuses.append(
+                Status.objects.create(name=faker.color_name(), description="status")
+            )
