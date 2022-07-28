@@ -4,6 +4,7 @@ from appliances.tests.factories import (
     BrandFactory,
     CategoryFactory,
     ProblemFactory,
+    SolutionFactory,
     SymptomFactory,
 )
 from service.models import Status
@@ -62,3 +63,6 @@ class InitialSampleDataCreation:
 
     def generateRandomProblems(self, quantity):
         self.problems = ProblemFactory.create_batch(quantity)
+
+    def generateRandomSolutions(self, quantity):
+        self.solutions = SolutionFactory.create_batch(quantity)
