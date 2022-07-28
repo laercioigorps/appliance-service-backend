@@ -49,7 +49,13 @@ class SampleInitialDataCreationTest(TestCase):
         self.sampleData.generateRandomAppliances(5)
         self.assertEqual(len(self.sampleData.appliances), 5)
         self.assertTrue(self.sampleData.appliances[0].brand in self.sampleData.brands)
-        self.assertTrue(self.sampleData.appliances[0].category in self.sampleData.categories)
+        self.assertTrue(
+            self.sampleData.appliances[0].category in self.sampleData.categories
+        )
+
+    def test_generate_5_random_status(self):
+        self.sampleData.generateRandonStatus(quantity=5)
+        self.assertEqual(len(self.sampleData.statuses), 5)
 
 
 class SampleDataCreationServiceTest(TestCase):
