@@ -208,3 +208,13 @@ class SampleDataCreationServiceTest(TestCase):
                     inTheList = False
                     break
         self.assertTrue(inTheList)
+
+    def test_generate_3_random_services_with_2_causes_each(self):
+        self.sampleData.generateRandomCustomers(3)
+        self.sampleData.generateRandomServices(3)
+        twoEach = True
+        for service in self.sampleData.services:
+            if service.historic.problems.count() != 2:
+                twoEach = False
+                break
+        self.assertTrue(twoEach)
