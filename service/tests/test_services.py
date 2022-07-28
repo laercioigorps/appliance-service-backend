@@ -57,6 +57,16 @@ class SampleInitialDataCreationTest(TestCase):
         self.sampleData.generateRandonStatus(quantity=5)
         self.assertEqual(len(self.sampleData.statuses), 5)
 
+    def test_set_1_random_status_as_conclusive(self):
+        self.sampleData.generateRandonStatus(3)
+        self.sampleData.setRandomStatusAsConclusive(1)
+        is_conclusive = False
+        for status in self.sampleData.statuses:
+            if status.is_conclusive:
+                is_conclusive = True
+                break
+        self.assertTrue(is_conclusive)
+
 
 class SampleDataCreationServiceTest(TestCase):
     def setUp(self):
