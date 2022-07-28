@@ -207,13 +207,14 @@ class SampleDataCreationServiceTest(TestCase):
         self.assertTrue(twoEachProblems)
         self.assertTrue(twoEachSolutions)
 
-    def test_generate_3_random_services_with_symptoms_and_problems_initially_fetched(
+    def test_generate_3_random_services_with_symptoms_problems_and_solutions_initially_fetched(
         self,
     ):
         self.sampleData.generateRandomCustomers(3)
         self.sampleData.generateRandomServices(3)
         symptomsInTheList = True
         problemsInTheList = True
+        solutionsInTheList = True
         for service in self.sampleData.services:
             for symptom in service.historic.symptoms.all():
                 if symptom not in self.sampleData.symptoms:
@@ -221,5 +222,9 @@ class SampleDataCreationServiceTest(TestCase):
             for problem in service.historic.problems.all():
                 if problem not in self.sampleData.problems:
                     problemsInTheList = False
+            for solution in service.historic.solutions.all():
+                if solution not in self.sampleData.solutions:
+                    solutionsInTheList = False
         self.assertTrue(symptomsInTheList)
         self.assertTrue(problemsInTheList)
+        self.assertTrue(solutionsInTheList)
