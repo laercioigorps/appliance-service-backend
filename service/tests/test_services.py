@@ -228,3 +228,13 @@ class SampleDataCreationServiceTest(TestCase):
         self.assertTrue(symptomsInTheList)
         self.assertTrue(problemsInTheList)
         self.assertTrue(solutionsInTheList)
+
+    def test_service_address_not_null(self):
+        self.sampleData.generateRandomCustomers(3)
+        self.sampleData.generateRandomServices(3)
+        notNullServices = True
+        for service in self.sampleData.services:
+            if not service.address:
+                notNullServices = False
+                break
+        self.assertTrue(notNullServices)
