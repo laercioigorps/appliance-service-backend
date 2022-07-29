@@ -650,3 +650,10 @@ class SampleDataCreateViewTest(TestCase):
         self.assertEqual(
             Customer.objects.filter(owner=self.user1.profile.org).count(), 100
         )
+
+    def test_create_sample_data_with_not_authenticated_user(self):
+        client = APIClient()
+        response = self.client.post(
+            reverse("service:sample_creation"), format="json"
+        )
+        self.assertEqual(response.status_code, 403)
