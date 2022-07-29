@@ -186,6 +186,9 @@ class TopCustomersServicesView(APIView):
 
 
 class SampleCreationView(APIView):
+
+    permission_classes = [IsAuthenticated]
+
     def post(self, request, format=None):
         sampleData = SampleDataCreation()
         sampleData.fetchInitialData()
