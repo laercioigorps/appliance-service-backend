@@ -21,5 +21,7 @@ class ServiceFactory(factory.django.DjangoModelFactory):
     )
     address = factory.SubFactory(AddressFactory)
     price = factory.LazyAttribute(
-        lambda _: faker.pydecimal(left_digits=4, right_digits=2, positive=True)
+        lambda _: faker.pydecimal(
+            left_digits=4, right_digits=2, positive=True, max_value=2000
+        )
     )
