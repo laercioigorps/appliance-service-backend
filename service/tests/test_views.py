@@ -637,3 +637,16 @@ class SampleDataCreateViewTest(TestCase):
             name="Concluded", description="Concluded", is_conclusive=True
         )
         self.completed = Status.objects.create(name="Canceled", description="Canceled")
+
+    def test_create_sample_data_for_new_user_with_valid_client(self):
+        response = self.user1Client.post(
+            reverse("service:sample_creation"), format="json"
+        )
+        self.assertEqual(response.status_code, 201)
+
+        self.assertEqual(
+            Service.objects.filter(owner=self.user1.profile.org).count(), 100
+        )
+        self.assertEqual(
+            Customer.objects.filter(owner=self.user1.profile.org).count(), 100
+        )
