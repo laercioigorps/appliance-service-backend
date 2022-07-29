@@ -1,5 +1,6 @@
 from datetime import date, timedelta
 from functools import partial
+from random import sample
 from django.shortcuts import get_object_or_404, render
 from rest_framework.views import APIView
 
@@ -8,6 +9,7 @@ from profiles.models import Address, Customer
 from profiles.permissions import IsCustomerOwner
 from profiles.serializers import AddressSerializer, CustomerSerializer
 from service.permissions import IsServiceOwner
+from service.services import SampleDataCreation
 from .models import Service, Status
 from rest_framework import serializers, status
 from rest_framework.response import Response
@@ -181,3 +183,14 @@ class TopCustomersServicesView(APIView):
         ).order_by("-services")[:quantity]
 
         return Response(topCustomers)
+
+
+class SampleCreationView(APIView):
+    def post(self, request, format=None):
+        sampleData = SampleDataCreation()
+        sampleData.fetchInitialData()
+        sampleData.organization = request.user.profile.org
+        sampleData.generateRandomCustomers(100)
+        sampleData.generateRandomAddressForCustomers(2)
+        sampleData.generateRandomServices(100)
+        return Response(status=status.HTTP_201_CREATED)
