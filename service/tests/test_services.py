@@ -255,3 +255,14 @@ class SampleDataCreationServiceTest(TestCase):
                 sameAddress = False
                 break
         self.assertTrue(sameAddress)
+
+    def test_service_price_always_positive(self):
+        self.sampleData.generateRandomCustomers(1)
+        self.sampleData.generateRandomAddressForCustomers(1)
+        self.sampleData.generateRandomServices(10)
+        alwaysPositive = True
+        for service in self.sampleData.services:
+            if service.price < 0:
+                alwaysPositive = False
+                break
+        self.assertTrue(alwaysPositive)
