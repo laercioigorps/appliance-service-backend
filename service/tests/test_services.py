@@ -164,12 +164,14 @@ class SampleDataCreationServiceTest(TestCase):
 
     def test_generate_10_random_services(self):
         self.sampleData.generateRandomCustomers(2)
+        self.sampleData.generateRandomAddressForCustomers(1)
         self.sampleData.generateRandomServices(10)
         serviceCount = Service.objects.count()
         self.assertEqual(serviceCount, 10)
 
     def test_generate_3_random_services_with_provided_organization(self):
         self.sampleData.generateRandomCustomers(1)
+        self.sampleData.generateRandomAddressForCustomers(1)
         self.sampleData.generateRandomServices(3)
         sameOwner = True
         for service in self.sampleData.services:
@@ -180,6 +182,7 @@ class SampleDataCreationServiceTest(TestCase):
 
     def test_generate_3_random_services_with_provided_customers(self):
         self.sampleData.generateRandomCustomers(3)
+        self.sampleData.generateRandomAddressForCustomers(1)
         self.sampleData.generateRandomServices(3)
         sameCustomers = True
         for service in self.sampleData.services:
@@ -192,6 +195,7 @@ class SampleDataCreationServiceTest(TestCase):
         self,
     ):
         self.sampleData.generateRandomCustomers(3)
+        self.sampleData.generateRandomAddressForCustomers(2)
         self.sampleData.generateRandomServices(3)
         twoEachSymptoms = True
         twoEachProblems = True
@@ -211,6 +215,7 @@ class SampleDataCreationServiceTest(TestCase):
         self,
     ):
         self.sampleData.generateRandomCustomers(3)
+        self.sampleData.generateRandomAddressForCustomers(1)
         self.sampleData.generateRandomServices(3)
         symptomsInTheList = True
         problemsInTheList = True
@@ -231,6 +236,7 @@ class SampleDataCreationServiceTest(TestCase):
 
     def test_service_address_not_null(self):
         self.sampleData.generateRandomCustomers(3)
+        self.sampleData.generateRandomAddressForCustomers(1)
         self.sampleData.generateRandomServices(3)
         notNullServices = True
         for service in self.sampleData.services:
@@ -238,3 +244,14 @@ class SampleDataCreationServiceTest(TestCase):
                 notNullServices = False
                 break
         self.assertTrue(notNullServices)
+
+    def test_service_address_is_the_same_as_customers(self):
+        self.sampleData.generateRandomCustomers(3)
+        self.sampleData.generateRandomAddressForCustomers(2)
+        self.sampleData.generateRandomServices(5)
+        sameAddress = True
+        for service in self.sampleData.services:
+            if service.address not in service.customer.addresses.all():
+                sameAddress = False
+                break
+        self.assertTrue(sameAddress)
