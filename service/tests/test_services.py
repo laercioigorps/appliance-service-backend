@@ -266,3 +266,14 @@ class SampleDataCreationServiceTest(TestCase):
                 alwaysPositive = False
                 break
         self.assertTrue(alwaysPositive)
+
+    def test_service_price_neve_greater_than_2000(self):
+        self.sampleData.generateRandomCustomers(1)
+        self.sampleData.generateRandomAddressForCustomers(1)
+        self.sampleData.generateRandomServices(10)
+        alwaysOk = True
+        for service in self.sampleData.services:
+            if service.price > 2000:
+                alwaysOk = False
+                break
+        self.assertTrue(alwaysOk)
