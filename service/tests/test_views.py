@@ -9,6 +9,7 @@ from service.models import Service, Status
 from rest_framework.test import APIClient
 import io
 from rest_framework.parsers import JSONParser
+from service.services import InitialSampleDataCreation
 
 from service.tests.factories import ServiceFactory
 
@@ -598,3 +599,41 @@ class TopCustomerTest(TestCase):
         self.assertEqual(data[2]["services"], 3)
         self.assertEqual(data[3]["services"], 2)
         self.assertEqual(data[4]["services"], 2)
+
+
+class SampleDataCreateViewTest(TestCase):
+    def setUp(self):
+        self.user1 = UserFactory()
+        self.user1Client = APIClient()
+        self.user1Client.force_authenticate(user=self.user1)
+
+        self.initialData = InitialSampleDataCreation()
+        self.setTestStatuses()
+        self.generateInitialData()
+
+    def generateInitialData(self):
+        self.initialData.generateRandomBrands(3)
+        self.initialData.generateRandomCategories(3)
+        self.initialData.generateRandomAppliances(5)
+        self.initialData.generateRandomSymptoms(10)
+        self.initialData.generateRandomProblems(10)
+        self.initialData.generateRandomSolutions(10)
+        self.initialData.statuses = list(Status.objects.all())
+
+    def setTestStatuses(self):
+        self.awaiting = Status.objects.create(
+            name="Scheduled visit", description="Scheduled visit"
+        )
+        self.completed = Status.objects.create(
+            name="Waiting for approval", description="Waiting for approval"
+        )
+        self.completed = Status.objects.create(
+            name="Scheduled service", description="Scheduled service"
+        )
+        self.completed = Status.objects.create(
+            name="Awaiting payment", description="Awaiting payment"
+        )
+        self.completed = Status.objects.create(
+            name="Concluded", description="Concluded", is_conclusive=True
+        )
+        self.completed = Status.objects.create(name="Canceled", description="Canceled")
