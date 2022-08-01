@@ -74,7 +74,7 @@ class ServiceViewTest(TestCase):
         response = self.notAuthenticatedClient.get(
             reverse("service:service_list"), format="json"
         )
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 401)
 
     def test_create_service_only_with_required_data(self):
         serviceCount = Service.objects.filter(owner=self.user1.profile.org).count()
@@ -91,7 +91,7 @@ class ServiceViewTest(TestCase):
         response = self.notAuthenticatedClient.post(
             reverse("service:service_list"), format="json"
         )
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 401)
 
     def test_get_service_detail_with_valid_user(self):
         response = self.user1Client.get(
@@ -112,7 +112,7 @@ class ServiceViewTest(TestCase):
             reverse("service:service_detail", kwargs={"service_pk": self.service1.id}),
             format="json",
         )
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 401)
 
     def test_get_not_valid_service_detail_with_authenticated_user(self):
         response = self.user1Client.get(
@@ -155,7 +155,7 @@ class ServiceViewTest(TestCase):
             format="json",
         )
 
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 401)
 
         newServiceCount = Service.objects.filter(customer=self.customer1).count()
         self.assertEqual(newServiceCount, serviceCount)
@@ -207,7 +207,7 @@ class ServiceViewTest(TestCase):
             {"price": 125.99},
             format="json",
         )
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 401)
 
     def test_partially_update_service_with_price_using_not_valid_data(self):
         client = APIClient()
@@ -300,7 +300,7 @@ class ServiceHistoryTest(TestCase):
         client = APIClient()
         response = client.get(reverse("service:service_history"), format="json")
 
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 401)
 
     def test_service_income_history_labels_using_valid_user(self):
         response = self.user1Client.get(
@@ -656,4 +656,4 @@ class SampleDataCreateViewTest(TestCase):
         response = self.client.post(
             reverse("service:sample_creation"), format="json"
         )
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 401)
