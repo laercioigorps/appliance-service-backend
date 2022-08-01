@@ -128,7 +128,7 @@ class TestCustomerDetailView(TestCase):
             format="json",
         )
 
-        self.assertEquals(response.status_code, 403)
+        self.assertEquals(response.status_code, 401)
 
     def test_get_invalid_customer_with_authenticated_user(self):
         client = APIClient()
@@ -215,7 +215,7 @@ class TestCustomerDetailView(TestCase):
             format="json",
         )
 
-        self.assertEquals(response.status_code, 403)
+        self.assertEquals(response.status_code, 401)
 
         customer_count = Customer.objects.filter(owner=self.user2.profile.org).count()
         self.assertEquals(customer_count, 3)
@@ -296,7 +296,7 @@ class TestCustomerHistoricView(TestCase):
             reverse("profiles:customer_history"),
             format="json",
         )
-        self.assertEquals(response.status_code, 403)
+        self.assertEquals(response.status_code, 401)
 
     def test_get_new_customers_history_with_different_years(self):
 
@@ -399,7 +399,7 @@ class TestAddressView(TestCase):
             },
             format="json",
         )
-        self.assertEquals(response.status_code, 403)
+        self.assertEquals(response.status_code, 401)
 
         addressCount = self.customer2.addresses.count()
         self.assertEqual(addressCount, 0)
@@ -530,7 +530,7 @@ class TestAddressListGetView(TestCase):
             reverse("profiles:customer_address_list", kwargs={"pk": self.customer1.id})
         )
 
-        self.assertEquals(response.status_code, 403)
+        self.assertEquals(response.status_code, 401)
 
     def test_list_address_from_customer_with_invalid_customer_id(self):
 
@@ -615,7 +615,7 @@ class TestCustomerAddressDetailView(TestCase):
             )
         )
 
-        self.assertEquals(response.status_code, 403)
+        self.assertEquals(response.status_code, 401)
 
     def test_retrieve_customer_address_wich_authenticated_user_does_not_own(self):
         client = APIClient()
@@ -745,7 +745,7 @@ class TestCustomerAddressDetailView(TestCase):
                 kwargs={"pk": self.customer1.id, "address_pk": self.address1.id},
             )
         )
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 401)
 
     def test_delete_customer_address_wich_authenticated_user_does_not_own(self):
         client = APIClient()
