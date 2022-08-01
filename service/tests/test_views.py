@@ -371,11 +371,11 @@ class StatusViewTest(TestCase):
 
         instructions = {
             str(self.status1.id): 5,
-            str(self.status1.id): 4,
-            str(self.status1.id): 3,
-            str(self.status1.id): 2,
-            str(self.status1.id): 1,
-            str(self.status1.id): 3,
+            str(self.status2.id): 4,
+            str(self.status3.id): 3,
+            str(self.status4.id): 2,
+            str(self.status5.id): 1,
+            str(self.status6.id): 3,
         }
         self.values = list(instructions.values())
 
@@ -653,7 +653,5 @@ class SampleDataCreateViewTest(TestCase):
 
     def test_create_sample_data_with_not_authenticated_user(self):
         client = APIClient()
-        response = self.client.post(
-            reverse("service:sample_creation"), format="json"
-        )
+        response = self.client.post(reverse("service:sample_creation"), format="json")
         self.assertEqual(response.status_code, 401)
