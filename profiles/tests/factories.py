@@ -10,30 +10,30 @@ class OrganizationFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Organization
 
-    name = factory.LazyAttribute(lambda _: faker.company())
+    name = factory.LazyAttribute(lambda _: faker.company()[:30])
 
 
 class AddressFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Address
 
-    number = factory.LazyAttribute(lambda _: faker.building_number())
-    street = factory.LazyAttribute(lambda _: faker.street_name())
-    neighborhood = factory.LazyAttribute(lambda _: faker.city_suffix())
-    city = factory.LazyAttribute(lambda _: faker.city())
-    state = factory.LazyAttribute(lambda _: faker.state())
-    country = factory.LazyAttribute(lambda _: faker.country())
+    number = factory.LazyAttribute(lambda _: faker.building_number()[:10])
+    street = factory.LazyAttribute(lambda _: faker.street_name()[:30])
+    neighborhood = factory.LazyAttribute(lambda _: faker.city_suffix()[:30])
+    city = factory.LazyAttribute(lambda _: faker.city()[:30])
+    state = factory.LazyAttribute(lambda _: faker.state()[:30])
+    country = factory.LazyAttribute(lambda _: faker.country()[:30])
 
 
 class CustomerFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Customer
 
-    name = factory.LazyAttribute(lambda _: faker.name())
+    name = factory.LazyAttribute(lambda _: faker.name()[:40])
     owner = factory.SubFactory(OrganizationFactory)
-    email = factory.LazyAttribute(lambda _: faker.company_email())
+    email = factory.LazyAttribute(lambda _: faker.company_email()[:40])
     profession = factory.LazyAttribute(lambda _: faker.job()[:40])
-    nickname = factory.LazyAttribute(lambda _: faker.first_name())
+    nickname = factory.LazyAttribute(lambda _: faker.first_name()[:40])
     phone1 = factory.LazyAttribute(lambda _: faker.phone_number()[:29])
     phone2 = factory.LazyAttribute(lambda _: faker.phone_number()[:29])
 
