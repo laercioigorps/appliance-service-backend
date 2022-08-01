@@ -478,16 +478,16 @@ class StatusViewTest(TestCase):
         self.assertEqual(
             data["labels"],
             [
-                "null",
                 self.status1.name,
                 self.status2.name,
                 self.status3.name,
                 self.status4.name,
                 self.status5.name,
                 self.status6.name,
+                "null",
             ],
         )
-        self.assertEqual(data["data"], [1, 5, 4, 3, 2, 2, 3])
+        self.assertEqual(data["data"], [5, 4, 3, 2, 2, 3, 1])
 
 
 class TopCustomerTest(TestCase):
