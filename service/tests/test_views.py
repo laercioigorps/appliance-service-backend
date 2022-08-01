@@ -370,12 +370,12 @@ class StatusViewTest(TestCase):
         self.status6 = Status.objects.create(name="Cancelled")
 
         instructions = {
-            "1": 5,
-            "2": 4,
-            "3": 3,
-            "4": 2,
-            "5": 1,
-            "6": 3,
+            str(self.status1.id): 5,
+            str(self.status1.id): 4,
+            str(self.status1.id): 3,
+            str(self.status1.id): 2,
+            str(self.status1.id): 1,
+            str(self.status1.id): 3,
         }
         self.values = list(instructions.values())
 
