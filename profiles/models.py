@@ -24,14 +24,14 @@ class Organization(models.Model):
 
 
 class Customer(models.Model):
-    name = models.CharField(max_length=30)
+    name = models.CharField(max_length=40)
     owner = models.ForeignKey(Organization, on_delete=models.CASCADE)
     addresses = models.ManyToManyField(Address, blank=True)
-    email = models.EmailField(max_length=20, null=True, blank=True)
-    nickname = models.CharField(max_length=30, null=True, blank=True)
-    profession = models.CharField(max_length=20, null=True, blank=True)
-    phone1 = models.CharField(max_length=15, null=True, blank=True)
-    phone2 = models.CharField(max_length=15, null=True, blank=True)
+    email = models.EmailField(max_length=40, null=True, blank=True)
+    nickname = models.CharField(max_length=40, null=True, blank=True)
+    profession = models.CharField(max_length=40, null=True, blank=True)
+    phone1 = models.CharField(max_length=30, null=True, blank=True)
+    phone2 = models.CharField(max_length=30, null=True, blank=True)
     created_at = models.DateField(default=date.today())
 
     def has_object_permission(self, request):
