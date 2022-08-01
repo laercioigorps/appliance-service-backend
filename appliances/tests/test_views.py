@@ -368,7 +368,7 @@ class HistoricViewTest(TestCase):
         response = self.notAuthenticatedClient.get(
             reverse("appliances:historic_list"), format="json"
         )
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 401)
 
     def test_get_historic_detail_using_valid_authenticated_user(self):
         historic = HistoricFactory(
@@ -410,7 +410,7 @@ class HistoricViewTest(TestCase):
             ),
             format="json",
         )
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 401)
 
     def test_get_historic_detail_wich_authenticated_user_does_not_own(self):
 
