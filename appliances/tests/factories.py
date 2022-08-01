@@ -44,7 +44,7 @@ class SolutionFactory(factory.django.DjangoModelFactory):
         model = Solution
 
     name = factory.LazyAttribute(lambda _: faker.name())
-    description = factory.LazyAttribute(lambda _: faker.paragraph(nb_sentences=5))
+    description = factory.LazyAttribute(lambda _: faker.text(max_nb_chars=100))
 
 
 class ProblemFactory(factory.django.DjangoModelFactory):
@@ -52,7 +52,7 @@ class ProblemFactory(factory.django.DjangoModelFactory):
         model = Problem
 
     name = factory.LazyAttribute(lambda _: faker.name())
-    description = factory.LazyAttribute(lambda _: faker.paragraph(nb_sentences=5))
+    description = factory.LazyAttribute(lambda _: faker.text(max_nb_chars=100))
 
     @factory.post_generation
     def solutions(self, create, extracted, **kwargs):
@@ -71,7 +71,7 @@ class SymptomFactory(factory.django.DjangoModelFactory):
         model = Symptom
 
     name = factory.LazyAttribute(lambda _: faker.name())
-    description = factory.LazyAttribute(lambda _: faker.paragraph(nb_sentences=5))
+    description = factory.LazyAttribute(lambda _: faker.text(max_nb_chars=100))
 
     @factory.post_generation
     def categories(self, create, extracted, **kwargs):
