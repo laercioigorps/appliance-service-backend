@@ -31,7 +31,9 @@ class CustomerFactory(factory.django.DjangoModelFactory):
 
     name = factory.LazyAttribute(lambda _: faker.name())
     owner = factory.SubFactory(OrganizationFactory)
-    email = factory.LazyAttribute(lambda _: faker.name())
+    email = factory.LazyAttribute(
+        lambda _: f"{faker.first_name()}.{faker.last_name()}@{faker.domain_name()}"
+    )
     profession = factory.LazyAttribute(lambda _: faker.job())
     nickname = factory.LazyAttribute(lambda _: faker.first_name())
     phone1 = factory.LazyAttribute(lambda _: faker.phone_number())
