@@ -288,3 +288,14 @@ class SampleDataCreationServiceTest(TestCase):
                 statusNeverNull = False
                 break
         self.assertTrue(statusNeverNull)
+
+    def test_service_with_conclusive_status_always_have_end_date(self):
+        self.sampleData.generateRandomCustomers(1)
+        self.sampleData.generateRandomAddressForCustomers(1)
+        self.sampleData.generateRandomServices(10)
+        conclusiveStatusAlwayHasEndDate = True
+        for service in self.sampleData.services:
+            if service.status.is_conclusive and not service.end_date:
+                conclusiveStatusAlwayHasEndDate = False
+                break
+        self.assertTrue(conclusiveStatusAlwayHasEndDate)
