@@ -41,27 +41,35 @@ class SampleDataCreation:
             for i in range(quantity):
                 customer.addresses.add(AddressFactory())
 
+    def getNewHistoric(self):
+        historic = HistoricFactory(
+            symptoms=faker.random_elements(
+                elements=self.symptoms, unique=True, length=2
+            ),
+            problems=faker.random_elements(
+                elements=self.problems, unique=True, length=2
+            ),
+            solutions=faker.random_elements(
+                elements=self.solutions, unique=True, length=2
+            ),
+        )
+        return historic
+
+    def getNewService(self, customer, historic):
+        service = ServiceFactory(
+            owner=self.organization,
+            customer=customer,
+            historic=historic,
+            address=faker.random_element(customer.addresses.all()),
+            status=faker.random_element(self.statuses),
+        )
+        return service
+
     def generateRandomServices(self, quantity):
         for i in range(quantity):
             customer = faker.random_element(self.customers)
-            historic = HistoricFactory(
-                symptoms=faker.random_elements(
-                    elements=self.symptoms, unique=True, length=2
-                ),
-                problems=faker.random_elements(
-                    elements=self.problems, unique=True, length=2
-                ),
-                solutions=faker.random_elements(
-                    elements=self.solutions, unique=True, length=2
-                ),
-            )
-            service = ServiceFactory(
-                owner=self.organization,
-                customer=customer,
-                historic=historic,
-                address=faker.random_element(customer.addresses.all()),
-                status=faker.random_element(self.statuses),
-            )
+            historic = self.getNewHistoric()
+            service = self.getNewService(customer, historic)
             if service.status.is_conclusive:
                 service.end_date = service.start_date
                 service.save()
