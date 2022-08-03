@@ -1,3 +1,4 @@
+from datetime import date
 from appliances.models import Appliance, Brand, Problem, Solution, Symptom
 from appliances.tests.factories import (
     ApplianceFactory,
@@ -24,6 +25,8 @@ class SampleDataCreation:
         self.problems = []
         self.solutions = []
         self.services = []
+        self.start_date = date.today()
+        self.end_date = date.today()
 
     def fetchInitialData(self):
         self.statuses = list(Status.objects.all())
@@ -56,12 +59,15 @@ class SampleDataCreation:
         return historic
 
     def createRandomService(self, customer, historic):
+        randomDate = faker.date_between(self.start_date, self.end_date)
+
         service = ServiceFactory(
             owner=self.organization,
             customer=customer,
             historic=historic,
             address=faker.random_element(customer.addresses.all()),
             status=faker.random_element(self.statuses),
+            start_date=randomDate,
         )
         return service
 
