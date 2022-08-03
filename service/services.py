@@ -61,6 +61,7 @@ class SampleDataCreation:
                     customer=customer,
                     historic=historic,
                     address=faker.random_element(customer.addresses.all()),
+                    status=faker.random_element(self.statuses),
                 )
             )
 
