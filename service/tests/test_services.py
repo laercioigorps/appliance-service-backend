@@ -1,3 +1,4 @@
+from datetime import date, timedelta
 from django.test import TestCase
 from appliances.models import Appliance, Brand
 from appliances.tests.factories import BrandFactory, CategoryFactory
@@ -299,3 +300,24 @@ class SampleDataCreationServiceTest(TestCase):
                 conclusiveStatusAlwayHasEndDate = False
                 break
         self.assertTrue(conclusiveStatusAlwayHasEndDate)
+
+    def test_services_service_date_in_2_months_before(self):
+        startDate = date.today() - timedelta(days=30 * 2)
+        endDate = date.today() - timedelta(days=30 * 1)
+
+        self.sampleData.generateRandomCustomers(1)
+        self.sampleData.generateRandomAddressForCustomers(1)
+
+        self.sampleData.start_date = startDate
+        self.sampleData.end_date = endDate
+
+        self.sampleData.generateRandomServices(3)
+
+        dateAlwaysBetween = True
+        for service in self.sampleData.services:
+            if service.start_date > endDate or service.start_date < startDate:
+                print(service.start_date)
+                dateAlwaysBetween = False
+                break
+
+        self.assertTrue(dateAlwaysBetween)
