@@ -41,7 +41,7 @@ class SampleDataCreation:
             for i in range(quantity):
                 customer.addresses.add(AddressFactory())
 
-    def getNewHistoric(self):
+    def createRandomHistoric(self):
         historic = HistoricFactory(
             symptoms=faker.random_elements(
                 elements=self.symptoms, unique=True, length=2
@@ -55,7 +55,7 @@ class SampleDataCreation:
         )
         return historic
 
-    def getNewService(self, customer, historic):
+    def createRandomService(self, customer, historic):
         service = ServiceFactory(
             owner=self.organization,
             customer=customer,
@@ -68,8 +68,8 @@ class SampleDataCreation:
     def generateRandomServices(self, quantity):
         for i in range(quantity):
             customer = faker.random_element(self.customers)
-            historic = self.getNewHistoric()
-            service = self.getNewService(customer, historic)
+            historic = self.createRandomHistoric()
+            service = self.createRandomService(customer, historic)
             if service.status.is_conclusive:
                 service.end_date = service.start_date
                 service.save()
