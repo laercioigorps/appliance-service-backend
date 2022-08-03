@@ -55,15 +55,17 @@ class SampleDataCreation:
                     elements=self.solutions, unique=True, length=2
                 ),
             )
-            self.services.append(
-                ServiceFactory(
-                    owner=self.organization,
-                    customer=customer,
-                    historic=historic,
-                    address=faker.random_element(customer.addresses.all()),
-                    status=faker.random_element(self.statuses),
-                )
+            service = ServiceFactory(
+                owner=self.organization,
+                customer=customer,
+                historic=historic,
+                address=faker.random_element(customer.addresses.all()),
+                status=faker.random_element(self.statuses),
             )
+            if service.status.is_conclusive:
+                service.end_date = service.start_date
+                service.save()
+            self.services.append(service)
 
 
 class InitialSampleDataCreation:
