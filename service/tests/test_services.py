@@ -277,3 +277,14 @@ class SampleDataCreationServiceTest(TestCase):
                 alwaysOk = False
                 break
         self.assertTrue(alwaysOk)
+
+    def test_service_status_is_not_null(self):
+        self.sampleData.generateRandomCustomers(1)
+        self.sampleData.generateRandomAddressForCustomers(1)
+        self.sampleData.generateRandomServices(3)
+        statusNeverNull = True
+        for service in self.sampleData.services:
+            if not service.status:
+                statusNeverNull = False
+                break
+        self.assertTrue(statusNeverNull)
