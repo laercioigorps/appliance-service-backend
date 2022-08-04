@@ -661,11 +661,11 @@ class SampleDataCreateViewTest(TestCase):
         endDate = date.today()
 
         response = self.user1Client.post(
-            reverse("service:sample_creation"), format="json"
+            reverse("service:sample_creation"),{"customers": 3, "services" : 10}, format="json"
         )
         self.assertEqual(response.status_code, 201)
 
-        services = Service.objects.all()[:10]
+        services = Service.objects.all()
         inDateRange = True
         dates = []
         for service in services:
