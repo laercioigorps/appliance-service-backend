@@ -676,3 +676,18 @@ class SampleDataCreateViewTest(TestCase):
                 dates.append(service.start_date)
         self.assertTrue(inDateRange)
         self.assertGreater(len(dates), 5)
+
+    def test_set_customer_and_services_quantity_to_create(self):
+        response = self.user1Client.post(
+            reverse("service:sample_creation"),
+            {"customers": 3, "services": 5},
+            format="json",
+        )
+        self.assertEqual(response.status_code, 201)
+
+        self.assertEqual(
+            Service.objects.filter(owner=self.user1.profile.org).count(), 5
+        )
+        self.assertEqual(
+            Customer.objects.filter(owner=self.user1.profile.org).count(), 3
+        )
