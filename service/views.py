@@ -194,6 +194,9 @@ class SampleCreationView(APIView):
         sampleData.fetchInitialData()
         sampleData.organization = request.user.profile.org
         sampleData.generateRandomCustomers(100)
+        sampleData.start_date = date.today() - timedelta(days=30 * 6)
+        sampleData.end_date = date.today()
         sampleData.generateRandomAddressForCustomers(2)
+
         sampleData.generateRandomServices(100)
         return Response(status=status.HTTP_201_CREATED)
