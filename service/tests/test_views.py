@@ -655,3 +655,24 @@ class SampleDataCreateViewTest(TestCase):
         client = APIClient()
         response = self.client.post(reverse("service:sample_creation"), format="json")
         self.assertEqual(response.status_code, 401)
+
+    def test_created_sample_data_has_different_dates_in_6_month_range(self):
+        startDate = date.today() - timedelta(days=30 * 6)
+        endDate = date.today()
+
+        response = self.user1Client.post(
+            reverse("service:sample_creation"), format="json"
+        )
+        self.assertEqual(response.status_code, 201)
+
+        services = Service.objects.all()[:10]
+        inDateRange = True
+        dates = []
+        for service in services:
+            if service.start_date < startDate or service.start_date > endDate:
+                inDateRange = False
+                break
+            if service.start_date not in dates:
+                dates.append(service.start_date)
+        self.assertTrue(inDateRange)
+        self.assertGreater(len(dates), 5)
