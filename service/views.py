@@ -41,7 +41,7 @@ class ServiceListView(APIView):
             {
                 "results": serializer.data,
                 "next": paginator.get_next_link(),
-                "previous": None,
+                "previous": paginator.get_previous_link(),
             }
         )
 
