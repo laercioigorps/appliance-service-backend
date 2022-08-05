@@ -63,6 +63,7 @@ class CustomerHistoryView(APIView):
             Customer.objects.filter(owner=request.user.profile.org)
             .values("created_at__month", "created_at__year")
             .annotate(count=Count("created_at__month"))
+            .order_by("created_at__year", "created_at__month")
         )
 
         dict = getDisctionaryOfLists(customers)
