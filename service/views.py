@@ -16,6 +16,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django.db.models import Count, Sum
 from core.utils.utils import concatenateLists, getDisctionaryOfLists, renameListNulls
+from rest_framework.pagination import LimitOffsetPagination
 
 
 # Create your views here.
@@ -33,8 +34,11 @@ class ServiceListView(APIView):
 
     def get(self, request):
         services = Service.objects.filter(owner=request.user.profile.org)
-        serializer = self.ServiceListSerializer(services, many=True)
-        return Response(data=serializer.data)
+        paginator = LimitOffsetPagination()
+        result_page = paginator.paginate_queryset(services, request)
+        serializer = self.ServiceListSerializer(result_page, many=True)
+
+        return Response({"results": serializer.data})
 
     def post(self, request):
         org = request.user.profile.org
