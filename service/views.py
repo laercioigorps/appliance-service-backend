@@ -192,14 +192,16 @@ class SampleCreationView(APIView):
     def post(self, request, format=None):
         customers_quantity = request.data.get("customers", 100)
         services_quantity = request.data.get("services", 100)
-        
+
         sampleData = SampleDataCreation()
-        sampleData.fetchInitialData()
-        sampleData.organization = request.user.profile.org
-        sampleData.generateRandomCustomers(customers_quantity)
         sampleData.start_date = date.today() - timedelta(days=30 * 6)
         sampleData.end_date = date.today()
-        sampleData.generateRandomAddressForCustomers(2)
 
+        sampleData.fetchInitialData()
+        sampleData.organization = request.user.profile.org
+
+        sampleData.generateRandomCustomers(customers_quantity)
+        sampleData.generateRandomAddressForCustomers(2)
         sampleData.generateRandomServices(services_quantity)
+
         return Response(status=status.HTTP_201_CREATED)
