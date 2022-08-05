@@ -345,6 +345,25 @@ class TestCustomerHistoricView(TestCase):
 
         self.assertEqual(data["total"], 15)
 
+    def test_get_new_customers_history_with_latter_year(self):
+
+        newCustomer = CustomerFactory(
+            owner=self.user1.profile.org, created_at=date(year=2023, month=1, day=17)
+        )
+        response = self.client1Authenticated.get(
+            reverse("profiles:customer_history"),
+            format="json",
+        )
+        self.assertEquals(response.status_code, 200)
+
+        stream = io.BytesIO(response.content)
+        data = JSONParser().parse(stream)
+
+        self.assertEqual(data["data"], [5, 4, 3, 2, 1, 1])
+        self.assertEqual(
+            data["labels"], ["1-2022", "2-2022", "3-2022", "4-2022", "5-2022", "1-2023"]
+        )
+
 
 class TestAddressView(TestCase):
     def setUp(self):
