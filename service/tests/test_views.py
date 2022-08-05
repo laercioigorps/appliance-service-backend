@@ -691,3 +691,24 @@ class SampleDataCreateViewTest(TestCase):
         self.assertEqual(
             Customer.objects.filter(owner=self.user1.profile.org).count(), 3
         )
+
+    def test_customer_created_has_created_at_dates_in_6_month_range(self):
+        startDate = date.today() - timedelta(days=30 * 6)
+        endDate = date.today()
+
+        response = self.user1Client.post(
+            reverse("service:sample_creation"),{"customers": 10, "services" : 1}, format="json"
+        )
+        self.assertEqual(response.status_code, 201)
+
+        customers = Customer.objects.all()
+        inDateRange = True
+        dates = []
+        for customer in customers:
+            if customer.created_at < startDate or customer.created_at > endDate:
+                inDateRange = False
+                break
+            if customer.created_at not in dates:
+                dates.append(customer.created_at)
+        self.assertTrue(inDateRange)
+        self.assertGreater(len(dates), 5)
