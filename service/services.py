@@ -37,7 +37,12 @@ class SampleDataCreation:
 
     def generateRandomCustomers(self, quantity):
         for i in range(quantity):
-            self.customers.append(CustomerFactory(owner=self.organization))
+            self.customers.append(
+                CustomerFactory(
+                    owner=self.organization,
+                    created_at=faker.date_between(self.start_date, self.end_date),
+                )
+            )
 
     def generateRandomAddressForCustomers(self, quantity):
         for customer in self.customers:
