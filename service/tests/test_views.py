@@ -80,6 +80,22 @@ class ServiceViewTest(TestCase):
         )
         self.assertEqual(data["results"][0]["price"], str(self.service1.price))
 
+    def test_list_first_1_service_has_next_page_link(self):
+        response = self.user1Client.get(
+            "%s?limit=1&offset=0"
+            % reverse(
+                "service:service_list",
+            ),
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, 200)
+
+        stream = io.BytesIO(response.content)
+        data = JSONParser().parse(stream)
+
+        self.assertIn("?limit=1&offset=1", data["next"])
+
     def test_list_services_with_not_authenticated_user(self):
         response = self.notAuthenticatedClient.get(
             reverse("service:service_list"), format="json"
