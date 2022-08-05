@@ -49,26 +49,36 @@ class ServiceViewTest(TestCase):
 
         self.notAuthenticatedClient = APIClient()
 
-    def test_list_services_by_user_org(self):
+    def test_list_first_10_services_in_page_results_from_user_org(self):
         serviceCount = Service.objects.filter(owner=self.user1.profile.org).count()
         self.assertEqual(serviceCount, 2)
 
-        response = self.user1Client.get(reverse("service:service_list"), format="json")
+        response = self.user1Client.get(
+            "%s?limit=10&offset=0"
+            % reverse(
+                "service:service_list",
+            ),
+            format="json",
+        )
 
         self.assertEqual(response.status_code, 200)
 
         stream = io.BytesIO(response.content)
         data = JSONParser().parse(stream)
 
-        self.assertEqual(len(data), 2)
+        self.assertEqual(len(data["results"]), 2)
 
-        self.assertEqual(data[0]["customer"]["name"], self.service1.customer.name)
-        self.assertEqual(data[0]["address"]["number"], self.service1.address.number)
         self.assertEqual(
-            data[0]["historic"]["appliance"]["model"],
+            data["results"][0]["customer"]["name"], self.service1.customer.name
+        )
+        self.assertEqual(
+            data["results"][0]["address"]["number"], self.service1.address.number
+        )
+        self.assertEqual(
+            data["results"][0]["historic"]["appliance"]["model"],
             self.service1.historic.appliance.model,
         )
-        self.assertEqual(data[0]["price"], str(self.service1.price))
+        self.assertEqual(data["results"][0]["price"], str(self.service1.price))
 
     def test_list_services_with_not_authenticated_user(self):
         response = self.notAuthenticatedClient.get(
@@ -661,7 +671,9 @@ class SampleDataCreateViewTest(TestCase):
         endDate = date.today()
 
         response = self.user1Client.post(
-            reverse("service:sample_creation"),{"customers": 3, "services" : 10}, format="json"
+            reverse("service:sample_creation"),
+            {"customers": 3, "services": 10},
+            format="json",
         )
         self.assertEqual(response.status_code, 201)
 
@@ -697,7 +709,9 @@ class SampleDataCreateViewTest(TestCase):
         endDate = date.today()
 
         response = self.user1Client.post(
-            reverse("service:sample_creation"),{"customers": 10, "services" : 1}, format="json"
+            reverse("service:sample_creation"),
+            {"customers": 10, "services": 1},
+            format="json",
         )
         self.assertEqual(response.status_code, 201)
 
