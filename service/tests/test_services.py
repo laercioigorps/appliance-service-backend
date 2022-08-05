@@ -321,3 +321,19 @@ class SampleDataCreationServiceTest(TestCase):
                 break
 
         self.assertTrue(dateAlwaysBetween)
+
+    def test_service_custumer_creation_date_in_date_range(self):
+        startDate = date.today() - timedelta(days=30 * 2)
+        endDate = date.today() - timedelta(days=30 * 1)
+
+        self.sampleData.start_date = startDate
+        self.sampleData.end_date = endDate
+
+        self.sampleData.generateRandomCustomers(10)
+
+        dateAlwaysBetween = True
+        for customer in self.sampleData.customers:
+            if customer.created_at > endDate or customer.created_at < startDate:
+                dateAlwaysBetween = False
+                break
+        self.assertTrue(dateAlwaysBetween)
