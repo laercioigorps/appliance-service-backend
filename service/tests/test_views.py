@@ -96,6 +96,20 @@ class ServiceViewTest(TestCase):
 
         self.assertIn("?limit=1&offset=1", data["next"])
 
+    def test_list_services_first_page_has_no_previus_page_link(self):
+        response = self.user1Client.get(
+            "%s?limit=2&offset=0"
+            % reverse(
+                "service:service_list",
+            ),
+            format="json",
+        )
+
+        stream = io.BytesIO(response.content)
+        data = JSONParser().parse(stream)
+
+        self.assertIsNone(data["previous"])
+
     def test_list_services_with_not_authenticated_user(self):
         response = self.notAuthenticatedClient.get(
             reverse("service:service_list"), format="json"
