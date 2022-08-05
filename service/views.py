@@ -37,7 +37,13 @@ class ServiceListView(APIView):
         paginator = LimitOffsetPagination()
         result_page = paginator.paginate_queryset(services, request)
         serializer = self.ServiceListSerializer(result_page, many=True)
-        return Response({"results": serializer.data, "next": paginator.get_next_link()})
+        return Response(
+            {
+                "results": serializer.data,
+                "next": paginator.get_next_link(),
+                "previous": None,
+            }
+        )
 
     def post(self, request):
         org = request.user.profile.org
