@@ -89,6 +89,15 @@ class TestCustomerView(TestCase):
         data = JSONParser().parse(stream)
         self.assertIsNone(data["previous"])
 
+    def test_list_customers_seconde_page_has_previous_page(self):
+        client = APIClient()
+        client.force_authenticate(user=self.user2)
+        response = client.get("%s?limit=2&offset=2" % reverse("profiles:customer_list"))
+
+        stream = io.BytesIO(response.content)
+        data = JSONParser().parse(stream)
+        self.assertIn("limit=2", data["previous"])
+
 
 class TestCustomerDetailView(TestCase):
     def setUp(self):
