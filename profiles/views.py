@@ -14,6 +14,9 @@ from rest_framework.pagination import LimitOffsetPagination
 
 
 class CustomerListView(APIView):
+
+    permission_classes = [IsAuthenticated]
+
     def post(self, request, format=None):
         data = request.data
         data["owner"] = request.user.profile.org.id
