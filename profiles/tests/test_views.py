@@ -62,11 +62,6 @@ class TestCustomerView(TestCase):
         self.assertEqual(len(data["results"]), 3)
 
     def test_list_3_customers_has_no_next_page(self):
-        customer_owned_by_user2_organization = Customer.objects.filter(
-            owner=self.user2.profile.org
-        ).count()
-        self.assertEqual(customer_owned_by_user2_organization, 3)
-
         client = APIClient()
         client.force_authenticate(user=self.user2)
         response = client.get("%s?limit=3&offset=0" % reverse("profiles:customer_list"))
@@ -77,11 +72,6 @@ class TestCustomerView(TestCase):
         self.assertIsNone(data["next"])
 
     def test_list_2_customers_has_next_page(self):
-        customer_owned_by_user2_organization = Customer.objects.filter(
-            owner=self.user2.profile.org
-        ).count()
-        self.assertEqual(customer_owned_by_user2_organization, 3)
-
         client = APIClient()
         client.force_authenticate(user=self.user2)
         response = client.get("%s?limit=2&offset=0" % reverse("profiles:customer_list"))
