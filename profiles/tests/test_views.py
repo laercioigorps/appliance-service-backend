@@ -43,6 +43,13 @@ class TestCustomerView(TestCase):
         customer_count = Customer.objects.all().count()
         self.assertEqual(customer_count, 5)
 
+    def test_create_customer_using_not_authenticated_user(self):
+        client = APIClient()
+        response = client.post(
+            reverse("profiles:customer_list"), {"name": "customer1"}, format="json"
+        )
+        self.assertEqual(response.status_code, 401)
+
     def test_list_3_customers_limited_by_10(self):
         customer_owned_by_user2_organization = Customer.objects.filter(
             owner=self.user2.profile.org
