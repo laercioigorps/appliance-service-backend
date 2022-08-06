@@ -98,6 +98,13 @@ class TestCustomerView(TestCase):
         data = JSONParser().parse(stream)
         self.assertIn("limit=2", data["previous"])
 
+    def test_list_customers_with_no_authenticated_user(self):
+        client = APIClient()
+
+        response = client.get("%s?limit=2&offset=2" % reverse("profiles:customer_list"))
+
+        self.assertEqual(response.status_code, 401)
+
 
 class TestCustomerDetailView(TestCase):
     def setUp(self):
