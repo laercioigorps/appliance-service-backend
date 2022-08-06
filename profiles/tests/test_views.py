@@ -69,14 +69,26 @@ class TestCustomerView(TestCase):
 
         client = APIClient()
         client.force_authenticate(user=self.user2)
-        response = client.get(
-            "%s?limit=3&offset=0" % reverse("profiles:customer_list")
-        )
+        response = client.get("%s?limit=3&offset=0" % reverse("profiles:customer_list"))
 
         stream = io.BytesIO(response.content)
         data = JSONParser().parse(stream)
 
         self.assertIsNone(data["next"])
+
+    def test_list_2_customers_has_next_page(self):
+        customer_owned_by_user2_organization = Customer.objects.filter(
+            owner=self.user2.profile.org
+        ).count()
+        self.assertEqual(customer_owned_by_user2_organization, 3)
+
+        client = APIClient()
+        client.force_authenticate(user=self.user2)
+        response = client.get("%s?limit=2&offset=0" % reverse("profiles:customer_list"))
+
+        stream = io.BytesIO(response.content)
+        data = JSONParser().parse(stream)
+        self.assertIn("limit=2&offset=2", data["next"])
 
 
 class TestCustomerDetailView(TestCase):
