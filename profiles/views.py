@@ -28,7 +28,7 @@ class CustomerListView(APIView):
         limitPagination = LimitOffsetPagination()
         result_page = limitPagination.paginate_queryset(customer_by_org, request)
         serializer = CustomerSerializer(result_page, many=True)
-        return Response({"results": serializer.data})
+        return Response({"results": serializer.data, "next": None})
 
 
 class CustomerDetailView(APIView):
