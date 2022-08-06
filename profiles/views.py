@@ -10,9 +10,10 @@ from .permissions import IsAddressOwner, IsCustomerOwner
 from django.db.models import Count
 
 # Create your views here.
-@api_view(["GET", "POST"])
-def customer_list_view(request, format=None):
-    if request.method == "POST":
+
+
+class CustomerListView(APIView):
+    def post(self, request, format=None):
         data = request.data
         data["owner"] = request.user.profile.org.id
         serializer = CustomerSerializer(data=data)
@@ -20,7 +21,8 @@ def customer_list_view(request, format=None):
             serializer.save(owner=request.user.profile.org)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    if request.method == "GET":
+
+    def get(self, request, format=None):
         customer_by_org = Customer.objects.filter(owner=request.user.profile.org)
         serializer = CustomerSerializer(customer_by_org, many=True)
         return Response(serializer.data)
