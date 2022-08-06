@@ -8,6 +8,7 @@ from profiles.serializers import AddressSerializer, CustomerSerializer
 from rest_framework.permissions import IsAuthenticated
 from .permissions import IsAddressOwner, IsCustomerOwner
 from django.db.models import Count
+from rest_framework.pagination import LimitOffsetPagination
 
 # Create your views here.
 
@@ -24,8 +25,10 @@ class CustomerListView(APIView):
 
     def get(self, request, format=None):
         customer_by_org = Customer.objects.filter(owner=request.user.profile.org)
-        serializer = CustomerSerializer(customer_by_org, many=True)
-        return Response(serializer.data)
+        limitPagination = LimitOffsetPagination()
+        result_page = limitPagination.paginate_queryset(customer_by_org, request)
+        serializer = CustomerSerializer(result_page, many=True)
+        return Response({"results": serializer.data})
 
 
 class CustomerDetailView(APIView):
