@@ -32,7 +32,7 @@ class CustomerListView(APIView):
             {
                 "results": serializer.data,
                 "next": limitPagination.get_next_link(),
-                "previous": None,
+                "previous": limitPagination.get_previous_link(),
             }
         )
 
