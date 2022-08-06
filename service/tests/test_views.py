@@ -10,14 +10,15 @@ from rest_framework.test import APIClient
 import io
 from rest_framework.parsers import JSONParser
 from service.services import InitialSampleDataCreation
+from django.contrib.auth.models import User
 
 from service.tests.factories import ServiceFactory
 
 
 class ServiceViewTest(TestCase):
     def setUp(self):
-        self.user1 = UserFactory()
-        self.user2 = UserFactory()
+        self.user1 = User.objects.create_user("root1", "email2@exemple.com", "root")
+        self.user2 = User.objects.create_user("root2", "email2@exemple.com", "root")
 
         self.user1Client = APIClient()
         self.user1Client.force_authenticate(user=self.user1)
