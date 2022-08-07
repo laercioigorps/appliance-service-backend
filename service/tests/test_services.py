@@ -279,6 +279,17 @@ class SampleDataCreationServiceTest(TestCase):
                 break
         self.assertTrue(alwaysOk)
 
+    def test_services_historic_appliances_are_in_initially_fetched_data(self):
+        self.sampleData.generateRandomCustomers(1)
+        self.sampleData.generateRandomAddressForCustomers(1)
+        self.sampleData.generateRandomServices(3)
+        alwaysOk = True
+        for service in self.sampleData.services:
+            if service.historic.appliance not in self.initialData.appliances:
+                alwaysOk = False
+                break
+        self.assertTrue(alwaysOk)
+
     def test_service_status_is_not_null(self):
         self.sampleData.generateRandomCustomers(1)
         self.sampleData.generateRandomAddressForCustomers(1)
