@@ -60,7 +60,7 @@ class SampleDataCreation:
             solutions=faker.random_elements(
                 elements=self.solutions, unique=True, length=2
             ),
-            appliance=None,
+            appliance=faker.random_element(self.appliances),
             org=None,
         )
         return historic
