@@ -142,11 +142,11 @@ class SampleDataCreationServiceTest(TestCase):
 
     def test_fetched_initial_data(self):
         self.sampleData.fetchInitialData()
-        self.assertEqual(self.sampleData.statuses, self.initialData.statuses)
-        self.assertEqual(self.sampleData.appliances, self.initialData.appliances)
-        self.assertEqual(self.sampleData.symptoms, self.initialData.symptoms)
-        self.assertEqual(self.sampleData.problems, self.initialData.problems)
-        self.assertEqual(self.sampleData.solutions, self.initialData.solutions)
+        self.assertCountEqual(self.sampleData.statuses, self.initialData.statuses)
+        self.assertCountEqual(self.sampleData.appliances, self.initialData.appliances)
+        self.assertCountEqual(self.sampleData.symptoms, self.initialData.symptoms)
+        self.assertCountEqual(self.sampleData.problems, self.initialData.problems)
+        self.assertCountEqual(self.sampleData.solutions, self.initialData.solutions)
 
     def test_generate_10_customers(self):
         self.sampleData.generateRandomCustomers(10)
