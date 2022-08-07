@@ -1,6 +1,6 @@
 from datetime import date, timedelta
 from django.test import TestCase
-from appliances.models import Appliance, Brand, Category, Problem, Symptom
+from appliances.models import Appliance, Brand, Category, Problem, Solution, Symptom
 from appliances.tests.factories import BrandFactory, CategoryFactory
 from service.models import Service, Status
 from profiles.models import Address, Customer, Organization
@@ -409,3 +409,7 @@ class SampleDataCreateColateralEffectsTest(TestCase):
     def test_initial_problems_count_is_the_same(self):
         problemsCount = Problem.objects.count()
         self.assertEqual(len(self.initialData.problems), problemsCount)
+
+    def test_initial_solutions_count_is_the_same(self):
+        solutionsCount = Solution.objects.count()
+        self.assertEqual(len(self.initialData.solutions), solutionsCount)
