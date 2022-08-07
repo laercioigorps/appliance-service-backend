@@ -381,3 +381,7 @@ class SampleDataCreateColateralEffectsTest(TestCase):
             name="Concluded", description="Concluded", is_conclusive=True
         )
         self.completed = Status.objects.create(name="Canceled", description="Canceled")
+
+    def test_initial_brands_count_is_the_same(self):
+        brandCount = Brand.objects.count()
+        self.assertEqual(len(self.initialData.brands), brandCount)
