@@ -290,6 +290,17 @@ class SampleDataCreationServiceTest(TestCase):
                 break
         self.assertTrue(alwaysOk)
 
+    def test_services_historics_have_org_equal_to_initially_set(self):
+        self.sampleData.generateRandomCustomers(1)
+        self.sampleData.generateRandomAddressForCustomers(1)
+        self.sampleData.generateRandomServices(3)
+        alwaysOk = True
+        for service in self.sampleData.services:
+            if service.historic.org is not self.sampleData.organization:
+                alwaysOk = False
+                break
+        self.assertTrue(alwaysOk)
+
     def test_service_status_is_not_null(self):
         self.sampleData.generateRandomCustomers(1)
         self.sampleData.generateRandomAddressForCustomers(1)
