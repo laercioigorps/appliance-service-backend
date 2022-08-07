@@ -28,9 +28,9 @@ SECRET_KEY = os.environ.get("SECRET_KEY", default="foo")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = int(os.environ.get("DEBUG", default=0))
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "still-wildwood-53101.herokuapp.com"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "laercio-appliace-services.herokuapp.com"]
 
-CSRF_TRUSTED_ORIGINS = ["https://still-wildwood-53101.herokuapp.com"]
+CSRF_TRUSTED_ORIGINS = ["https://laercio-appliace-services.herokuapp.com"]
 
 # Application definition
 
