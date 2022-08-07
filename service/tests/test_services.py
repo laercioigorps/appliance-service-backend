@@ -397,3 +397,7 @@ class SampleDataCreateColateralEffectsTest(TestCase):
     def test_initial_organization_count_is_the_same(self):
         organizationCount = Organization.objects.count()
         self.assertEqual(organizationCount, 1)
+
+    def test_initial_appliances_count_is_the_same(self):
+        appliancesCount = Appliance.objects.count()
+        self.assertEqual(len(self.initialData.appliances), appliancesCount)
