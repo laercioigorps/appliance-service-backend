@@ -61,6 +61,7 @@ class SampleDataCreation:
                 elements=self.solutions, unique=True, length=2
             ),
             appliance=None,
+            org=None,
         )
         return historic
 
