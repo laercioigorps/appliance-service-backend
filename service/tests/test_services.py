@@ -337,3 +337,47 @@ class SampleDataCreationServiceTest(TestCase):
                 dateAlwaysBetween = False
                 break
         self.assertTrue(dateAlwaysBetween)
+
+
+class SampleDataCreateColateralEffectsTest(TestCase):
+    def setUp(self):
+        self.organization = Organization.objects.create(name="own")
+        self.sampleData = SampleDataCreation()
+        self.initialData = InitialSampleDataCreation()
+        self.sampleData.organization = self.organization
+        self.setTestStatuses()
+        self.generateInitialData()
+        self.sampleData.fetchInitialData()
+        self.generateSampleData()
+
+    def generateSampleData(self):
+        self.sampleData.generateRandomCustomers(5)
+        self.sampleData.generateRandomAddressForCustomers(2)
+        self.sampleData.generateRandomServices(10)
+
+    def generateInitialData(self):
+        self.initialData.generateRandomBrands(3)
+        self.initialData.generateRandomCategories(3)
+        self.initialData.generateRandomAppliances(5)
+        self.initialData.generateRandomSymptoms(10)
+        self.initialData.generateRandomProblems(10)
+        self.initialData.generateRandomSolutions(10)
+        self.initialData.statuses = list(Status.objects.all())
+
+    def setTestStatuses(self):
+        self.awaiting = Status.objects.create(
+            name="Scheduled visit", description="Scheduled visit"
+        )
+        self.completed = Status.objects.create(
+            name="Waiting for approval", description="Waiting for approval"
+        )
+        self.completed = Status.objects.create(
+            name="Scheduled service", description="Scheduled service"
+        )
+        self.completed = Status.objects.create(
+            name="Awaiting payment", description="Awaiting payment"
+        )
+        self.completed = Status.objects.create(
+            name="Concluded", description="Concluded", is_conclusive=True
+        )
+        self.completed = Status.objects.create(name="Canceled", description="Canceled")
