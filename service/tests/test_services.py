@@ -435,3 +435,69 @@ class SampleDataCreateColateralEffectsTest(TestCase):
     def test_initial_solutions_count_is_the_same(self):
         solutionsCount = Solution.objects.count()
         self.assertEqual(len(self.initialData.solutions), solutionsCount)
+
+
+class TnitialSampleDataCreateColateralEffectsTest(TestCase):
+    def setUp(self):
+        self.initialData = InitialSampleDataCreation()
+        self.setTestStatuses()
+        self.generateInitialData()
+
+    def generateInitialData(self):
+        self.initialData.generateRandomBrands(3)
+        self.initialData.generateRandomCategories(3)
+        self.initialData.generateRandomAppliances(5)
+        self.initialData.generateRandomSymptoms(10)
+        self.initialData.generateRandomProblems(10)
+        self.initialData.generateRandomSolutions(10)
+        self.initialData.statuses = list(Status.objects.all())
+
+    def setTestStatuses(self):
+        self.awaiting = Status.objects.create(
+            name="Scheduled visit", description="Scheduled visit"
+        )
+        self.completed = Status.objects.create(
+            name="Waiting for approval", description="Waiting for approval"
+        )
+        self.completed = Status.objects.create(
+            name="Scheduled service", description="Scheduled service"
+        )
+        self.completed = Status.objects.create(
+            name="Awaiting payment", description="Awaiting payment"
+        )
+        self.completed = Status.objects.create(
+            name="Concluded", description="Concluded", is_conclusive=True
+        )
+        self.completed = Status.objects.create(name="Canceled", description="Canceled")
+
+    def test_initial_brands_count_is_the_same(self):
+        brandCount = Brand.objects.count()
+        self.assertEqual(3, brandCount)
+
+    def test_initial_status_count_is_the_same(self):
+        statusCount = Status.objects.count()
+        self.assertEqual(6, statusCount)
+
+    def test_initial_categories_count_is_the_same(self):
+        categoryCount = Category.objects.count()
+        self.assertEqual(3, categoryCount)
+
+    def test_initial_organization_count_is_the_same(self):
+        organizationCount = Organization.objects.count()
+        self.assertEqual(organizationCount, 0)
+
+    def test_initial_appliances_count_is_the_same(self):
+        appliancesCount = Appliance.objects.count()
+        self.assertEqual(5, appliancesCount)
+
+    def test_initial_symptoms_count_is_the_same(self):
+        symptomsCount = Symptom.objects.count()
+        self.assertEqual(10, symptomsCount)
+
+    def test_initial_problems_count_is_the_same(self):
+        problemsCount = Problem.objects.count()
+        self.assertEqual(10, problemsCount)
+
+    def test_initial_solutions_count_is_the_same(self):
+        solutionsCount = Solution.objects.count()
+        self.assertEqual(10, solutionsCount)
