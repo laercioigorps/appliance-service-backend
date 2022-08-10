@@ -92,12 +92,43 @@ You can find auth endpoints em [dj-auth-rest endpoints](https://dj-rest-auth.rea
 > /services/?limit=16&offset=0 (GET)
 >*  limit - set to choose the max number of customers
 >*  offset - set to choose customers to ignore
->>Returns a list of customers
+>> Returns a list of customers
 
+Create a service for the authenticated user organization
 > /services/ (POST)
->*  limit - set to choose the max number of customers
->*  offset - set to choose customers to ignore
->>Returns a list of customers
+>>Returns a service object
+
+#### service detail*
+> /services/<service_id>/ (GET)
+>> Returns a service object
+
+#### service status report*
+> /services/status/ (GET)
+>> Returns a report with services status count.
+
+#### list statuses*
+> /services/status/ (GET)
+>> return a list with all statuses.
+
+#### services status report
+> /services/services-by-status/<number_of_days>/ (GET)
+>> return a report with current services statuses count in a giver date range in days.
+
+#### services top customers service income
+> /services/top-customers-income/<number_of_customers_to_get>/ (GET)
+>> return a report with customers with more services income.
+
+
+#### services top customers service count
+> /services/op-customers-services/<number_of_customers_to_get>/ (GET)
+>> return a report with customers with more services.
+
+
+#### Create random sample data(will onlly be available locally for security reasons)
+> /services/sample-create/ (POST)
+>* customers - Number of customers to create
+>* services - Number of services to create
+
 
 ## Built With
 
