@@ -10,11 +10,11 @@ I built the backend using containerized(Docker) Django and Django Rest Framework
 Yseful links to try, it may take some time to first load.
 
 * [Frontend app - try the project with a sample account](https://www.djangoproject.com/)
-* [Live backend API url](https://www.django-rest-framework.org/)
+* [Live backend API url](http://laercio-appliace-services.herokuapp.com/)
 
 #### Frontend github page
 
-* [Frontend github page](https://www.djangoproject.com/)
+* [Frontend github page](https://github.com/laercioigorps/appliance-service-frontend)
   
 ## API EndPoints
 You can find auth endpoints em [dj-auth-rest endpoints](https://dj-rest-auth.readthedocs.io/en/latest/api_endpoints.html), the basics are:
