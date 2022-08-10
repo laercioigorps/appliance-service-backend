@@ -39,6 +39,28 @@ You can find auth endpoints em [dj-auth-rest endpoints](https://dj-rest-auth.rea
 
 ### Profiles
 
+#### List customers
+> /profiles/customers/?limit=16&offset=0 (GET)
+>*  limit - set to choose the max number of customers
+>*  offset - set to choose customers to ignore
+>>Returns a list of customers
+
+#### Customer detail
+> /profiles/customers/<customer_id> (GET)
+>> Returns a a customer object
+
+#### Customer addresses
+> /profiles/customers/<customer_id>/address/ (GET)
+>> Returns all addresses from given customer
+
+#### Customer address detail
+> /profiles/customers/<customer_id>/address/<address_id>/ (GET)
+>> Returns address object
+
+#### Customer history
+> /profiles/customers/<customer_id>/address/<address_id>/ (GET)
+>> Returns a report with customers created by date: data, labels and total_count.
+
 ### Appliances
 
 ### Services
