@@ -21,6 +21,8 @@ You can find auth endpoints em [dj-auth-rest endpoints](https://dj-rest-auth.rea
 
 ### Auth
 
+
+ 
 #### Login
 > /dj-rest-auth/login/ (POST)
 >* username
@@ -28,6 +30,7 @@ You can find auth endpoints em [dj-auth-rest endpoints](https://dj-rest-auth.rea
 >*  password
 >>Returns Token key
 
+<details>
 
 #### Registration
 > /dj-rest-auth/registration/ (POST)
@@ -37,14 +40,21 @@ You can find auth endpoints em [dj-auth-rest endpoints](https://dj-rest-auth.rea
 >*  password2
 >>Returns Token key
 
+</details>
+  
+
 ### Profiles
 
+
+  
 #### List customers*
 > /profiles/customers/?limit=16&offset=0 (GET)
 >*  limit - set to choose the max number of customers
 >*  offset - set to choose customers to ignore
 >>Returns a list of customers
 
+<details>
+  
 #### Customer detail*
 > /profiles/customers/<customer_id> (GET)
 >> Returns a a customer object
@@ -60,12 +70,17 @@ You can find auth endpoints em [dj-auth-rest endpoints](https://dj-rest-auth.rea
 #### Customer history*
 > /profiles/customers/<customer_id>/address/<address_id>/ (GET)
 >> Returns a report with customers created by date: data, labels and total_count.
-
+  
+</details>
+  
 ### Appliances
+
+
 
 #### List Brands
 > /services/brands/ (GET)
 
+<details>
 #### List Categories
 > /services/brands/ (GET)
 
@@ -86,14 +101,20 @@ You can find auth endpoints em [dj-auth-rest endpoints](https://dj-rest-auth.rea
 > /services/historics/<historic_id> (GET)
 >> Return the given historic if authenticated user has permission.
 
+</details>
+    
 ### Services
 
+
+  
 #### List oand create services*
 > /services/?limit=16&offset=0 (GET)
 >*  limit - set to choose the max number of customers
 >*  offset - set to choose customers to ignore
 >> Returns a list of customers
-
+  
+<details>
+  
 Create a service for the authenticated user organization
 > /services/ (POST)
 >>Returns a service object
@@ -128,7 +149,8 @@ Create a service for the authenticated user organization
 > /services/sample-create/ (POST)
 >* customers - Number of customers to create
 >* services - Number of services to create
-
+      
+</details>
 
 ## Built With
 
