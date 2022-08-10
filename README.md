@@ -88,6 +88,17 @@ You can find auth endpoints em [dj-auth-rest endpoints](https://dj-rest-auth.rea
 
 ### Services
 
+#### List oand create services*
+> /services/?limit=16&offset=0 (GET)
+>*  limit - set to choose the max number of customers
+>*  offset - set to choose customers to ignore
+>>Returns a list of customers
+
+> /services/ (POST)
+>*  limit - set to choose the max number of customers
+>*  offset - set to choose customers to ignore
+>>Returns a list of customers
+
 ## Built With
 
 This section should list any major Tools/frameworks/libraries used.
