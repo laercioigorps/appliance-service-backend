@@ -9,7 +9,7 @@ I built the backend using containerized(Docker) Django and Django Rest Framework
 
 Yseful links to try, it may take some time to first load.
 
-* [Frontend app - try the project with a sample account](https://www.djangoproject.com/)
+* [Frontend app - try the project with a sample account(may take some time to server start)](https://appliance-service-frontend.vercel.app/sample-login)
 * [Live backend API url](http://laercio-appliace-services.herokuapp.com/)
 
 #### Frontend github page
